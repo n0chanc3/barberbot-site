@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BarberBot — Telegram-бот для запису в барбершоп</title>
+<meta name="description" content="Клієнти записуються самі, 24/7, прямо в Telegram. Нагадування, розклад майстра, окремий бот під ваш салон.">
+<meta name="color-scheme" content="dark">
+<style>
+  :root{
+    /* Палітра «нуар + бурштин»: теплий майже чорний фон, кремовий текст, бурштин із міддю,
+       і кольори барбер-пола (червоний, синій, кремовий) як акцент */
+    --bg:#0a0a0d; --bg2:#111116; --card:#15151b; --line:#27262e; --text:#f5f0e6; --muted:#a59f94;
+    --accent:#f4b942; --accent2:#e8692c; --accent-ink:#1c1304; --bubble:#1d1c24; --me:#2b5ea8;
+    --pole-r:#d9442f; --pole-b:#3a6fd8;
+    --grad:linear-gradient(100deg,#ffd978 0%,#f4b942 35%,#e8692c 100%);
+    --ease:cubic-bezier(.2,.8,.2,1);
+  }
+  *{box-sizing:border-box;margin:0}
+  html{scroll-behavior:smooth;overflow-x:clip}
+  body{background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-x:clip}
+  a{color:inherit}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+  section{position:relative;padding:96px 0}
+  h2{font-size:clamp(30px,5vw,54px);line-height:1.08;letter-spacing:-.02em;margin-bottom:14px}
+  .sub{color:var(--muted);font-size:18px;max-width:600px;margin-bottom:44px}
+  .gold,.gold i{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+  ::selection{background:var(--accent);color:var(--accent-ink)}
+
+  /* світло за курсором */
+  .spot{position:fixed;left:0;top:0;width:560px;height:560px;margin:-280px 0 0 -280px;border-radius:50%;pointer-events:none;z-index:-1;
+    background:radial-gradient(circle,rgba(244,185,66,.13),transparent 62%);opacity:0;transition:opacity .6s;will-change:transform}
+  .spot.on{opacity:1}
+  /* легке зерно поверх фону */
+  .noise{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  /* фон: паралакс-плями й сітка */
+  .bgfx{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.5;will-change:transform}
+  .b1{width:560px;height:560px;background:#6b4308;left:-140px;top:-100px}
+  .b2{width:480px;height:480px;background:#5a1f0a;right:-160px;top:38vh}
+  .b3{width:420px;height:420px;background:#1a2150;left:28vw;top:120vh}
+  .grid{position:absolute;inset:-50% 0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+    background-size:64px 64px;opacity:.16;mask-image:radial-gradient(ellipse at 50% 40%,#000 0,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at 50% 40%,#000 0,transparent 70%)}
+
+  /* шапка і прогрес прокрутки */
+  /* прогрес прокрутки у вигляді барбер-пола */
+  .progress{position:fixed;left:0;top:0;height:4px;width:100%;transform-origin:0 50%;transform:scaleX(0);z-index:50;
+    background:repeating-linear-gradient(135deg,var(--pole-r) 0 10px,var(--text) 10px 20px,var(--pole-b) 20px 30px,var(--text) 30px 40px);
+    background-size:56.57px 100%;animation:pole 1.2s linear infinite}
+  @keyframes pole{to{background-position:56.57px 0}}
+  header{position:fixed;left:0;right:0;top:0;z-index:40;padding:14px 0;transition:background .3s,backdrop-filter .3s,border-color .3s;border-bottom:1px solid transparent}
+  header.scrolled{background:rgba(10,10,13,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+  header .wrap{display:flex;justify-content:space-between;align-items:center}
+  .logo{font-weight:800;letter-spacing:.5px;font-size:18px;text-decoration:none}
+  .logo span{color:var(--accent)}
+
+  /* кнопки з мікроанімацією */
+  .btn{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--grad);color:var(--accent-ink);font-weight:700;
+    padding:15px 28px;border-radius:14px;text-decoration:none;overflow:hidden;will-change:transform;
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+  .btn::before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.55) 50%,transparent 70%);transform:translateX(-120%);transition:transform .7s var(--ease)}
+  .btn:hover{box-shadow:0 14px 44px rgba(232,105,44,.38)}
+  .btn:hover::before{transform:translateX(120%)}
+  .btn:active{transform:scale(.96)!important}
+  .btn .arr{display:inline-block;transition:transform .35s var(--ease)}
+  .btn:hover .arr{transform:translateX(5px)}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--accent);box-shadow:none}
+  .btn.sm{padding:10px 18px;border-radius:12px;font-size:14px}
+
+  /* HERO */
+  .hero{min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:110px 0 60px}
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:40px;align-items:center;width:100%;
+    transform:translateY(var(--hy,0px)) scale(var(--hsc,1));opacity:var(--ho,1);will-change:transform,opacity}
+  .badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(22,26,34,.6);padding:7px 14px;border-radius:99px;font-size:14px;color:var(--muted);margin-bottom:22px}
+  .dot{width:8px;height:8px;border-radius:50%;background:#3ddc84;box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:pulse 2s infinite}
+  @keyframes pulse{70%{box-shadow:0 0 0 10px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+  h1{font-size:clamp(40px,6.4vw,78px);line-height:1.02;letter-spacing:-.03em;font-weight:800;margin-bottom:24px}
+  h1 .line{display:block;white-space:nowrap}
+  h1 .ch{display:inline-block;transform-origin:50% 100%;will-change:transform}
+  .js h1 .ch{animation:rise .8s var(--ease) both;animation-delay:calc(var(--i)*28ms)}
+  .js h1 .ch.out{animation:fall .3s ease-in both;animation-delay:calc(var(--i)*12ms)}
+  @keyframes rise{from{opacity:0;transform:translateY(.9em) rotate(8deg) scaleY(1.4)}to{opacity:1;transform:none}}
+  @keyframes fall{to{opacity:0;transform:translateY(-.6em) scaleY(.6)}}
+  .rot{color:var(--accent);min-height:1em}
+  .lead{color:var(--muted);font-size:19px;max-width:520px;margin-bottom:32px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .scrollhint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:26px;height:42px;border:2px solid var(--line);border-radius:14px}
+  .scrollhint::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--accent);animation:wheel 1.6s infinite}
+  @keyframes wheel{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
+
+  /* 3D-телефон */
+  .scene{perspective:1200px;display:grid;place-items:center}
+  .float{animation:float 6s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-14px)}}
+  .phone3d{position:relative;transform-style:preserve-3d;transform:rotateY(var(--ry,-14deg)) rotateX(var(--rx,6deg));will-change:transform}
+  .phone{position:relative;width:min(290px,72vw);background:linear-gradient(160deg,#2a2f3b,#14171d);border:1px solid #3a4150;border-radius:38px;padding:12px;
+    box-shadow:0 40px 90px rgba(0,0,0,.55),0 0 0 1px rgba(245,184,61,.12),inset 0 1px 0 rgba(255,255,255,.08)}
+  /* відблиск на склі, що рухається разом із нахилом */
+  .phone3d .phone::after{content:"";position:absolute;inset:12px;border-radius:28px;pointer-events:none;z-index:4;
+    background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.13) 50%,transparent 62%);background-size:260% 100%;background-position:var(--gl,50%) 0}
+  .phone::before{content:"";position:absolute;left:50%;top:20px;width:74px;height:20px;margin-left:-37px;border-radius:12px;background:#000;z-index:3}
+  .screen{position:relative;background:var(--bg);border-radius:28px;height:min(470px,56vh);overflow:hidden;font-size:14px}
+  .bar{position:absolute;left:0;right:0;top:0;padding:40px 12px 10px;text-align:center;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-bottom:1px solid var(--line);background:var(--bg2);z-index:2}
+  .scr{position:absolute;inset:86px 12px 12px;display:flex;flex-direction:column;gap:8px;opacity:0;transform:translateY(18px) scale(.97);transition:opacity .45s var(--ease),transform .45s var(--ease);pointer-events:none}
+  .scr.on{opacity:1;transform:none}
+  .scr.prev{transform:translateY(-18px) scale(.97)}
+  .msg{background:var(--bubble);padding:10px 12px;border-radius:14px 14px 14px 4px;max-width:96%}
+  .keys{display:grid;gap:6px;margin-top:8px}
+  .keys.c3{grid-template-columns:repeat(3,1fr)}
+  .keys span{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:8px 6px;text-align:center;font-size:13px;white-space:nowrap}
+  .scr.on .keys span.on{animation:pick .5s .55s var(--ease) both}
+  @keyframes pick{0%{transform:scale(1)}40%{transform:scale(.9)}100%{transform:scale(1);background:var(--accent);color:var(--accent-ink);border-color:transparent;font-weight:700}}
+  .okcard{display:flex;gap:10px;align-items:center}
+  .check{flex:none;width:38px;height:38px}
+  .check circle{fill:none;stroke:#3ddc84;stroke-width:3;stroke-dasharray:120;stroke-dashoffset:120}
+  .check path{fill:none;stroke:#3ddc84;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40;stroke-dashoffset:40}
+  .scr.on .check circle{animation:draw .6s .25s var(--ease) forwards}
+  .scr.on .check path{animation:draw .4s .7s var(--ease) forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  .chip{position:absolute;display:flex;align-items:center;gap:8px;background:rgba(22,26,34,.9);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:13px;font-weight:600;white-space:nowrap;
+    box-shadow:0 18px 40px rgba(0,0,0,.45);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .chip.c1{left:-70px;top:120px;transform:translateZ(70px)}
+  .chip.c2{right:-64px;top:250px;transform:translateZ(110px)}
+  .chip.c3{left:-40px;bottom:54px;transform:translateZ(50px)}
+
+  /* рядок, що біжить */
+  .marquee{padding:26px 0;border-block:1px solid var(--line);background:var(--bg2);overflow:hidden;transform:rotate(-1.2deg) scale(1.03)}
+  .track{display:flex;gap:48px;white-space:nowrap;will-change:transform;font-size:clamp(28px,5vw,58px);font-weight:800;letter-spacing:-.02em;text-transform:uppercase}
+  .track span:nth-child(even){color:transparent;-webkit-text-stroke:1.5px var(--accent)}
+
+  /* скролітелінг */
+  .story{height:440vh;padding:0}
+  .sticky{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;overflow:hidden}
+  .sticky .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:center;width:100%}
+  .steps{position:relative;min-height:300px}
+  .st{position:absolute;inset:0;opacity:0;transform:translateY(40px);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
+  .st.on{opacity:1;transform:none}
+  .st.prev{transform:translateY(-40px)}
+  .st .num{font-size:14px;font-weight:700;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;margin-bottom:14px}
+  .st h2{font-size:clamp(32px,5.4vw,64px)}
+  .st p{color:var(--muted);font-size:18px;max-width:440px}
+  .rail{display:flex;gap:8px;margin-top:22px}
+  .rail i{height:4px;flex:1;max-width:70px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
+  .rail i::after{content:"";position:absolute;inset:0;background:var(--accent);transform-origin:0 50%;transform:scaleX(var(--f,0))}
+  .ghostnum{position:absolute;right:-2vw;top:50%;font-size:46vh;font-weight:800;line-height:1;color:transparent;-webkit-text-stroke:2px var(--line);opacity:.5;transform:translateY(-50%);pointer-events:none;z-index:-1;transition:opacity .4s}
+
+  /* поява при прокрутці */
+  .js .rv{opacity:0;transform:translateY(34px);transition:opacity .8s var(--ease),transform .8s var(--ease);transition-delay:var(--d,0ms)}
+  .js .rv.in{opacity:1;transform:none}
+  .js .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em}
+  .js .w>i{display:inline-block;font-style:normal;transform:translateY(110%);transition:transform .9s var(--ease);transition-delay:calc(var(--i)*60ms)}
+  .js .in .w>i,.js .w.in>i{transform:none}
+
+  /* картки з нахилом і світінням */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px}
+  .card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;overflow:hidden;
+    transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s var(--ease),border-color .3s;will-change:transform}
+  .card::before{content:"";position:absolute;inset:0;background:radial-gradient(260px circle at var(--mx,50%) var(--my,-40%),rgba(245,184,61,.18),transparent 70%);opacity:0;transition:opacity .3s;pointer-events:none}
+  .card:hover{border-color:rgba(245,184,61,.45);transition:transform .1s linear,border-color .3s}
+  .card:hover::before{opacity:1}
+  .ic{display:grid;place-items:center;width:52px;height:52px;border-radius:14px;background:var(--bg2);border:1px solid var(--line);font-size:26px;margin-bottom:16px;transition:transform .5s var(--ease)}
+  .card:hover .ic{transform:translateY(-4px) rotate(-8deg) scale(1.1)}
+  .card h3{font-size:19px;margin-bottom:6px}
+  .card p{color:var(--muted);font-size:15px}
+
+  /* як почати */
+  .how{display:grid;gap:0;position:relative;padding-left:56px;max-width:720px}
+  .how::before{content:"";position:absolute;left:17px;top:6px;bottom:6px;width:2px;background:var(--line)}
+  .how .fill{position:absolute;left:17px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--accent),var(--accent2));transform-origin:50% 0;transform:scaleY(var(--p,0))}
+  .hs{position:relative;padding:0 0 38px}
+  .hs:last-child{padding-bottom:0}
+  .hs .n{position:absolute;left:-56px;top:0;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--card);border:2px solid var(--line);color:var(--muted);transition:all .4s var(--ease)}
+  .hs.done .n{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);transform:scale(1.12)}
+  .hs h3{font-size:21px;margin-bottom:4px}
+  .hs p{color:var(--muted)}
+
+  /* ціни */
+  .price{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;perspective:1200px}
+  .plan{display:flex;flex-direction:column}
+  .plan.hot{border-color:rgba(244,185,66,.35);background:linear-gradient(180deg,rgba(244,185,66,.10),var(--card) 55%)}
+  /* світло, що оббігає рамку головного тарифу */
+  @property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
+  .plan.hot::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
+    background:conic-gradient(from var(--ang),transparent 0 62%,#ffd978 80%,var(--accent2) 92%,transparent 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+    animation:spin 4.5s linear infinite}
+  @keyframes spin{to{--ang:360deg}}
+  .plan .tag{align-self:flex-start;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .plan .p{font-size:44px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin:4px 0;font-variant-numeric:tabular-nums}
+  .plan .p small{font-size:16px;font-weight:600;color:var(--muted)}
+  .plan .when{color:var(--muted);font-size:14px}
+  .plan ul{list-style:none;padding:0;color:var(--muted);font-size:15px;display:grid;gap:9px;margin:18px 0 24px;flex:1}
+  .plan li{padding-left:24px;position:relative}
+  .plan li::before{content:"";position:absolute;left:0;top:.5em;width:12px;height:6px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+  .plan .btn{justify-content:center}
+
+  /* питання */
+  .faq{max-width:780px}
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;transition:border-color .3s}
+  details[open],details:hover{border-color:rgba(245,184,61,.4)}
+  summary{cursor:pointer;font-weight:600;padding:18px 54px 18px 22px;list-style:none;position:relative}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"";position:absolute;right:22px;top:50%;width:10px;height:10px;margin-top:-8px;border-right:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(45deg);transition:transform .35s var(--ease)}
+  details[open] summary::after{transform:translateY(5px) rotate(-135deg)}
+  details p{color:var(--muted);padding:0 22px 20px;font-size:15px}
+  details[open] p{animation:drop .4s var(--ease)}
+  @keyframes drop{from{opacity:0;transform:translateY(-8px)}}
+
+  /* фінал */
+  .final{padding:140px 0;text-align:center;overflow:hidden}
+  .bigtxt{position:absolute;left:0;top:50%;white-space:nowrap;font-size:clamp(90px,22vw,300px);font-weight:800;line-height:1;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:2px var(--line);
+    transform:translate(var(--x,0),-50%);pointer-events:none;z-index:-1;will-change:transform}
+  .final h2{font-size:clamp(34px,6.4vw,76px)}
+  .final .sub{margin:0 auto 34px}
+  .btn.xl{font-size:19px;padding:20px 38px;border-radius:18px}
+  footer{padding:30px 0 40px;color:var(--muted);font-size:14px;text-align:center;border-top:1px solid var(--line)}
+
+  @media(max-width:880px){
+    section{padding:72px 0}
+    .hero .wrap{grid-template-columns:1fr;gap:54px}
+    .hero{padding-top:96px}
+    .cards,.price{grid-template-columns:1fr}
+    .chip.c1{left:-14px}.chip.c2{right:-14px}.chip.c3{left:-8px}
+    .sticky .wrap{grid-template-columns:minmax(0,1fr);gap:18px;align-content:center}
+    .steps{min-height:176px}
+    .st h2{font-size:30px;margin-bottom:8px}
+    .st p{font-size:15px}
+    .st .num{margin-bottom:8px}
+    .sticky .phone{width:min(240px,62vw)}
+    .sticky .screen{height:min(380px,46vh)}
+    .ghostnum{font-size:30vh;top:22%}
+    .scrollhint{display:none}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;transition-duration:.01ms!important}
+    .float{animation:none}
+  }
+</style>
+</head>
+<body>
+<script>document.documentElement.classList.add("js")</script>
+
+<div class="bgfx" aria-hidden="true">
+  <div class="grid" data-speed="-0.06"></div>
+  <div class="blob b1" data-speed="0.18" data-m="26"></div>
+  <div class="blob b2" data-speed="-0.12" data-m="-34"></div>
+  <div class="blob b3" data-speed="-0.3" data-m="18"></div>
+</div>
+<div class="noise" aria-hidden="true"></div>
+<div class="spot" id="spot" aria-hidden="true"></div>
+<div class="progress" id="progress"></div>
+
+<header id="header"><div class="wrap">
+  <a class="logo" href="#top">Barber<span>Bot</span></a>
+  <a class="btn sm contact magnetic" href="#">Написати <span class="arr">→</span></a>
+</div></header>
+
+<main id="top">
+
+<section class="hero"><div class="wrap">
+  <div>
+    <div class="badge rv"><span class="dot"></span> Приймає записи 24/7</div>
+    <h1 aria-label="Запис у барбершоп без дзвінків">
+      <span class="line kin" aria-hidden="true">Запис у</span>
+      <span class="line kin" aria-hidden="true">барбершоп</span>
+      <span class="line rot" id="rot" aria-hidden="true">без дзвінків</span>
+    </h1>
+    <p class="lead rv" style="--d:250ms">Telegram-бот, у якому клієнт обирає послугу, день і час за кілька дотиків. Майстер одразу бачить запис, а клієнт отримує нагадування й не забуває прийти.</p>
+    <div class="cta rv" style="--d:380ms">
+      <a class="btn contact magnetic" href="#">Спробувати безкоштовно <span class="arr">→</span></a>
+      <a class="btn ghost magnetic" href="#story">Як це працює</a>
+    </div>
+  </div>
+
+  <div class="scene rv" style="--d:200ms" id="scene">
+    <div class="float">
+      <div class="phone3d" id="phone3d">
+        <div class="phone"><div class="screen" id="heroScreen"></div></div>
+        <div class="chip c1">🔔 Нагадування клієнту</div>
+        <div class="chip c2">🆕 Новий запис · 12:00</div>
+        <div class="chip c3">📋 Розклад на завтра</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="scrollhint" aria-hidden="true"></div>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<section class="story" id="story">
+  <div class="sticky">
+    <div class="ghostnum" id="ghostnum" aria-hidden="true">1</div>
+    <div class="wrap">
+      <div>
+        <div class="steps" id="steps">
+          <div class="st on"><div class="num">Крок 1 з 3</div><h2>Обирає <span class="gold">послугу</span></h2><p>Клієнт відкриває бота й бачить ваші послуги з цінами. Один дотик, і він уже записується.</p></div>
+          <div class="st"><div class="num">Крок 2 з 3</div><h2>Обирає <span class="gold">день</span></h2><p>Бот показує лише ті дні, де є вільні місця. Вихідні та зайняті дні не відображаються.</p></div>
+          <div class="st"><div class="num">Крок 3 з 3</div><h2>Обирає <span class="gold">час</span></h2><p>Тільки вільні години. Двоє клієнтів не зможуть зайняти той самий час, навіть якщо натиснуть одночасно.</p></div>
+          <div class="st"><div class="num">Готово</div><h2>Запис <span class="gold">підтверджено</span></h2><p>Майстер миттєво отримує сповіщення, а клієнту бот нагадає за добу та за 2 години до візиту.</p></div>
+        </div>
+        <div class="rail" id="rail"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="scene"><div class="phone"><div class="screen" id="storyScreen"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section><div class="wrap">
+  <h2 data-split>Що отримує <span class="gold">барбершоп</span></h2>
+  <p class="sub rv">Усе, що потрібно для запису, і нічого зайвого.</p>
+  <div class="cards">
+    <div class="card tilt rv"><div class="ic">🕐</div><h3>Запис 24/7</h3><p>Клієнти записуються вночі й у вихідні, поки ви зайняті роботою.</p></div>
+    <div class="card tilt rv" style="--d:80ms"><div class="ic">🔔</div><h3>Нагадування</h3><p>За добу та за 2 години до візиту. Менше «забув» і порожніх вікон.</p></div>
+    <div class="card tilt rv" style="--d:160ms"><div class="ic">📋</div><h3>Розклад майстра</h3><p>Записи на сьогодні, завтра й післязавтра в одному повідомленні, із сумою за день.</p></div>
+    <div class="card tilt rv"><div class="ic">❌</div><h3>Скасування в один дотик</h3><p>Клієнт сам скасовує запис, а ви одразу бачите, що час звільнився.</p></div>
+    <div class="card tilt rv" style="--d:80ms"><div class="ic">🧠</div><h3>Пам’ятає клієнтів</h3><p>Постійним клієнтам не треба знову вводити ім’я й номер.</p></div>
+    <div class="card tilt rv" style="--d:160ms"><div class="ic">🎨</div><h3>Під ваш салон</h3><p>Ваша назва, адреса, послуги, ціни та графік роботи.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2 data-split>Як <span class="gold">почати</span></h2>
+  <p class="sub rv">Запуск без складних налаштувань.</p>
+  <div class="how" id="how">
+    <div class="fill"></div>
+    <div class="hs rv"><div class="n">1</div><h3>Напишіть мені</h3><p>Розкажіть про послуги, ціни та графік роботи.</p></div>
+    <div class="hs rv"><div class="n">2</div><h3>Створіть бота</h3><p>Ви створюєте бота в @BotFather і надсилаєте токен. Я підкажу, як це зробити за дві хвилини.</p></div>
+    <div class="hs rv"><div class="n">3</div><h3>Тест і запуск</h3><p>Налаштовую бота, ви перевіряєте його, і він починає приймати записи.</p></div>
+    <div class="hs rv"><div class="n">4</div><h3>Додайте посилання</h3><p>Вставте посилання на бота в Instagram, Google Maps і на візитку.</p></div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2 data-split>Прозора <span class="gold">вартість</span></h2>
+  <p class="sub rv">Спочатку 2 тижні безкоштовно. Платите, лише якщо бот сподобався.</p>
+  <div class="price">
+    <div class="card plan hot tilt rv">
+      <div class="tag">Тест</div>
+      <div class="p"><span data-count="0">0</span> грн</div>
+      <div class="when">перші 2 тижні</div>
+      <ul><li>Повноцінний бот під ваш салон</li><li>Нагадування та розклад майстра</li><li>Без зобов’язань</li></ul>
+      <a class="btn contact" href="#">Спробувати <span class="arr">→</span></a>
+    </div>
+    <div class="card plan tilt rv" style="--d:90ms">
+      <div class="tag">Підключення</div>
+      <div class="p"><span data-count="2000">2 000</span> грн</div>
+      <div class="when">один раз</div>
+      <ul><li>Налаштування під ваш салон: назва, адреса, послуги, ціни, графік</li><li>Запуск і перевірка</li><li>Допомога зі створенням бота в Telegram</li></ul>
+      <a class="btn ghost contact" href="#">Дізнатися більше</a>
+    </div>
+    <div class="card plan tilt rv" style="--d:180ms">
+      <div class="tag">Підтримка</div>
+      <div class="p"><span data-count="500">500</span> грн <small>/ місяць</small></div>
+      <div class="when">після тестового періоду</div>
+      <ul><li>Бот працює на сервері 24/7</li><li>Щоденні резервні копії записів</li><li>Правки послуг, цін і графіка</li></ul>
+      <a class="btn ghost contact" href="#">Дізнатися більше</a>
+    </div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <h2 data-split>Питання та <span class="gold">відповіді</span></h2>
+  <p class="sub rv">Коротко про те, що питають найчастіше.</p>
+  <div class="faq">
+    <details class="rv"><summary>Чи треба клієнтам щось встановлювати?</summary><p>Ні. Telegram уже є майже в усіх, достатньо натиснути на посилання на бота.</p></details>
+    <details class="rv"><summary>Хто бачить дані клієнтів?</summary><p>У кожного салону окремий бот і окрема база записів. Інші салони ваших клієнтів не бачать.</p></details>
+    <details class="rv"><summary>Що, якщо мені треба змінити ціни чи графік?</summary><p>Напишіть мені, я оновлю налаштування бота.</p></details>
+    <details class="rv"><summary>Чи може бот працювати з кількома майстрами?</summary><p>Зараз бот розрахований на одного майстра чи один графік. Підтримку кількох майстрів можна додати за домовленістю.</p></details>
+    <details class="rv"><summary>Чи є онлайн-оплата?</summary><p>Поки що ні: клієнт платить у салоні. Якщо потрібно, її можна додати окремо.</p></details>
+  </div>
+</div></section>
+
+<section class="final" id="final">
+  <div class="bigtxt" id="bigtxt" aria-hidden="true">ЗАПИС · 24/7 · ЗАПИС · 24/7 · ЗАПИС · 24/7 ·</div>
+  <div class="wrap">
+    <h2 data-split>Спробуйте бота <span class="gold">на собі</span></h2>
+    <p class="sub rv">Напишіть мені в Telegram, і я надішлю демо-бота. Пройдіть запис так, як це зробить ваш клієнт.</p>
+    <div class="rv" style="--d:120ms"><a class="btn xl contact magnetic" href="#">Написати в Telegram <span class="arr">→</span></a></div>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">© BarberBot · Андрій · боти для запису клієнтів у Telegram</div></footer>
+
+<script>
+(function () {
+  "use strict";
+  var TELEGRAM_USERNAME = "andhlj";
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+
+  // контакт
+  $$("a.contact").forEach(function (a) {
+    a.href = "https://t.me/" + TELEGRAM_USERNAME; a.target = "_blank"; a.rel = "noopener";
+  });
+
+  // ---------- екрани телефона ----------
+  var SCREENS = [
+    '<div class="msg">✂️ <b>Крок 1 з 3</b><br>Оберіть послугу:<div class="keys"><span>✂️ Стрижка · 300 грн</span><span>🧔 Борода · 200 грн</span><span class="on">💈 Стрижка + борода · 450 грн</span></div></div>',
+    '<div class="msg">📅 <b>Крок 2 з 3</b><br>Оберіть день:<div class="keys c3"><span>Сьогодні</span><span class="on">Завтра</span><span>Пт</span><span>Сб</span><span>Пн</span><span>Вт</span></div></div>',
+    '<div class="msg">🕐 <b>Крок 3 з 3</b><br>Оберіть вільний час:<div class="keys c3"><span>10:00</span><span>11:00</span><span class="on">12:00</span><span>14:00</span><span>15:00</span><span>16:00</span></div></div>',
+    '<div class="msg"><div class="okcard"><svg class="check" viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M12 20.5l5.5 5.5L28.5 14.5"/></svg><div><b>Ви записані!</b><br>Завтра о 12:00</div></div></div>' +
+    '<div class="msg">💈 Стрижка + борода — 450 грн<br>🔔 Нагадаємо за добу та за 2 години.</div>' +
+    '<div class="msg" style="border:1px solid rgba(245,184,61,.4)">🆕 <b>Майстру:</b> новий запис<br>👤 Богдан · 📱 +380…</div>'
+  ];
+  function buildScreen(el) {
+    el.innerHTML = '<div class="bar">💈 Барбершоп — запис онлайн</div>' +
+      SCREENS.map(function (h, i) { return '<div class="scr' + (i === 0 ? " on" : "") + '">' + h + "</div>"; }).join("");
+    var scr = $$(".scr", el), cur = 0;
+    return function (i) {
+      if (i === cur) return;
+      scr.forEach(function (s, k) { s.classList.toggle("on", k === i); s.classList.toggle("prev", k < i); });
+      cur = i;
+    };
+  }
+  var setHero = buildScreen($("#heroScreen"));
+  var setStory = buildScreen($("#storyScreen"));
+  if (!reduce) {
+    var hi = 0;
+    setInterval(function () { hi = (hi + 1) % SCREENS.length; setHero(hi); }, 2400);
+  } else { setHero(3); }
+
+  // ---------- кінетичний заголовок ----------
+  function letters(el, text) {
+    el.innerHTML = "";
+    text.split("").forEach(function (c, i) {
+      var s = document.createElement("span");
+      s.className = "ch"; s.style.setProperty("--i", i);
+      s.textContent = c === " " ? " " : c;
+      el.appendChild(s);
+    });
+  }
+  var kin = $$("h1 .kin"), rot = $("#rot");
+  var WORDS = ["без дзвінків", "без переписок", "без пропусків", "24/7"];
+  kin.forEach(function (l) { letters(l, l.textContent); });
+  letters(rot, WORDS[0]);
+  if (!reduce) {
+    var wi = 0;
+    setInterval(function () {
+      $$(".ch", rot).forEach(function (c) { c.classList.add("out"); });
+      setTimeout(function () { wi = (wi + 1) % WORDS.length; letters(rot, WORDS[wi]); }, 420);
+    }, 2800);
+    // літери тягнуться до курсора
+    if (fine) {
+      var chs = $$("h1 .kin .ch");
+      $(".hero").addEventListener("mousemove", function (e) {
+        chs.forEach(function (c) {
+          var r = c.getBoundingClientRect();
+          var d = Math.hypot(e.clientX - (r.left + r.width / 2), e.clientY - (r.top + r.height / 2));
+          var k = clamp(1 - d / 220, 0, 1);
+          c.style.animation = "none";
+          c.style.transform = "scaleY(" + (1 + k * 0.38) + ") translateY(" + (-k * 6) + "px)";
+          c.style.color = k > 0.05 ? "color-mix(in srgb, var(--accent) " + Math.round(k * 100) + "%, var(--text))" : "";
+          c.style.transition = "transform .25s, color .25s";
+        });
+      });
+      $(".hero").addEventListener("mouseleave", function () {
+        chs.forEach(function (c) { c.style.transform = ""; c.style.color = ""; });
+      });
+    }
+  }
+
+  // ---------- заголовки секцій: слова виїжджають ----------
+  $$("h2[data-split]").forEach(function (h) {
+    var i = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+        if (n.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+            var w = document.createElement("span"); w.className = "w";
+            var inner = document.createElement("i"); inner.textContent = part; inner.style.setProperty("--i", i++);
+            w.appendChild(inner); frag.appendChild(w);
+          });
+          node.replaceChild(frag, n);
+        } else if (n.nodeType === 1) { walk(n); }
+      });
+    })(h);
+    h.classList.add("rvh");
+  });
+
+  // ---------- поява та лічильники ----------
+  function countUp(el) {
+    var to = +el.dataset.count, t0 = performance.now(), dur = 1100;
+    var fmt = function (n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, " "); };
+    if (reduce || !to) { el.textContent = fmt(to); return; }
+    setTimeout(function () { el.textContent = fmt(to); }, dur + 250);  // ціна завжди доходить до кінця
+    (function tick(t) {
+      var p = clamp((t - t0) / dur, 0, 1), e = 1 - Math.pow(1 - p, 4);
+      el.textContent = fmt(to * e);
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+  var pending = $$(".rv, .rvh");
+  function reveal() {
+    if (!pending.length) return;
+    var limit = innerHeight * 0.92;
+    pending = pending.filter(function (el) {
+      if (el.getBoundingClientRect().top > limit) return true;
+      el.classList.add("in");
+      $$("[data-count]", el).forEach(countUp);
+      return false;
+    });
+  }
+
+  // ---------- рядок, що біжить ----------
+  var track = $("#track");
+  var ITEMS = ["Запис 24/7", "Нагадування", "Розклад майстра", "Без дзвінків", "Скасування в один дотик", "Під ваш салон"];
+  var html = ITEMS.map(function (t) { return "<span>" + t + "</span><span>✦</span>"; }).join("");
+  track.innerHTML = html + html + html;
+
+  // ---------- нахил телефона й карток, магнітні кнопки ----------
+  var spot = $("#spot"), spotT = { x: innerWidth / 2, y: innerHeight / 2 }, spotC = { x: innerWidth / 2, y: innerHeight / 2 };
+  var heroWrap = $(".hero .wrap");
+  var phone3d = $("#phone3d"), tgt = { rx: 6, ry: -14 }, cur = { rx: 6, ry: -14 }, mouse = { x: 0, y: 0 };
+  if (fine && !reduce) {
+    window.addEventListener("mousemove", function (e) {
+      spotT.x = e.clientX; spotT.y = e.clientY; spot.classList.add("on");
+      mouse.x = e.clientX / innerWidth - 0.5; mouse.y = e.clientY / innerHeight - 0.5;
+      tgt.ry = mouse.x * 34; tgt.rx = -mouse.y * 22;
+    });
+    $$(".tilt").forEach(function (c) {
+      c.addEventListener("mousemove", function (e) {
+        var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty("--ry", (x - 0.5) * 10 + "deg"); c.style.setProperty("--rx", (0.5 - y) * 10 + "deg");
+        c.style.setProperty("--mx", x * 100 + "%"); c.style.setProperty("--my", y * 100 + "%");
+      });
+      c.addEventListener("mouseleave", function () { c.style.setProperty("--ry", "0deg"); c.style.setProperty("--rx", "0deg"); });
+    });
+    $$(".magnetic").forEach(function (b) {
+      b.addEventListener("mousemove", function (e) {
+        var r = b.getBoundingClientRect();
+        b.style.transform = "translate(" + (e.clientX - r.left - r.width / 2) * 0.28 + "px," + (e.clientY - r.top - r.height / 2) * 0.4 + "px)";
+      });
+      b.addEventListener("mouseleave", function () { b.style.transform = ""; });
+    });
+  }
+
+  // ---------- прокрутка: прогрес, паралакс, історія ----------
+  var progress = $("#progress"), header = $("#header"), story = $("#story"), steps = $$("#steps .st"),
+      rail = $$("#rail i"), ghost = $("#ghostnum"), how = $("#how"), hows = $$(".hs", how),
+      big = $("#bigtxt"), fin = $("#final"), par = $$("[data-speed]");
+  var lastY = scrollY, vel = 0, off = 0, half = 0, storyStep = -1;
+
+  function onScroll() {
+    var y = scrollY, vh = innerHeight, max = document.documentElement.scrollHeight - vh;
+    progress.style.transform = "scaleX(" + (max > 0 ? y / max : 0) + ")";
+    header.classList.toggle("scrolled", y > 30);
+    reveal();
+
+    var r = story.getBoundingClientRect(), p = clamp(-r.top / (r.height - vh), 0, 1);
+    var s = Math.min(3, Math.floor(p * 4));
+    if (s !== storyStep) {
+      storyStep = s;
+      steps.forEach(function (el, k) { el.classList.toggle("on", k === s); el.classList.toggle("prev", k < s); });
+      setStory(s);
+      ghost.textContent = s < 3 ? s + 1 : "✓";
+    }
+    rail.forEach(function (el, k) { el.style.setProperty("--f", clamp(p * 4 - k, 0, 1)); });
+
+    var hr = how.getBoundingClientRect(), hp = clamp((vh * 0.62 - hr.top) / hr.height, 0, 1);
+    how.style.setProperty("--p", hp);
+    hows.forEach(function (el, k) { el.classList.toggle("done", hp > (k + 0.1) / hows.length); });
+
+    if (!reduce) {
+      // перший екран віддаляється й гасне під час прокрутки
+      var hp2 = clamp(y / vh, 0, 1);
+      heroWrap.style.setProperty("--hy", (hp2 * 90).toFixed(1) + "px");
+      heroWrap.style.setProperty("--hsc", (1 - hp2 * 0.08).toFixed(3));
+      heroWrap.style.setProperty("--ho", (1 - hp2 * 1.15).toFixed(3));
+      var fr = fin.getBoundingClientRect();
+      big.style.setProperty("--x", (-(vh - fr.top) * 0.35) + "px");
+    }
+  }
+
+  function frame() {
+    var y = scrollY;
+    if (y !== lastY) onScroll();  // страховка, якщо браузер не надіслав подію scroll
+    vel += ((y - lastY) - vel) * 0.18; lastY = y;
+    // паралакс фону: прокрутка + курсор
+    par.forEach(function (el) {
+      var m = +(el.dataset.m || 0);
+      el.style.transform = "translate3d(" + (mouse.x * m) + "px," + (y * +el.dataset.speed + mouse.y * m) + "px,0)";
+    });
+    // рядок: швидкість і нахил залежать від швидкості прокрутки
+    if (!half) half = track.scrollWidth / 3;
+    off = (off + 1.1 + Math.abs(vel) * 0.55) % (half || 1);
+    track.style.transform = "translate3d(" + (-off) + "px,0,0) skewX(" + clamp(-vel * 0.35, -14, 14) + "deg)";
+    // телефон плавно повертається за курсором
+    cur.rx += (tgt.rx - cur.rx) * 0.07; cur.ry += (tgt.ry - cur.ry) * 0.07;
+    phone3d.style.setProperty("--rx", cur.rx.toFixed(2) + "deg");
+    phone3d.style.setProperty("--ry", cur.ry.toFixed(2) + "deg");
+    phone3d.style.setProperty("--gl", (50 - cur.ry * 2.4).toFixed(1) + "%");
+    spotC.x += (spotT.x - spotC.x) * 0.12; spotC.y += (spotT.y - spotC.y) * 0.12;
+    spot.style.transform = "translate3d(" + spotC.x.toFixed(1) + "px," + spotC.y.toFixed(1) + "px,0)";
+    requestAnimationFrame(frame);
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", function () { half = 0; onScroll(); });
+  window.addEventListener("load", onScroll);
+  setTimeout(onScroll, 600);
+  onScroll();
+  if (!reduce) requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
