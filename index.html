@@ -688,7 +688,7 @@
       <p>Бот може повернути вам приблизно</p>
       <div class="lost"><span id="cResult">1 200</span> грн</div>
       <p>на місяць за вашими цифрами.</p>
-      <div class="vs">Підтримка бота: 500 грн / місяць<div class="bar"><i id="cBar"></i></div></div>
+      <div class="vs">Підтримка бота: від 300 грн / місяць<div class="bar"><i id="cBar"></i></div></div>
     </div>
   </div>
 </div></section>
@@ -704,25 +704,25 @@
       <div class="name">Тест</div>
       <div class="p"><span data-count="0">0</span> грн</div>
       <div class="when">перші 2 тижні</div>
-      <ul><li>Повноцінний бот під ваш салон</li><li>Нагадування й розклад майстра</li><li>Без зобовʼязань</li></ul>
+      <ul><li>Повноцінний бот під ваш салон</li><li>Окремо або разом з Altegio</li><li>Без зобовʼязань</li></ul>
       <a class="btn cream contact" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні.">Спробувати <span class="arr">→</span></a>
     </div>
     <div class="plan rv" style="--d:90ms">
-      <div class="name">Підключення</div>
-      <div class="p"><span data-count="2000">2 000</span> грн</div>
-      <div class="when">один раз</div>
-      <ul><li>Налаштування під ваш салон: назва, адреса, послуги, ціни, графік</li><li>Запуск і перевірка разом з вами</li><li>Допомога зі створенням бота в Telegram</li></ul>
-      <a class="btn light contact" href="#" data-msg="Добрий день! Хочу дізнатися більше про підключення бота для запису (2 000 грн): що потрібно від мене і скільки часу займе запуск?">Дізнатися більше</a>
+      <div class="name">Окремо</div>
+      <div class="p"><span data-count="400">400</span> грн <small>/ місяць</small></div>
+      <div class="when">+ підключення 1 500 грн один раз</div>
+      <ul><li>Бот сам веде розклад: ваші послуги, ціни й графік</li><li>Нагадування, розклад майстра, вихідні й перерви в боті</li><li>Сервер 24/7, щоденні копії записів, правки</li></ul>
+      <a class="btn light contact" href="#" data-msg="Добрий день! Хочу дізнатися більше про бота для запису без CRM (1 500 грн підключення, 400 грн на місяць).">Дізнатися більше</a>
     </div>
     <div class="plan rv" style="--d:180ms">
-      <div class="name">Підтримка</div>
-      <div class="p"><span data-count="500">500</span> грн <small>/ місяць</small></div>
-      <div class="when">після тестового періоду</div>
-      <ul><li>Бот працює на сервері 24/7</li><li>Щоденні резервні копії записів</li><li>Правки послуг, цін і графіка</li></ul>
-      <a class="btn light contact" href="#" data-msg="Добрий день! Хочу дізнатися більше про підтримку бота (500 грн на місяць): що входить і як відбуваються зміни?">Дізнатися більше</a>
+      <div class="name">З Altegio</div>
+      <div class="p"><span data-count="300">300</span> грн <small>/ місяць</small></div>
+      <div class="when">+ підключення 1 000 грн один раз</div>
+      <ul><li>Запис у Telegram одразу у ваш Altegio</li><li>Клієнт обирає майстра, послугу й вільний час</li><li>Нагадування в Telegram безкоштовні, на відміну від SMS</li></ul>
+      <a class="btn light contact" href="#" data-msg="Добрий день! У нас Altegio, хочу дізнатися більше про бота для запису в Telegram (1 000 грн підключення, 300 грн на місяць).">Дізнатися більше</a>
     </div>
   </div>
-  <p class="note rv">500 грн на місяць це приблизно одна-дві стрижки.</p>
+  <p class="note rv">Підтримка коштує приблизно як одна стрижка на місяць.</p>
 </div></section>
 
 <!-- ЯК ПОЧАТИ -->
@@ -1259,7 +1259,7 @@
     $("#oLost").textContent = lost;
     $("#oShare").textContent = share + "%";
     var to = check * lost * share / 100, from = shown, t0 = performance.now(), id = ++calcAnim;
-    cBar.style.setProperty("--w", (to > 0 ? Math.min(100, 500 / to * 100) : 100).toFixed(1) + "%");
+    cBar.style.setProperty("--w", (to > 0 ? Math.min(100, 300 / to * 100) : 100).toFixed(1) + "%");
     (function tick(t) {
       if (id !== calcAnim) return;
       var p = reduce ? 1 : clamp((t - t0) / 450, 0, 1);
