@@ -51,6 +51,75 @@
   #cring.press>span{transform:scale(1.35);background:rgba(200,150,62,.85)}
   #cring.hover.press>span{transform:scale(1.6)}
 
+  /* ---------- заставка при вході ---------- */
+  #intro{position:fixed;inset:0;z-index:120;background:radial-gradient(120% 90% at 50% 40%,#2C6A51,#1E4D3A 55%,#123124);color:#FFF8EA;display:grid;place-items:center;
+    clip-path:inset(0 0 0 0);transition:clip-path .9s cubic-bezier(.76,0,.24,1);animation:introFailsafe 0s 4.5s forwards}
+  html:not(.js) #intro{display:none}
+  #intro.gone{clip-path:inset(0 0 100% 0)}
+  @keyframes introFailsafe{to{visibility:hidden;pointer-events:none}}
+  .intro-in{display:flex;flex-direction:column;align-items:center;gap:22px;transition:transform .9s cubic-bezier(.76,0,.24,1),opacity .5s}
+  #intro.gone .intro-in{transform:translateY(-60px);opacity:0}
+  .intro-in .pole{width:26px;height:62px;border-radius:13px;border:3px solid #FFF8EA;animation:popin .7s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes popin{from{transform:scale(0) rotate(-40deg)}}
+  .intro-word{display:flex;font:800 clamp(42px,9vw,90px)/1 var(--head);letter-spacing:-.03em}
+  .intro-word span{display:inline-block;animation:ijump .9s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--k)*65ms + .15s)}
+  .intro-word span:nth-child(n+7){color:#FFE3A6}
+  @keyframes ijump{0%{opacity:0;transform:translateY(90px) scale(.6,1.4) rotate(-12deg)}55%{opacity:1;transform:translateY(-16px) scale(1.14,.86) rotate(2deg)}
+    75%{transform:translateY(5px) scale(.95,1.05)}100%{opacity:1;transform:none}}
+  .intro-bar{width:min(220px,60vw);height:4px;border-radius:2px;background:rgba(255,248,234,.2);overflow:hidden}
+  .intro-bar i{display:block;height:100%;background:#FFE3A6;transform-origin:0 50%;animation:ibar 1.2s .25s cubic-bezier(.6,0,.2,1) both}
+  @keyframes ibar{from{transform:scaleX(0)}}
+  .intro-tip{font:600 14px var(--body);opacity:.75;animation:fadein .6s .6s both}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}}
+
+  /* ---------- літери заголовка вистрибують ---------- */
+  h1 .ch{display:inline-block}
+  .js h1 .ch{opacity:0}
+  .loaded h1 .ch{animation:hjump .9s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--j)*36ms)}
+  @keyframes hjump{0%{opacity:0;transform:translateY(-1.1em) scale(.7,1.35) rotate(-14deg)}
+    50%{opacity:1;transform:translateY(.12em) scale(1.18,.82) rotate(3deg)}
+    72%{transform:translateY(-.08em) scale(.95,1.06)}100%{opacity:1;transform:none}}
+
+  /* ---------- підказки: куди гортати й що натискати ---------- */
+  section[id]{scroll-margin-top:70px}
+  .scroll-cue{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;
+    text-decoration:none;color:var(--muted);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;z-index:3;transition:opacity .4s,transform .4s}
+  .scroll-cue.hide{opacity:0;transform:translateX(-50%) translateY(14px);pointer-events:none}
+  .scroll-cue .mouse{width:26px;height:40px;border:2px solid var(--ink2);border-radius:14px;position:relative}
+  .scroll-cue .mouse i{position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--green);animation:wheel 1.6s infinite}
+  @keyframes wheel{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
+  .scroll-cue .finger{display:none;font-size:26px;animation:swipe 1.8s ease-in-out infinite}
+  @keyframes swipe{0%,100%{transform:translateY(8px);opacity:.4}50%{transform:translateY(-10px);opacity:1}}
+  .scroll-cue .chev{animation:chev 1.4s ease-in-out infinite;color:var(--green)}
+  @keyframes chev{50%{transform:translateY(5px)}}
+  @media (hover:none){.scroll-cue .mouse{display:none}.scroll-cue .finger{display:block}}
+
+  .story-cue{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:10px 16px;border-radius:99px;background:var(--card);border:1px solid var(--line);
+    font-weight:700;font-size:14px;color:var(--ink2);box-shadow:var(--shadow);transition:opacity .3s}
+  .story-cue .chev{display:inline-block;color:var(--green);animation:chev 1.2s ease-in-out infinite}
+
+  .tap-hint{position:absolute;left:0;top:0;z-index:9;pointer-events:none;display:flex;flex-direction:column;align-items:center;opacity:0;transition:opacity .4s,transform .45s var(--ease)}
+  .tap-hint.on{opacity:1}
+  .tap-hint .hand{font-size:34px;line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));animation:tap 1.3s ease-in-out infinite;transform-origin:50% 0}
+  @keyframes tap{0%,100%{transform:translateY(6px)}45%{transform:translateY(-4px) scale(.92)}55%{transform:translateY(-4px) scale(.92)}}
+  .tap-hint .bubble{margin-top:2px;background:var(--ink);color:#FFF8EA;font-size:12px;font-weight:800;padding:5px 10px;border-radius:99px;white-space:nowrap}
+
+  .field{position:relative}
+  .slide-hint{position:absolute;left:30%;top:52px;display:flex;align-items:center;gap:6px;pointer-events:none;font-size:12px;font-weight:800;color:var(--green);transition:opacity .4s}
+  .slide-hint .hand{font-size:24px;animation:slide 1.8s ease-in-out infinite}
+  @keyframes slide{0%,100%{transform:translateX(-18px) rotate(-8deg)}50%{transform:translateX(26px) rotate(8deg)}}
+  .slide-hint.hide{opacity:0}
+
+  .secnav{position:fixed;right:18px;top:50%;transform:translateY(-50%);z-index:45;display:none;flex-direction:column;align-items:flex-end;gap:12px}
+  .secnav a{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink2);font-size:13px;font-weight:700}
+  .secnav a i{width:10px;height:10px;border-radius:5px;background:var(--line);border:2px solid var(--paper);box-shadow:0 0 0 1px #CDBFA6;transition:height .35s var(--ease),background .3s}
+  .secnav a span{opacity:0;transform:translateX(10px);transition:opacity .25s,transform .3s var(--ease);background:var(--card);padding:4px 10px;border-radius:8px;box-shadow:var(--shadow)}
+  .secnav a:hover span,.secnav a.on span{opacity:1;transform:none}
+  .secnav a.on span{background:var(--green);color:#FFF8EA}
+  .secnav a.on i{height:26px;background:var(--green);box-shadow:none}
+  .secnav:hover a span{opacity:1;transform:none}
+  @media (min-width:1180px) and (hover:hover){.secnav{display:flex}}
+
   /* ---------- телефон підлітає до вас ---------- */
   .zoom{position:fixed;inset:0;z-index:80;display:grid;place-items:center;visibility:hidden;pointer-events:none}
   .zoom.open{visibility:visible;pointer-events:auto}
@@ -135,7 +204,7 @@
   h1 .w{display:inline-block}
   .mark{position:relative;white-space:nowrap;color:var(--green)}
   .mark svg{position:absolute;left:-2%;bottom:-.12em;width:104%;height:.36em;overflow:visible}
-  .mark path{fill:none;stroke:var(--brass);stroke-width:7;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;transition:stroke-dashoffset 1.2s .9s var(--ease)}
+  .mark path{fill:none;stroke:var(--brass);stroke-width:7;stroke-linecap:round;stroke-dasharray:420;stroke-dashoffset:420;transition:stroke-dashoffset 1.2s 1.3s var(--ease)}
   .loaded .mark path{stroke-dashoffset:0}
   .lead{font-size:20px;color:var(--ink2);max-width:540px;margin-bottom:30px}
   .cta{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:30px}
@@ -144,8 +213,7 @@
   .checks i{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--green-soft);color:var(--green);font-style:normal;font-size:13px;font-weight:800}
 
   /* анімація появи заголовка */
-  .js h1 .w{opacity:0;transform:translateY(.5em);filter:blur(6px);transition:opacity .8s var(--ease),transform .8s var(--ease),filter .8s var(--ease);transition-delay:calc(var(--i)*70ms)}
-  .loaded h1 .w{opacity:1;transform:none;filter:none}
+  /* поява заголовка тепер по літерах (див. «літери заголовка вистрибують») */
 
   /* декоративні плями й ножиці */
   .blob{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;z-index:-1;will-change:transform}
@@ -458,6 +526,7 @@
 </head>
 <body>
 <script>document.documentElement.classList.add("js")</script>
+<div id="intro" aria-hidden="true"><div class="intro-in"><span class="pole"></span><div class="intro-word"><span style="--k:0">B</span><span style="--k:1">a</span><span style="--k:2">r</span><span style="--k:3">b</span><span style="--k:4">e</span><span style="--k:5">r</span><span style="--k:6">B</span><span style="--k:7">o</span><span style="--k:8">t</span></div><div class="intro-bar"><i></i></div><div class="intro-tip">Запис у барбершоп через Telegram</div></div></div>
 <div class="progress" id="progress"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -477,6 +546,7 @@
 
 <!-- HERO -->
 <section class="hero">
+  <a class="scroll-cue" id="scrollCue" href="#why"><span class="mouse"><i></i></span><span class="finger">👆</span><span>Гортайте вниз</span><span class="chev">↓</span></a>
   <div class="blob g" data-par="0.12"></div>
   <div class="blob b" data-par="-0.08"></div>
   <div class="icons" aria-hidden="true" data-par="0.2">
@@ -568,6 +638,7 @@
           <div class="st"><div class="num">04</div><h2>Готово</h2><p>Клієнт бачить підтвердження, а ви миттєво отримуєте сповіщення про новий запис.</p></div>
         </div>
         <div class="rail" id="rail"><i></i><i></i><i></i><i></i></div>
+        <div class="story-cue" id="storyCue"><span class="chev">↓</span><span id="storyCueT">Гортайте, щоб побачити крок 2 з 4</span></div>
       </div>
       <div class="phone-scene">
         <div class="phone">
@@ -629,6 +700,7 @@
         <div class="chat" id="demoChat"></div>
       </div>
     </div>
+    <div class="tap-hint" id="tapHint" aria-hidden="true"><span class="hand">👆</span><span class="bubble">Натисніть</span></div>
     <div class="notif" id="notif">
       <div class="who"><span class="ava" style="width:28px;height:28px;font-size:11px">B</span>Вам прийшло</div>
       <b>🆕 Новий запис</b><span id="notifText"></span>
@@ -673,7 +745,7 @@
   <div class="calc">
     <div class="panel rv">
       <div class="field"><label for="cCheck">Середній чек <output id="oCheck">400 грн</output></label>
-        <input type="range" id="cCheck" min="150" max="1500" step="50" value="400"></div>
+        <input type="range" id="cCheck" min="150" max="1500" step="50" value="400"><div class="slide-hint" id="slideHint" aria-hidden="true"><span class="hand">👆</span>Посуньте</div></div>
       <div class="field"><label for="cLost">Клієнтів на місяць, що не дочекались відповіді або забули прийти <output id="oLost">6</output></label>
         <input type="range" id="cLost" min="0" max="40" step="1" value="6"></div>
       <div class="field" style="margin-bottom:0"><label for="cShare">Скільки з них бот міг би зберегти <output id="oShare">50%</output></label>
@@ -794,6 +866,7 @@
   </div>
 </div>
 
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div>
 
@@ -816,7 +889,50 @@
     a.target = "_blank"; a.rel = "noopener";
   });
 
-  requestAnimationFrame(function () { document.documentElement.classList.add("loaded"); });
+  // ---------- літери заголовка: розбиваємо слова на літери ----------
+  (function () {
+    var j = 0;
+    $$("h1 .w").forEach(function (w) {
+      Array.prototype.slice.call(w.childNodes).forEach(function (n) {
+        if (n.nodeType !== 3) return;  // svg-підкреслення не чіпаємо
+        var frag = document.createDocumentFragment();
+        n.textContent.split("").forEach(function (c) {
+          var s = document.createElement("span");
+          s.className = "ch"; s.setAttribute("aria-hidden", "true"); s.style.setProperty("--j", j++);
+          s.textContent = c;
+          frag.appendChild(s);
+        });
+        w.replaceChild(frag, n);
+      });
+    });
+  })();
+
+  // ---------- заставка при вході (раз за відвідування) ----------
+  var startPage = function () {
+    document.documentElement.classList.add("loaded");
+    if (!reduce && typeof ph !== "undefined" && ph) { ph.ry = -370; ph.vy = 0; }  // телефон робить оберт уже після заставки
+  };
+  (function () {
+    var intro = $("#intro"), seen = false;
+    try { seen = sessionStorage.getItem("bb-intro") === "1"; } catch (e) { /* без памʼяті */ }
+    if (!intro || reduce || seen) {
+      if (intro) intro.remove();
+      requestAnimationFrame(startPage);
+      return;
+    }
+    try { sessionStorage.setItem("bb-intro", "1"); } catch (e) { /* без памʼяті */ }
+    document.documentElement.classList.add("lock");
+    var done = false;
+    var finish = function () {
+      if (done) return; done = true;
+      intro.classList.add("gone");
+      document.documentElement.classList.remove("lock");
+      setTimeout(startPage, 300);
+      setTimeout(function () { intro.remove(); }, 1100);
+    };
+    setTimeout(finish, 1650);
+    intro.addEventListener("click", finish);  // нетерплячим: клік пропускає заставку
+  })();
 
   // ---------- сценарій чату ----------
   var CHECK = '<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M12 20.5l5.5 5.5L28.5 14.5"/></svg>';
@@ -1370,6 +1486,44 @@
   [cCheck, cLost, cShare].forEach(function (el) { el.addEventListener("input", calc); });
   calc();
 
+  // ---------- підказки: що натискати й куди гортати ----------
+  var scrollCue = $("#scrollCue"), storyCueT = $("#storyCueT"), storyCue = $("#storyCue"),
+      secLinks = $$("#secnav a"), secs = secLinks.map(function (a) { return document.getElementById(a.dataset.sec); }),
+      tapHint = $("#tapHint"), slideHint = $("#slideHint"), lastStoryStep = -1;
+
+  function guideScroll(y, vh, s) {
+    scrollCue.classList.toggle("hide", y > 40);
+    if (s !== lastStoryStep) {
+      lastStoryStep = s;
+      storyCueT.textContent = s < 3 ? "Гортайте, щоб побачити крок " + (s + 2) + " з 4" : "Готово! Гортайте далі";
+    }
+    // яка секція зараз посередині екрана
+    var mid = vh * 0.45, active = 0;
+    secs.forEach(function (sec, k) { if (sec && sec.getBoundingClientRect().top <= mid) active = k; });
+    secLinks.forEach(function (a, k) { a.classList.toggle("on", k === active); });
+  }
+
+  // рука в демо показує наступну кнопку
+  function updateTapHint() {
+    var scene = tapHint.parentElement, chat = $("#demoChat");
+    var btns = $$(".kb button:not(:disabled)", chat), b = btns[0];
+    if (!b) { tapHint.classList.remove("on"); return; }
+    var sr = scene.getBoundingClientRect(), br = b.getBoundingClientRect(), cr = chat.getBoundingClientRect();
+    if (br.bottom > cr.bottom || br.top < cr.top) { tapHint.classList.remove("on"); return; }
+    var x = br.left - sr.left + br.width / 2 - 26, yy = br.top - sr.top + br.height * 0.55;
+    tapHint.style.transform = "translate(" + x.toFixed(0) + "px," + yy.toFixed(0) + "px)";
+    tapHint.classList.add("on");
+  }
+  setInterval(function () {
+    var r = tryEl.getBoundingClientRect();
+    if (r.top < innerHeight && r.bottom > 0) updateTapHint();
+  }, 300);
+
+  // рука на повзунку зникає, щойно людина спробувала
+  $$("#calc input[type=range]").forEach(function (el) {
+    el.addEventListener("input", function () { slideHint.classList.add("hide"); }, { once: true });
+  });
+
   // ---------- прокрутка ----------
   var progress = $("#progress"), header = $("#header"), story = $("#how-client"), steps = $$("#steps .st"),
       rail = $$("#rail i"), how = $("#how"), hows = $$(".hs", how), mbar = $("#mbar"), par = $$("[data-par]"),
@@ -1401,6 +1555,7 @@
     });
 
     if (!demoStarted && tryEl.getBoundingClientRect().top < vh * 0.8) { demoStarted = true; startDemo(); }
+    guideScroll(y, vh, s);
   }
 
   function frame() {
