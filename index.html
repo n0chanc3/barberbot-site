@@ -189,28 +189,6 @@
   .avatars .emj-n{font-size:32px;animation:popav .45s cubic-bezier(.3,1.6,.5,1) both}
   .locs .emj-n{font-size:18px}
 
-  /* ---------- гра «Підстрижіть бороду» ---------- */
-  .game{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
-  .gwrap{position:relative;border-radius:28px;overflow:hidden;background:radial-gradient(circle at 50% 38%,#FFFDF8,#EFE6D4);
-    border:1px solid var(--line);box-shadow:var(--shadow);cursor:none;touch-action:none;user-select:none;-webkit-user-select:none}
-  #gCanvas{display:block;width:100%;aspect-ratio:520/440;touch-action:none}
-  .gstats{display:flex;align-items:center;gap:14px;margin:0 0 22px;max-width:420px}
-  .gbar{flex:1;height:12px;border-radius:6px;background:var(--line);overflow:hidden}
-  .gbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green2),var(--brass));transition:width .25s var(--ease)}
-  #gPct{font:700 20px var(--head);min-width:64px}
-  .gtip{font-weight:700;color:var(--muted);font-size:15px;margin-bottom:18px}
-  .gwin{position:absolute;inset:0;display:grid;place-items:center;background:rgba(246,241,231,.84);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-    opacity:0;pointer-events:none;transition:opacity .4s;cursor:auto}
-  .gwin.on{opacity:1;pointer-events:auto}
-  .gwin-in{text-align:center;display:grid;gap:12px;justify-items:center;padding:20px;transform:scale(.8);transition:transform .55s cubic-bezier(.3,1.6,.5,1)}
-  .gwin.on .gwin-in{transform:none}
-  .gbig{font-size:56px;line-height:1}
-  .gbig .emj{width:68px;height:68px}
-  .gwin h3{font-size:28px}
-  .gwin p{color:var(--muted)}
-  .gbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
-  @media(max-width:960px){.game{grid-template-columns:minmax(0,1fr);gap:26px}}
-
   /* ---------- телефон підлітає до вас ---------- */
   .zoom{position:fixed;inset:0;z-index:80;display:grid;place-items:center;visibility:hidden;pointer-events:none}
   .zoom.open{visibility:visible;pointer-events:auto}
@@ -613,6 +591,95 @@
     html{scroll-behavior:auto}
     *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important}
   }
+
+  /* =====================================================================
+     МІНІМАЛІЗМ: прибираємо те, що мельтешить
+     ===================================================================== */
+  .ribbon-band,.cut,.icons{display:none!important}
+  #cring{width:30px;height:30px;margin:-15px 0 0 -15px}
+  #cdot{width:6px;height:6px;margin:-3px 0 0 -3px}
+
+  /* =====================================================================
+     РЕАЛІСТИЧНИЙ iPhone + Telegram
+     ===================================================================== */
+  .phone{padding:9px;border-radius:54px;
+    background:linear-gradient(145deg,#6a6d75 0%,#2c2d32 16%,#15161a 50%,#2c2d32 84%,#6a6d75 100%);
+    box-shadow:inset 0 0 0 1.5px #8a8d96,inset 0 0 0 4px #0b0b0d,0 2px 3px rgba(0,0,0,.25),0 50px 90px rgba(21,23,28,.3)}
+  .phone::before{top:19px;width:98px;height:29px;margin-left:-49px;border-radius:16px;background:#000;box-shadow:inset 0 0 0 1px #1c1c1e}
+  .phone::after{inset:9px;border-radius:45px}
+  .phone .screen{border-radius:45px;
+    background-color:#CBDCB4;
+    background-image:
+      radial-gradient(circle at 20% 18%,rgba(255,255,255,.32) 0 2px,transparent 3px),
+      radial-gradient(circle at 72% 64%,rgba(255,255,255,.22) 0 1.6px,transparent 2.6px),
+      radial-gradient(circle at 45% 85%,rgba(60,90,50,.10) 0 2px,transparent 3px),
+      linear-gradient(165deg,#DFEACB 0%,#C6D9AB 55%,#B6CD98 100%);
+    background-size:40px 40px,56px 56px,48px 48px,100% 100%}
+  .sbar{position:absolute;left:0;right:0;top:0;height:50px;padding:2px 26px 0 36px;display:flex;align-items:center;justify-content:space-between;z-index:5;
+    font:600 14px -apple-system,"SF Pro Text",system-ui,sans-serif;color:#000;pointer-events:none;letter-spacing:-.01em}
+  .sbar span{display:flex;gap:5px;align-items:center}
+  .sbar svg{display:block;height:11px;width:auto}
+  .tgbar{height:100px;padding:50px 12px 0 6px;background:rgba(247,247,247,.93);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:.5px solid rgba(0,0,0,.16)}
+  .tgbar::before{content:"";width:12px;height:21px;flex:none;margin:0 6px 0 8px;
+    background:no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 21'%3E%3Cpath d='M10.5 1.5 2 10.5l8.5 9' fill='none' stroke='%23007AFF' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+  .tgname{font:600 15px/1.2 -apple-system,"SF Pro Text",system-ui,sans-serif;color:#000}
+  .tgname small{color:#8E8E93;font-weight:400;font-size:12.5px}
+  .chat{top:100px;bottom:62px}
+  .msg{position:relative;border-radius:18px 18px 18px 5px;padding:7px 11px;box-shadow:0 1px .5px rgba(0,0,0,.14);
+    font:400 14px/1.35 -apple-system,"SF Pro Text",system-ui,sans-serif;color:#000}
+  .msg::after{content:"12:04";float:right;margin:6px -2px -3px 10px;font-size:11px;line-height:1;color:#A2AAB4}
+  .msg.me{background:#EFFDDE;border-radius:18px 18px 5px 18px}
+  .msg.me::after{content:"12:04 ✓✓";color:#4FAE4E}
+  .msg:has(.typing)::after{content:none}
+  .msg.mst{background:#FFF6DF;border:1px dashed var(--brass)}
+  .kb span,.kb button{background:rgba(28,48,27,.34);color:#fff;font:500 13px -apple-system,"SF Pro Text",system-ui,sans-serif;border-radius:9px;box-shadow:none;
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+  .kb button:hover{background:rgba(28,48,27,.46);transform:none}
+  .kb button:active{background:rgba(28,48,27,.6);transform:scale(.97)}
+  .kb button:disabled{opacity:.5}
+  .kb span.tap{animation:kbtap .7s .8s var(--ease) both}
+  @keyframes kbtap{40%{transform:scale(.93);background:rgba(28,48,27,.62)}100%{transform:none;background:rgba(28,48,27,.62)}}
+  .kb.pulse button{animation:none}
+  .ibar{position:absolute;left:0;right:0;bottom:0;height:62px;padding:7px 10px 21px;display:flex;align-items:center;gap:10px;z-index:4;
+    background:rgba(247,247,247,.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:.5px solid rgba(0,0,0,.16);pointer-events:none}
+  .ibar svg{width:22px;height:22px;flex:none}
+  .ifield{flex:1;height:32px;border-radius:16px;border:.5px solid rgba(0,0,0,.2);background:#fff;display:flex;align-items:center;padding:0 12px;
+    color:#A0A0A6;font:400 14px -apple-system,"SF Pro Text",system-ui,sans-serif}
+  .ibar::after{content:"";position:absolute;left:50%;bottom:6px;width:118px;height:5px;margin-left:-59px;border-radius:3px;background:#111}
+  /* push-сповіщення iOS */
+  .push{position:absolute;left:8px;right:8px;top:8px;z-index:9;display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:22px;
+    background:rgba(246,246,246,.86);backdrop-filter:blur(22px) saturate(1.7);-webkit-backdrop-filter:blur(22px) saturate(1.7);
+    box-shadow:0 10px 30px rgba(0,0,0,.2);transform:translateY(-140%);opacity:0;cursor:pointer;
+    transition:transform .55s cubic-bezier(.2,1.25,.3,1),opacity .3s;font:13px/1.3 -apple-system,"SF Pro Text",system-ui,sans-serif;color:#000}
+  .push.on{transform:none;opacity:1}
+  .push .app{width:36px;height:36px;border-radius:9px;background:linear-gradient(180deg,#3BB3E8,#1E93C9);flex:none;display:grid;place-items:center}
+  .push .app svg{width:20px;height:20px}
+  .push .t{flex:1;min-width:0}
+  .push .t b{display:flex;justify-content:space-between;gap:8px;font-weight:600}
+  .push .t b small{font-weight:400;color:#8E8E93}
+  .push .t .pt{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* простими словами: що робить бот */
+  .what{padding:110px 0 40px}
+  .what h2{max-width:760px}
+  .what-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+  .what-card{background:var(--card,#fff);border:1px solid rgba(0,0,0,.08);border-radius:22px;padding:26px 24px;
+    transition:transform .35s var(--ease),box-shadow .35s var(--ease)}
+  .what-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(21,23,28,.10)}
+  .what-n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--green);color:#fff;margin-bottom:14px}
+  .what-card h3{margin:0 0 10px;font-size:20px}
+  .what-card p{margin:0;line-height:1.55;opacity:.85}
+  .what-card ul{margin:0;padding:0;list-style:none}
+  .what-card li{position:relative;padding:5px 0 5px 22px;line-height:1.45}
+  .what-card li::before{content:"";position:absolute;left:2px;top:13px;width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .what-foot{margin-top:24px;font-size:17px;opacity:.8}
+  @media(max-width:860px){.what{padding:80px 0 20px}.what-grid{grid-template-columns:1fr}}
+  @media(max-width:960px){
+    .story .tgbar{height:92px;padding-top:44px}
+    .story .chat{top:92px;bottom:56px}
+    .story .ibar{height:56px;padding-bottom:17px}
+    .story .phone{border-radius:44px;padding:8px}
+    .story .screen{border-radius:36px}
+  }
 </style>
 </head>
 <body>
@@ -628,7 +695,7 @@
 <header id="header"><div class="wrap">
   <a class="logo" href="#top"><span class="pole" aria-hidden="true"></span>BarberBot</a>
   <nav class="links" aria-label="Розділи">
-    <a href="#why">Навіщо</a><a href="#how-client">Як записуються</a><a href="#master">Для майстра</a><a href="#price">Вартість</a><a href="#faq">Питання</a>
+    <a href="#what">Що це</a><a href="#how-client">Як записуються</a><a href="#master">Для майстра</a><a href="#price">Вартість</a><a href="#faq">Питання</a>
   </nav>
   <a class="btn sm contact" href="#"><svg class="tg-ico"><use href="#tg"/></svg>Написати</a>
 </div></header>
@@ -637,7 +704,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <a class="scroll-cue" id="scrollCue" href="#why"><span class="mouse"><i></i></span><span class="finger">👆</span><span>Гортайте вниз</span><span class="chev">↓</span></a>
+  <a class="scroll-cue" id="scrollCue" href="#what"><span class="mouse"><i></i></span><span class="finger">👆</span><span>Гортайте вниз</span><span class="chev">↓</span></a>
   <div class="blob g" data-par="0.12"></div>
   <div class="blob b" data-par="-0.08"></div>
   <div class="icons" aria-hidden="true" data-par="0.2">
@@ -688,6 +755,41 @@
 </section>
 
 <div class="ribbon-band" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<!-- ПРОСТИМИ СЛОВАМИ -->
+<section id="what" class="what"><div class="wrap">
+  <div class="eyebrow rv">Простими словами</div>
+  <h2 class="rv">Що це за бот і <span class="acc" style="color:var(--green)">навіщо він вам</span></h2>
+  <div class="what-grid">
+    <div class="what-card rv">
+      <div class="what-n">1</div>
+      <h3>Що це</h3>
+      <p>Чат-бот у Telegram з назвою вашого салону. Клієнт відкриває його за посиланням з Instagram чи Google Maps, як звичайний чат.</p>
+    </div>
+    <div class="what-card rv" style="--d:90ms">
+      <div class="what-n">2</div>
+      <h3>Що він робить</h3>
+      <ul>
+        <li>Показує ваші послуги й ціни</li>
+        <li>Пропонує лише вільні дні й години</li>
+        <li>Записує клієнта і пише вам про новий запис</li>
+        <li>Нагадує клієнту про візит за добу й за 2 години</li>
+        <li>Дає клієнту скасувати запис одним натисканням</li>
+      </ul>
+    </div>
+    <div class="what-card rv" style="--d:180ms">
+      <div class="what-n">3</div>
+      <h3>Навіщо це вам</h3>
+      <ul>
+        <li>Не треба відповідати в Direct і по телефону</li>
+        <li>Записи приходять навіть уночі, поки ви спите</li>
+        <li>Менше клієнтів, які забули прийти</li>
+        <li>Увесь розклад на день в одному повідомленні</li>
+      </ul>
+    </div>
+  </div>
+  <p class="what-foot rv">Клієнту нічого встановлювати не треба. Вам теж: усе приходить у ваш Telegram.</p>
+</div></section>
 
 <!-- БУЛО / СТАЛО -->
 <section id="why"><div class="wrap">
@@ -883,32 +985,6 @@
   </div>
 </div></section>
 
-<!-- ГРА -->
-<section id="game" style="background:var(--paper2)"><div class="wrap game">
-  <div>
-    <div class="eyebrow rv">Хвилинка гри</div>
-    <h2 class="rv">Поки бот приймає записи, <span class="acc" style="color:var(--green)">підстрижіть бороду</span></h2>
-    <p class="sub rv" style="margin-bottom:20px">Клієнт у кріслі, ножиці у вас ✂️ Зробіть з нього красеня.</p>
-    <div class="gtip rv" id="gTip">Водіть мишкою по бороді: ножиці стрижуть самі.</div>
-    <div class="gstats rv"><div class="gbar"><i id="gBar"></i></div><b id="gPct">0%</b></div>
-    <div class="rv"><button class="btn light" id="gReset" type="button">↺ Відрастити бороду знову</button></div>
-  </div>
-  <div class="gwrap rv" id="gWrap" data-nocursor style="--d:120ms">
-    <canvas id="gCanvas" role="img" aria-label="Гра: підстрижіть бороду клієнту, водячи ножицями"></canvas>
-    <div class="gwin" id="gWin">
-      <div class="gwin-in">
-        <div class="gbig">🎉</div>
-        <h3>Красень!</h3>
-        <p id="gTime"></p>
-        <div class="gbtns">
-          <a class="btn contact" href="#" data-msg="Добрий день! Підстриг бороду на вашому сайті 😄 Хочу бота для свого барбершопу.">Хочу такого бота</a>
-          <button class="btn light" type="button" id="gAgain">↺ Ще раз</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div></section>
-
 <!-- КАЛЬКУЛЯТОР -->
 <section id="calc"><div class="wrap">
   <div class="eyebrow rv">Порахуйте самі</div>
@@ -1038,7 +1114,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#game" data-sec="game"><span>Гра</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#what" data-sec="what"><span>Що це</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
@@ -1148,6 +1224,7 @@
       heroChat.innerHTML = TYPING;
       setTimeout(function () {
         heroChat.innerHTML = frameHTML(hf);
+        if (hf === 3) pushNote(heroChat.closest(".screen"), "✅ Ви записані! Завтра о 12:00");
         hf = (hf + 1) % FRAMES.length;
         setTimeout(play, hf === 0 ? 3600 : 2600);
       }, 650);
@@ -1376,6 +1453,7 @@
                       botSay('<div class="ok"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M12 20.5l5.5 5.5L28.5 14.5"/></svg><div><b>Ви записані!</b><br>' +
                         pick.d + " о " + pick.t + "</div></div>", r, function () {
                         confetti(chat);
+                        pushNote(chat.closest(".screen"), "✅ Ви записані: " + pick.d + " о " + pick.t);
                         o.notifText.innerHTML = pick.s + "<br>📅 " + pick.d + " · 🕐 " + pick.t + "<br>🙋 Андрій · 📱 +380…";
                         setTimeout(function () { if (r === run) o.notif.classList.add("on"); }, 500);
                         if (o.autoHide && o.autoHide()) {  // на телефоні картка не закриває кнопки
@@ -1476,7 +1554,7 @@
   // ---------- ефекти за мишкою (лише комп'ютер з мишкою, без «зменшити рух») ----------
   var fxOn = fine && !reduce;
   var fxCanvas = $("#fx"), fctx = fxCanvas.getContext("2d"), ring = $("#cring"), cdot = $("#cdot"), clabel = $("#clabel");
-  var hideCursorFx = false;  // над грою власний курсор-ножиці, кільце ховаємо
+  var hideCursorFx = false, FX_TRAIL = false, FX_LENS = false;  // мінімалізм: без сліду й лінзи  // над грою власний курсор-ножиці, кільце ховаємо
   var M = { x: -999, y: -999, px: -999, py: -999, inside: false };
   var RG = { x: -999, y: -999, vx: 0, vy: 0 };
   var parts = [], wob = [], hoverEl = null, fxDpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1492,7 +1570,7 @@
     if (!fxOn) return;
     wob.forEach(function (w) { w.el.style.translate = ""; w.el.style.rotate = ""; });
     var sy = scrollY;
-    wob = $$("h1 .w, .split .wd > i, .icons span, .float-card, .checks li, .eyebrow, .demo-steps li i, .hs .n, .badge").map(function (el) {
+    wob = $$("h1 .w, .float-card, .badge").map(function (el) {
       var r = el.getBoundingClientRect();
       return { el: el, cx: r.left + r.width / 2, cy: r.top + r.height / 2 + sy, x: 0, y: 0, vx: 0, vy: 0, r: 0, vr: 0,
         k: el.matches(".icons span") ? 2.4 : el.matches(".float-card, .badge") ? 0.8 : 1 };
@@ -1540,7 +1618,7 @@
     document.addEventListener("mouseout", function (e) {
       if (!e.relatedTarget) { M.inside = false; document.documentElement.classList.remove("fx-on"); }
     });
-    window.addEventListener("mousedown", function () { ring.classList.add("press"); if (!hideCursorFx) spawn(M.x, M.y, 0, 0, true); });
+    window.addEventListener("mousedown", function () { ring.classList.add("press"); if (FX_TRAIL && !hideCursorFx) spawn(M.x, M.y, 0, 0, true); });
     window.addEventListener("mouseup", function () { ring.classList.remove("press"); });
     window.addEventListener("resize", function () { fxResize(); collectWob(); });
     window.addEventListener("load", collectWob);
@@ -1562,11 +1640,11 @@
 
     // слід із конфеті й ножиць
     var dx = M.x - M.px, dy = M.y - M.py;
-    if (M.inside && Math.hypot(dx, dy) > 14) { if (!hideCursorFx) spawn(M.x, M.y, dx, dy, false); M.px = M.x; M.py = M.y; }
+    if (M.inside && Math.hypot(dx, dy) > 14) { if (FX_TRAIL && !hideCursorFx) spawn(M.x, M.y, dx, dy, false); M.px = M.x; M.py = M.y; }
 
     fctx.clearRect(0, 0, innerWidth, innerHeight);
     // «лінза» з крапок, що розбігаються від курсора (не над кнопками й полями, щоб не заважала читати)
-    if (M.inside && !hideCursorFx && !(hoverEl && hoverEl.matches("a, button, input"))) {
+    if (FX_LENS && M.inside && !hideCursorFx && !(hoverEl && hoverEl.matches("a, button, input"))) {
       var RAD = 150, S = 22, x0 = Math.floor((M.x - RAD) / S) * S, y0 = Math.floor((M.y - RAD) / S) * S;
       fctx.fillStyle = "#1E4D3A";
       for (var gx = x0; gx <= M.x + RAD; gx += S) {
@@ -1604,8 +1682,8 @@
       if (cy < -200 || cy > vh + 200) continue;
       var ex = w.cx - M.x, ey = cy - M.y, d = Math.hypot(ex, ey), RR = w.k > 2 ? 220 : 150, tx = 0, ty = 0, tr = 0;
       if (M.inside && d < RR) {
-        var ff = 1 - d / RR, s = ff * ff * 16 * w.k;
-        tx = (ex / (d || 1)) * s; ty = (ey / (d || 1)) * s; tr = (ex > 0 ? 1 : -1) * ff * 8 * Math.min(w.k, 1.6);
+        var ff = 1 - d / RR, s = ff * ff * 7 * w.k;
+        tx = (ex / (d || 1)) * s; ty = (ey / (d || 1)) * s; tr = (ex > 0 ? 1 : -1) * ff * 3 * Math.min(w.k, 1.6);
       }
       w.vx = (w.vx + (tx - w.x) * 0.14) * 0.78; w.vy = (w.vy + (ty - w.y) * 0.14) * 0.78; w.vr = (w.vr + (tr - w.r) * 0.12) * 0.78;
       w.x += w.vx; w.y += w.vy; w.r += w.vr;
@@ -1670,6 +1748,39 @@
   }
   [cCheck, cLost, cShare].forEach(function (el) { el.addEventListener("input", calc); });
   calc();
+
+  // ---------- реалістичний iPhone: статус-бар, поле вводу, push-сповіщення ----------
+  var SV_SIG = '<svg viewBox="0 0 18 11"><rect x="0" y="7" width="3" height="4" rx="1" fill="#000"/><rect x="5" y="5" width="3" height="6" rx="1" fill="#000"/><rect x="10" y="2.5" width="3" height="8.5" rx="1" fill="#000"/><rect x="15" y="0" width="3" height="11" rx="1" fill="#000"/></svg>';
+  var SV_WIFI = '<svg viewBox="0 0 16 11"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.3-1.3A10.6 10.6 0 0 0 8 .3 10.6 10.6 0 0 0 .5 3.4l1.3 1.3A8.8 8.8 0 0 1 8 2.2Zm0 3.6c1.4 0 2.7.5 3.6 1.5l1.3-1.3A7 7 0 0 0 8 3.9a7 7 0 0 0-4.9 2.1l1.3 1.3c1-1 2.2-1.5 3.6-1.5Zm0 3.5L10.3 7a3.3 3.3 0 0 0-4.6 0L8 9.3Z" fill="#000"/></svg>';
+  var SV_BAT = '<svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="23" height="11" rx="3.5" fill="none" stroke="#000" opacity=".4"/><rect x="2" y="2" width="20" height="8" rx="2" fill="#000"/><path d="M25 4v4c.8-.3 1.4-1.1 1.4-2S25.8 4.3 25 4Z" fill="#000" opacity=".45"/></svg>';
+  var SV_CLIP = '<svg viewBox="0 0 24 24"><path d="M16.5 6.5 8.7 14.3a2 2 0 0 0 2.8 2.8l7.8-7.8a4 4 0 0 0-5.7-5.7l-7.8 7.8a6 6 0 0 0 8.5 8.5l6.4-6.4" fill="none" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var SV_MIC = '<svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" fill="none" stroke="#8E8E93" stroke-width="1.8"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" fill="none" stroke="#8E8E93" stroke-width="1.8" stroke-linecap="round"/></svg>';
+  var SV_TG = '<svg viewBox="0 0 24 24"><path fill="#fff" d="M21.9 4.6 18.7 19.8c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.3 13.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 3.1c.9-.3 1.6.2 1.4 1.5Z"/></svg>';
+  $$(".screen").forEach(function (sc) {
+    var sb = document.createElement("div");
+    sb.className = "sbar"; sb.setAttribute("aria-hidden", "true");
+    sb.innerHTML = "<b>9:41</b><span>" + SV_SIG + SV_WIFI + SV_BAT + "</span>";
+    sc.appendChild(sb);
+    var ib = document.createElement("div");
+    ib.className = "ibar"; ib.setAttribute("aria-hidden", "true");
+    ib.innerHTML = SV_CLIP + '<span class="ifield">Повідомлення</span>' + SV_MIC;
+    sc.appendChild(ib);
+    var pu = document.createElement("div");
+    pu.className = "push"; pu.setAttribute("role", "status");
+    pu.innerHTML = '<div class="app">' + SV_TG + '</div><div class="t"><b>Барбершоп <small>зараз</small></b><span class="pt"></span></div>';
+    pu.addEventListener("click", function () { pu.classList.remove("on"); });
+    sc.appendChild(pu);
+  });
+  function pushNote(screen, text) {
+    var pu = screen && screen.querySelector(".push");
+    if (!pu) return;
+    var pt = pu.querySelector(".pt");
+    pt.textContent = text;
+    if (typeof emojify === "function") emojify(pt);
+    pu.classList.remove("on"); void pu.offsetWidth; pu.classList.add("on");
+    clearTimeout(pu._t);
+    pu._t = setTimeout(function () { pu.classList.remove("on"); }, 3800);
+  }
 
   // ---------- смайлики: на iPhone/iPad/Mac системні Apple, на інших пристроях обʼємні Fluent 3D ----------
   var IS_APPLE = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
@@ -1877,205 +1988,6 @@
   });
   bSend.addEventListener("click", function () { confetti(bSend); });
   renderAvatars(0); renderLocInputs(); syncSteppers(); renderBuilder();
-
-  // ---------- гра «Підстрижіть бороду» ----------
-  (function () {
-    var wrap = $("#gWrap"), cv = $("#gCanvas"), g = cv.getContext("2d"), bar = $("#gBar"), pct = $("#gPct"),
-        win = $("#gWin"), tip = $("#gTip");
-    var W = 520, H = 440, CX = 260, CY = 175, R = 112, MIN = 9, CUT_R = 24;
-    var strands = [], bits = [], P = { x: -999, y: -999, in: false, down: false, snip: 0 }, totalLen = 0,
-        startT = 0, done = false, scale = 1, dpr = Math.min(window.devicePixelRatio || 1, 2), last = 0;
-    var touch = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (touch) tip.textContent = "Проведіть пальцем по бороді, щоб підстригти.";
-    var COLORS = ["#5B3A22", "#6E4A2E", "#4A2E1A", "#7A5536"];
-    var scisImg = null;
-    if (!IS_APPLE) { scisImg = new Image(); scisImg.src = "emoji/2702.png"; }
-
-    function rnd(a, b) { return a + Math.random() * (b - a); }
-    function grow() {
-      strands = []; bits = []; done = false; startT = 0; totalLen = 0;
-      win.classList.remove("on");
-      // борода: корені по нижній половині обличчя, волосся росте вниз і назовні
-      for (var i = 0; i < 150; i++) {
-        var a = rnd(0.15, Math.PI - 0.15), rr = R * rnd(0.55, 1.02);
-        var x = CX + Math.cos(a) * rr, y = CY + 30 + Math.sin(a) * rr * 0.95;
-        if (Math.hypot(x - CX, y - (CY + 52)) < 26) continue;  // рот лишаємо вільним
-        var dir = Math.atan2(y - CY + 40, x - CX) * 0.55 + Math.PI / 2 * 0.45;
-        var len = rnd(55, 110);
-        strands.push({ x: x, y: y, a: dir + rnd(-0.25, 0.25), len: len, orig: len, curl: rnd(-18, 18), w: rnd(3, 5),
-          c: COLORS[(Math.random() * COLORS.length) | 0] });
-      }
-      // вуса
-      for (var k = 0; k < 26; k++) {
-        var side = k % 2 ? 1 : -1, mx = CX + side * rnd(6, 34), my = CY + 38 + rnd(-3, 3);
-        var ml = rnd(28, 46);
-        strands.push({ x: mx, y: my, a: side > 0 ? rnd(0.15, 0.6) : Math.PI - rnd(0.15, 0.6), len: ml, orig: ml, curl: side * rnd(4, 10),
-          w: rnd(3, 4.5), c: COLORS[k % COLORS.length] });
-      }
-      strands.forEach(function (s) { totalLen += s.orig - MIN; });
-      update();
-    }
-    function tipOf(s, len) { return { x: s.x + Math.cos(s.a) * len, y: s.y + Math.sin(s.a) * len }; }
-    function cutAt(px, py) {
-      var cut = false;
-      for (var i = 0; i < strands.length; i++) {
-        var s = strands[i];
-        if (s.len <= MIN + 0.5) continue;
-        var t = tipOf(s, s.len), vx = t.x - s.x, vy = t.y - s.y, L2 = vx * vx + vy * vy;
-        var u = Math.max(0, Math.min(1, ((px - s.x) * vx + (py - s.y) * vy) / L2));
-        var qx = s.x + vx * u, qy = s.y + vy * u;
-        if (Math.hypot(px - qx, py - qy) > CUT_R) continue;
-        var nl = Math.max(MIN, s.len * u);
-        if (s.len - nl < 2) continue;
-        var from = tipOf(s, nl);
-        bits.push({ x1: from.x, y1: from.y, x2: t.x, y2: t.y, vx: rnd(-1.2, 1.2), vy: rnd(-1, 0.5), rot: 0, vr: rnd(-0.08, 0.08),
-          c: s.c, w: s.w, life: 1 });
-        s.len = nl; cut = true;
-      }
-      if (bits.length > 400) bits.splice(0, bits.length - 400);
-      if (cut) {
-        P.snip = 1;
-        if (!startT) startT = performance.now();
-        update();
-      }
-    }
-    function progress() {
-      var left = 0;
-      strands.forEach(function (s) { left += s.len - MIN; });
-      return totalLen ? 1 - left / totalLen : 0;
-    }
-    function update() {
-      var p = Math.min(1, progress() / 0.9);
-      bar.style.width = (p * 100).toFixed(0) + "%";
-      pct.textContent = Math.round(p * 100) + "%";
-      if (p >= 1 && !done) {
-        done = true;
-        var sec = startT ? Math.max(1, Math.round((performance.now() - startT) / 1000)) : 0;
-        $("#gTime").textContent = sec ? "Ви впоралися за " + sec + " с. А записатися до барбера з ботом ще швидше 😎" : "";
-        emojify($("#gTime"));
-        setTimeout(function () { win.classList.add("on"); confetti(cv); }, 350);
-      }
-    }
-    function toLogical(e) {
-      var r = cv.getBoundingClientRect();
-      return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
-    }
-    function move(e) {
-      var q = toLogical(e);
-      var px = P.x, py = P.y;
-      P.x = q.x; P.y = q.y; P.in = true;
-      if (done) return;
-      if (e.pointerType === "mouse" || P.down) {
-        // ріжемо вздовж шляху, щоб швидкий рух не «перестрибував» волосся
-        var steps = px > -900 ? Math.max(1, Math.ceil(Math.hypot(q.x - px, q.y - py) / 8)) : 1;
-        for (var i = 1; i <= steps; i++) cutAt(px > -900 ? px + (q.x - px) * i / steps : q.x, px > -900 ? py + (q.y - py) * i / steps : q.y);
-      }
-    }
-    cv.addEventListener("pointermove", move);
-    cv.addEventListener("pointerdown", function (e) { P.down = true; if (e.pointerType !== "mouse") cv.setPointerCapture(e.pointerId); move(e); });
-    window.addEventListener("pointerup", function () { P.down = false; });
-    cv.addEventListener("pointerleave", function () { P.in = false; P.x = P.y = -999; });
-    $("#gReset").addEventListener("click", grow);
-    $("#gAgain").addEventListener("click", grow);
-
-    function resize() {
-      var w = cv.clientWidth || W;
-      scale = w / W;
-      cv.width = Math.round(w * dpr); cv.height = Math.round(w * H / W * dpr);
-      g.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
-    }
-    window.addEventListener("resize", resize);
-
-    function face(happy, t) {
-      // плечі й накидка барбера
-      g.fillStyle = "#1E4D3A";
-      g.beginPath(); g.ellipse(CX, H + 40, 210, 150, 0, Math.PI, 0); g.fill();
-      g.fillStyle = "#FFF8EA";
-      g.beginPath(); g.moveTo(CX - 40, H - 108); g.lineTo(CX + 40, H - 108); g.lineTo(CX, H - 70); g.fill();
-      // шия
-      g.fillStyle = "#E7B48C"; g.fillRect(CX - 38, CY + 80, 76, 90);
-      // вуха
-      g.fillStyle = "#E9B892";
-      g.beginPath(); g.ellipse(CX - R + 4, CY, 18, 28, 0, 0, 7); g.fill();
-      g.beginPath(); g.ellipse(CX + R - 4, CY, 18, 28, 0, 0, 7); g.fill();
-      // обличчя
-      var grd = g.createRadialGradient(CX - 30, CY - 40, 20, CX, CY, R + 10);
-      grd.addColorStop(0, "#F8D3B0"); grd.addColorStop(1, "#E6B08A");
-      g.fillStyle = grd;
-      g.beginPath(); g.ellipse(CX, CY, R * 0.92, R * 1.08, 0, 0, 7); g.fill();
-      // зачіска
-      g.fillStyle = "#3E2615";
-      g.beginPath(); g.ellipse(CX, CY - R * 0.72, R * 0.95, R * 0.5, 0, Math.PI, 0); g.fill();
-      g.beginPath(); g.ellipse(CX + 20, CY - R * 0.8, R * 0.7, R * 0.32, -0.2, 0, 7); g.fill();
-      // брови
-      g.strokeStyle = "#3E2615"; g.lineWidth = 6; g.lineCap = "round";
-      var lift = happy ? -6 : 0;
-      g.beginPath(); g.moveTo(CX - 58, CY - 34 + lift); g.lineTo(CX - 22, CY - 40 + lift); g.stroke();
-      g.beginPath(); g.moveTo(CX + 22, CY - 40 + lift); g.lineTo(CX + 58, CY - 34 + lift); g.stroke();
-      // очі (кліпають)
-      var blink = (t % 3800) < 140;
-      g.fillStyle = "#2A1A10";
-      [-40, 40].forEach(function (dx) {
-        g.beginPath();
-        if (blink) g.ellipse(CX + dx, CY - 12, 10, 1.6, 0, 0, 7); else g.ellipse(CX + dx, CY - 12, 8, 10, 0, 0, 7);
-        g.fill();
-        if (!blink) { g.fillStyle = "#fff"; g.beginPath(); g.arc(CX + dx + 3, CY - 15, 2.6, 0, 7); g.fill(); g.fillStyle = "#2A1A10"; }
-      });
-      // ніс
-      g.strokeStyle = "rgba(160,95,60,.6)"; g.lineWidth = 4;
-      g.beginPath(); g.moveTo(CX, CY - 6); g.quadraticCurveTo(CX + 10, CY + 16, CX - 4, CY + 20); g.stroke();
-      // рот: що коротша борода, то ширша усмішка
-      g.strokeStyle = "#8A3B2A"; g.lineWidth = 5;
-      g.beginPath(); g.arc(CX, CY + 40, 18 + happy * 10, 0.15 * Math.PI, (0.85) * Math.PI); g.stroke();
-      // рум'янець
-      if (happy > 0.5) {
-        g.fillStyle = "rgba(232,105,90," + (0.25 * happy).toFixed(2) + ")";
-        g.beginPath(); g.ellipse(CX - 64, CY + 18, 16, 10, 0, 0, 7); g.fill();
-        g.beginPath(); g.ellipse(CX + 64, CY + 18, 16, 10, 0, 0, 7); g.fill();
-      }
-    }
-    function strand(s, len) {
-      var t = tipOf(s, len), mx = (s.x + t.x) / 2 + Math.cos(s.a + Math.PI / 2) * s.curl * (len / s.orig),
-          my = (s.y + t.y) / 2 + Math.sin(s.a + Math.PI / 2) * s.curl * (len / s.orig);
-      g.strokeStyle = s.c; g.lineWidth = s.w; g.lineCap = "round";
-      g.beginPath(); g.moveTo(s.x, s.y); g.quadraticCurveTo(mx, my, t.x, t.y); g.stroke();
-    }
-    function scissors(t) {
-      if (!P.in || P.x < -900) return;
-      var open = P.snip > 0 ? Math.sin(t / 40) * 0.35 : 0;
-      P.snip = Math.max(0, P.snip - 0.05);
-      g.save(); g.translate(P.x, P.y); g.rotate(-0.6 + open);
-      var sz = 46;
-      if (scisImg && scisImg.complete && scisImg.naturalWidth) g.drawImage(scisImg, -sz / 2, -sz / 2, sz, sz);
-      else { g.font = sz + "px serif"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("✂️", 0, 0); }
-      g.restore();
-      // зона зрізу
-      g.strokeStyle = "rgba(30,77,58,.25)"; g.lineWidth = 2; g.setLineDash([4, 5]);
-      g.beginPath(); g.arc(P.x, P.y, CUT_R, 0, 7); g.stroke(); g.setLineDash([]);
-    }
-    function frameG(t) {
-      requestAnimationFrame(frameG);
-      var r = wrap.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight) return;  // не видно: не малюємо
-      if (cv.clientWidth && Math.abs(cv.clientWidth / W - scale) > 0.001) resize();
-      g.clearRect(0, 0, W, H);
-      var happy = Math.min(1, progress() / 0.9);
-      face(happy, t);
-      strands.forEach(function (s) { strand(s, s.len); });
-      for (var i = bits.length - 1; i >= 0; i--) {
-        var b = bits[i];
-        b.vy += 0.25; b.x1 += b.vx; b.x2 += b.vx; b.y1 += b.vy; b.y2 += b.vy; b.rot += b.vr; b.life -= 0.008;
-        if (b.y1 > H + 40 || b.life <= 0) { bits.splice(i, 1); continue; }
-        var cx = (b.x1 + b.x2) / 2, cy = (b.y1 + b.y2) / 2;
-        g.save(); g.translate(cx, cy); g.rotate(b.rot); g.globalAlpha = Math.min(1, b.life * 1.5);
-        g.strokeStyle = b.c; g.lineWidth = b.w; g.lineCap = "round";
-        g.beginPath(); g.moveTo(b.x1 - cx, b.y1 - cy); g.lineTo(b.x2 - cx, b.y2 - cy); g.stroke();
-        g.restore();
-      }
-      scissors(t);
-    }
-    resize(); grow(); requestAnimationFrame(frameG);
-  })();
 
   // ---------- підказки: що натискати й куди гортати ----------
   var scrollCue = $("#scrollCue"), storyCueT = $("#storyCueT"), storyCue = $("#storyCue"),
