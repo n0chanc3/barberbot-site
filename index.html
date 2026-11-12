@@ -715,6 +715,37 @@
   .fact b{font:700 clamp(26px,3.2vw,40px)/1.05 var(--head);letter-spacing:-.02em;color:#FFE3A6;white-space:nowrap}
   .fact span{font-size:15px;line-height:1.35;color:rgba(243,238,226,.85)}
   @media(max-width:860px){.facts{padding:26px 0}.facts .wrap{grid-template-columns:1fr 1fr;gap:20px 14px}.fact{padding-left:12px}.fact span{font-size:14px}}
+  /* перемикач «без бота / з ботом» */
+  .sw{padding:100px 0 90px}
+  .sw h2{max-width:760px;margin-bottom:34px}
+  .sw-box{max-width:760px;background:#F6E5E0;border:1px solid #E9CEC6;border-radius:28px;padding:28px 30px 26px;
+    transition:background .7s var(--ease),border-color .7s var(--ease),box-shadow .7s var(--ease)}
+  .sw-box.on{background:var(--card);border-color:var(--green);box-shadow:0 24px 60px rgba(27,69,52,.16)}
+  .sw-toggle{display:inline-flex;align-items:center;gap:14px;border:0;background:none;padding:0;cursor:pointer;font:700 17px var(--body);color:var(--ink);margin-bottom:20px}
+  .sw-l{transition:opacity .4s,color .4s}
+  .sw-l.l1{opacity:.4}
+  .sw-box.on .sw-l.l0{opacity:.4}
+  .sw-box.on .sw-l.l1{opacity:1;color:var(--green)}
+  .sw-knob{position:relative;width:74px;height:42px;border-radius:99px;background:#C9B8B2;transition:background .45s var(--ease);flex:none}
+  .sw-knob i{position:absolute;left:4px;top:4px;width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.25);
+    transition:transform .5s cubic-bezier(.3,1.5,.5,1)}
+  .sw-box.on .sw-knob{background:#34C759}
+  .sw-box.on .sw-knob i{transform:translateX(32px)}
+  .sw-box:not(.touched) .sw-knob::after{content:"";position:absolute;inset:-5px;border-radius:99px;border:2px solid var(--brass);animation:swring 1.6s ease-out infinite}
+  @keyframes swring{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.22)}}
+  .sw-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .sw-list li,.sw-sum{display:grid}
+  .sw-list li>span,.sw-sum>span{grid-area:1/1;transition:opacity .45s var(--ease),transform .55s var(--ease);transition-delay:calc(var(--k,4)*90ms)}
+  .sw-list li>span{background:rgba(255,255,255,.6);border-radius:14px;padding:13px 16px;font-weight:600;font-size:16.5px;line-height:1.4}
+  .sw-list .a{color:#7A3B30}
+  .sw-list .b{background:var(--green-soft);color:var(--green)}
+  .sw-box .b{opacity:0;transform:translateY(12px) scale(.97);pointer-events:none}
+  .sw-box.on .b{opacity:1;transform:none}
+  .sw-box.on .a{opacity:0;transform:translateY(-12px) scale(.97)}
+  .sw-sum{margin:20px 0 0;font:700 clamp(18px,2.3vw,24px)/1.3 var(--head);letter-spacing:-.01em}
+  .sw-sum .a{color:#7A3B30}
+  .sw-sum .b{color:var(--green)}
+  @media(max-width:860px){.sw{padding:76px 0 60px}.sw-box{padding:22px 16px 20px;border-radius:22px}.sw-list li>span{font-size:15px;padding:12px 13px}.sw-toggle{font-size:15.5px;gap:10px}}
   /* КОРОТКА ВЕРСІЯ: лише головне */
   #why,#how-client,#master,#build,.sec-off{display:none!important}
   /* що робить бот: вкладки + телефон */
@@ -832,10 +863,28 @@
 
 <div class="facts"><div class="wrap">
   <div class="fact rv"><b>24/7</b><span>приймає записи, навіть уночі</span></div>
-  <div class="fact rv" style="--d:80ms"><b>15 с</b><span>і клієнт записаний</span></div>
-  <div class="fact rv" style="--d:160ms"><b>2</b><span>нагадування перед візитом</span></div>
+  <div class="fact rv" style="--d:80ms"><b><span data-count="15">15</span> с</b><span>і клієнт записаний</span></div>
+  <div class="fact rv" style="--d:160ms"><b><span data-count="2">2</span></b><span>нагадування перед візитом</span></div>
   <div class="fact rv" style="--d:240ms"><b>0 грн</b><span>перші 2 тижні</span></div>
 </div></div>
+
+<!-- ПЕРЕМИКАЧ: БЕЗ БОТА / З БОТОМ -->
+<section id="switch" class="sw"><div class="wrap">
+  <div class="eyebrow rv">Навіщо це вам</div>
+  <h2 class="rv">Увімкніть бота і <span class="acc" style="color:var(--green)">порівняйте</span></h2>
+  <div class="sw-box rv" id="swBox">
+    <button type="button" class="sw-toggle" id="swToggle" role="switch" aria-checked="false" aria-label="Увімкнути бота">
+      <span class="sw-l l0">Без бота</span><span class="sw-knob"><i></i></span><span class="sw-l l1">З ботом</span>
+    </button>
+    <ul class="sw-list">
+      <li style="--k:0"><span class="a">📞 3 пропущені дзвінки, поки ви стригли</span><span class="b">✅ 3 нові записи, поки ви стригли</span></li>
+      <li style="--k:1"><span class="a">💬 «А на завтра є час?» о 23:40. Ви вже спите</span><span class="b">🌙 О 23:40 бот сам записав клієнта на завтра</span></li>
+      <li style="--k:2"><span class="a">🤷 «Скільки коштує борода?» уп'яте за день</span><span class="b">💈 Ціни й вільний час клієнт бачить сам</span></li>
+      <li style="--k:3"><span class="a">😶 Клієнт на 14:00 забув і не прийшов</span><span class="b">⏰ Клієнт на 14:00 отримав нагадування й прийшов</span></li>
+    </ul>
+    <p class="sw-sum"><span class="a">Ви відповідаєте між клієнтами й увечері.</span><span class="b">Ви просто стрижете. Записи приходять самі.</span></p>
+  </div>
+</div></section>
 
 <!-- ЩО РОБИТЬ БОТ -->
 <section id="what" class="what"><div class="wrap ex">
@@ -1185,7 +1234,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#switch" data-sec="switch"><span>Навіщо</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
@@ -1853,6 +1902,25 @@
     pu._t = setTimeout(function () { pu.classList.remove("on"); }, 3800);
   }
 
+  // ---------- перемикач «без бота / з ботом» ----------
+  (function () {
+    var box = $("#swBox"), tg = $("#swToggle");
+    if (!box || !tg) return;
+    var shown = false;
+    function set(on) { box.classList.toggle("on", on); tg.setAttribute("aria-checked", on ? "true" : "false"); }
+    tg.addEventListener("click", function () { box.classList.add("touched"); shown = true; set(!box.classList.contains("on")); });
+    // коли блок уперше потрапляє на екран, перемикач сам вмикається, щоб було видно різницю
+    function check() {
+      if (shown) return;
+      var r = box.getBoundingClientRect();
+      if (r.top < innerHeight * 0.55 && r.bottom > 0) {
+        shown = true;
+        setTimeout(function () { if (!box.classList.contains("touched")) set(true); }, 1800);
+      }
+    }
+    addEventListener("scroll", check, { passive: true }); check();
+  })();
+
   // ---------- що робить бот: натискаєш пункт — телефон показує ----------
   (function () {
     var tabs = $$("#exTabs .ex-tab"), chat = $("#exChat"), who = $("#exWho");
@@ -1900,7 +1968,7 @@
       sand:  ["#F4ECDA", "#EBE0C7", "#E0D2B4", "#1B4534", "#2A6149", "#E3E7D1", "#B8842C", "#F1E1BE"]
     };
     var VARS = ["--paper", "--paper2", "--line", "--green", "--green2", "--green-soft", "--brass", "--brass-soft"];
-    var ORDER = ["cream", "sage", "mint", "sand", "cream", "sage", "cream"];
+    var ORDER = ["cream", "sand", "sage", "mint", "sand", "cream", "sage", "cream"];
     var slides = $$("section").filter(function (x) { return x.offsetParent !== null || getComputedStyle(x).display !== "none"; });
     var root = document.documentElement, cur = -1;
     function applyTheme(i) {
