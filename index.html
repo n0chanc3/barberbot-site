@@ -271,7 +271,7 @@
     </h1>
     <p class="lead rv" style="--d:250ms">Telegram-бот, у якому клієнт обирає послугу, день і час за кілька дотиків. Майстер одразу бачить запис, а клієнт отримує нагадування й не забуває прийти.</p>
     <div class="cta rv" style="--d:380ms">
-      <a class="btn contact magnetic" href="#">Спробувати безкоштовно <span class="arr">→</span></a>
+      <a class="btn contact magnetic" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні.">Спробувати безкоштовно <span class="arr">→</span></a>
       <a class="btn ghost magnetic" href="#story">Як це працює</a>
     </div>
   </div>
@@ -344,21 +344,21 @@
       <div class="p"><span data-count="0">0</span> грн</div>
       <div class="when">перші 2 тижні</div>
       <ul><li>Повноцінний бот під ваш салон</li><li>Нагадування та розклад майстра</li><li>Без зобов’язань</li></ul>
-      <a class="btn contact" href="#">Спробувати <span class="arr">→</span></a>
+      <a class="btn contact" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні.">Спробувати <span class="arr">→</span></a>
     </div>
     <div class="card plan tilt rv" style="--d:90ms">
       <div class="tag">Підключення</div>
       <div class="p"><span data-count="2000">2 000</span> грн</div>
       <div class="when">один раз</div>
       <ul><li>Налаштування під ваш салон: назва, адреса, послуги, ціни, графік</li><li>Запуск і перевірка</li><li>Допомога зі створенням бота в Telegram</li></ul>
-      <a class="btn ghost contact" href="#">Дізнатися більше</a>
+      <a class="btn ghost contact" href="#" data-msg="Добрий день! Хочу дізнатися більше про підключення бота для запису (2 000 грн): що потрібно від мене і скільки часу займе запуск?">Дізнатися більше</a>
     </div>
     <div class="card plan tilt rv" style="--d:180ms">
       <div class="tag">Підтримка</div>
       <div class="p"><span data-count="500">500</span> грн <small>/ місяць</small></div>
       <div class="when">після тестового періоду</div>
       <ul><li>Бот працює на сервері 24/7</li><li>Щоденні резервні копії записів</li><li>Правки послуг, цін і графіка</li></ul>
-      <a class="btn ghost contact" href="#">Дізнатися більше</a>
+      <a class="btn ghost contact" href="#" data-msg="Добрий день! Хочу дізнатися більше про підтримку бота (500 грн на місяць): що входить і як відбуваються зміни?">Дізнатися більше</a>
     </div>
   </div>
 </div></section>
@@ -399,7 +399,10 @@
 
   // контакт
   $$("a.contact").forEach(function (a) {
-    a.href = "https://t.me/" + TELEGRAM_USERNAME; a.target = "_blank"; a.rel = "noopener";
+    // data-msg: готове повідомлення, яке Telegram підставить у чат (людині лишиться натиснути «Надіслати»)
+    var msg = a.getAttribute("data-msg");
+    a.href = "https://t.me/" + TELEGRAM_USERNAME + (msg ? "?text=" + encodeURIComponent(msg) : "");
+    a.target = "_blank"; a.rel = "noopener";
   });
 
   // ---------- екрани телефона ----------
