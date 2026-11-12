@@ -161,7 +161,7 @@
   .st{position:absolute;inset:0;opacity:0;transform:translateY(36px);transition:opacity .5s var(--ease),transform .5s var(--ease);pointer-events:none}
   .st.on{opacity:1;transform:none}
   .st.prev{transform:translateY(-36px)}
-  .st .num{font:700 76px/1 var(--head);color:transparent;-webkit-text-stroke:2px var(--brass);margin-bottom:14px}
+  .st .num{font:700 76px/1 var(--head);color:var(--brass);opacity:.9;margin-bottom:14px}
   .st h2{font-size:clamp(28px,4.2vw,48px)}
   .st p{color:var(--muted);font-size:18px;max-width:440px}
   .rail{display:flex;gap:8px;margin-top:26px}
@@ -191,7 +191,8 @@
   .mode ul{list-style:none;padding:0;display:grid;gap:10px;font-size:15.5px}
   .mode li{padding-left:28px;position:relative}
   .mode li::before{content:"";position:absolute;left:4px;top:.45em;width:12px;height:6px;border-left:2.5px solid var(--green2);border-bottom:2.5px solid var(--green2);transform:rotate(-45deg)}
-  .mode .big{position:absolute;right:-10px;bottom:-34px;font:800 130px/1 var(--head);color:transparent;-webkit-text-stroke:1.5px var(--line);pointer-events:none}
+  .mode .big{position:absolute;right:-10px;bottom:-34px;font:800 130px/1 var(--head);color:var(--paper2);pointer-events:none}
+  .mode > *:not(.big){position:relative;z-index:1}
 
   /* ЦІНИ */
   .price{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;align-items:stretch}
