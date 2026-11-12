@@ -695,6 +695,36 @@
   @property --green-soft{syntax:"<color>";inherits:true;initial-value:#E3EEE7}
   @property --brass{syntax:"<color>";inherits:true;initial-value:#C8963E}
   @property --brass-soft{syntax:"<color>";inherits:true;initial-value:#F3E6CC}
+  /* КОРОТКА ВЕРСІЯ: лише головне */
+  #why,#how-client,#master,#build,.sec-off{display:none!important}
+  /* що робить бот: вкладки + телефон */
+  .ex{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:56px;align-items:center}
+  .what{padding:110px 0}
+  .ex-tabs{display:grid;gap:8px}
+  .ex-tab{position:relative;overflow:hidden;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:13px 18px;cursor:pointer;
+    font:inherit;color:var(--ink);transition:transform .3s var(--ease),box-shadow .3s,border-color .3s,background .3s}
+  .ex-tab b{display:block;font:700 16.5px var(--body)}
+  .ex-tab p{margin:0;max-height:0;opacity:0;overflow:hidden;color:var(--muted);font-size:14.5px;line-height:1.45;transition:max-height .4s var(--ease),opacity .3s,margin .3s}
+  .ex-tab:hover{transform:translateX(4px);border-color:var(--green2)}
+  .ex-tab.on{border-color:var(--green);box-shadow:0 12px 30px rgba(21,23,28,.10);transform:translateX(8px)}
+  .ex-tab.on p{max-height:60px;opacity:1;margin-top:4px}
+  .ex-tab i{position:absolute;left:0;bottom:0;height:3px;width:100%;background:var(--brass);transform-origin:0 50%;transform:scaleX(0)}
+  .ex-tab.on.run i{animation:exbar 4.2s linear forwards}
+  @keyframes exbar{to{transform:scaleX(1)}}
+  .ex-chat>*{animation:exin .5s var(--ease) both;animation-delay:calc(var(--n,0)*.42s)}
+  @keyframes exin{from{opacity:0;transform:translateY(14px) scale(.96)}}
+  .ex-chat .kb{animation:exin .5s var(--ease) both;animation-delay:calc(var(--n,0)*.42s)}
+  @media(max-width:860px){
+    .ex{grid-template-columns:minmax(0,1fr);gap:26px}
+    .what{padding:80px 0 60px}
+    .ex-tabs{display:flex;overflow-x:auto;gap:8px;margin:0 -20px;padding:4px 20px 10px;scroll-snap-type:x mandatory;scrollbar-width:none}
+    .ex-tabs::-webkit-scrollbar{display:none}
+    .ex-tab{flex:none;scroll-snap-align:center;padding:11px 15px;border-radius:99px}
+    .ex-tab b{font-size:14.5px;white-space:nowrap}
+    .ex-tab p{display:none}
+    .ex-tab:hover,.ex-tab.on{transform:none}
+    .ex-tab.on{background:var(--green);color:#FFF8EA}
+  }
   /* кольори плавно перетікають між розділами */
   :root{transition:--paper 1s ease,--paper2 1s ease,--line 1s ease,--green 1s ease,--green2 1s ease,--green-soft 1s ease,--brass 1s ease,--brass-soft 1s ease}
   /* пульт презентації */
@@ -734,7 +764,7 @@
 <header id="header"><div class="wrap">
   <a class="logo" href="#top"><span class="pole" aria-hidden="true"></span>BarberBot</a>
   <nav class="links" aria-label="Розділи">
-    <a href="#what">Що це</a><a href="#how-client">Як записуються</a><a href="#master">Для майстра</a><a href="#price">Вартість</a><a href="#faq">Питання</a>
+    <a href="#what">Що це</a><a href="#try">Спробувати</a><a href="#price">Вартість</a><a href="#faq">Питання</a>
   </nav>
   <a class="btn sm contact" href="#"><svg class="tg-ico"><use href="#tg"/></svg>Написати</a>
 </div></header>
@@ -761,7 +791,7 @@
         <span class="w mark acc" style="--i:2">самі.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 50 4, 120 4, 197 12"/></svg></span>
         <span class="w" style="--i:3">Ви</span> <span class="w" style="--i:4">просто</span> <span class="w" style="--i:5">стрижете.</span>
       </h1>
-      <p class="lead rv" style="--d:300ms">Бот приймає записи 24/7: клієнт обирає послугу, день і час за кілька дотиків, отримує нагадування, а ви бачите весь розклад у Telegram. Без дзвінків і переписок у Direct.</p>
+      <p class="lead rv" style="--d:300ms">Telegram-бот сам записує клієнтів 24/7, нагадує їм про візит і надсилає вам розклад.</p>
       <div class="cta rv" style="--d:420ms">
         <a class="btn contact magnetic" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні."><svg class="tg-ico"><use href="#tg"/></svg>Спробувати безкоштовно</a>
         <button class="btn light magnetic" type="button" id="openZoom">📱 Записатися самому</button>
@@ -795,39 +825,29 @@
 
 <div class="ribbon-band" aria-hidden="true"><div class="track" id="track"></div></div>
 
-<!-- ПРОСТИМИ СЛОВАМИ -->
-<section id="what" class="what"><div class="wrap">
-  <div class="eyebrow rv">Простими словами</div>
-  <h2 class="rv">Що це за бот і <span class="acc" style="color:var(--green)">навіщо він вам</span></h2>
-  <div class="what-grid">
-    <div class="what-card rv">
-      <div class="what-n">1</div>
-      <h3>Що це</h3>
-      <p>Чат-бот у Telegram з назвою вашого салону. Клієнт відкриває його за посиланням з Instagram чи Google Maps, як звичайний чат.</p>
-    </div>
-    <div class="what-card rv" style="--d:90ms">
-      <div class="what-n">2</div>
-      <h3>Що він робить</h3>
-      <ul>
-        <li>Показує ваші послуги й ціни</li>
-        <li>Пропонує лише вільні дні й години</li>
-        <li>Записує клієнта і пише вам про новий запис</li>
-        <li>Нагадує клієнту про візит за добу й за 2 години</li>
-        <li>Дає клієнту скасувати запис одним натисканням</li>
-      </ul>
-    </div>
-    <div class="what-card rv" style="--d:180ms">
-      <div class="what-n">3</div>
-      <h3>Навіщо це вам</h3>
-      <ul>
-        <li>Не треба відповідати в Direct і по телефону</li>
-        <li>Записи приходять навіть уночі, поки ви спите</li>
-        <li>Менше клієнтів, які забули прийти</li>
-        <li>Увесь розклад на день в одному повідомленні</li>
-      </ul>
+<!-- ЩО РОБИТЬ БОТ -->
+<section id="what" class="what"><div class="wrap ex">
+  <div>
+    <div class="eyebrow rv">Простими словами</div>
+    <h2 class="rv">Що робить <span class="acc" style="color:var(--green)">бот</span></h2>
+    <p class="sub rv" style="margin-bottom:22px">Натискайте пункти й дивіться в телефон.</p>
+    <div class="ex-tabs rv" id="exTabs" role="tablist">
+      <button type="button" class="ex-tab on" role="tab"><b>💈 Показує послуги й ціни</b><p>Клієнт відкриває чат за посиланням з Instagram.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b>📅 Дає обрати вільний час</b><p>Зайняті години й вихідні сховані.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b>✅ Записує сам, 24/7</b><p>Навіть уночі. Вам одразу приходить сповіщення.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b>⏰ Нагадує про візит</b><p>За добу й за 2 години. Менше тих, хто забув.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b>☀️ Зранку надсилає розклад</b><p>Усі клієнти на день одним повідомленням.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b>❌ Скасовує в один дотик</b><p>Вікно одразу звільняється для інших.</p><i></i></button>
     </div>
   </div>
-  <p class="what-foot rv">Клієнту нічого встановлювати не треба. Вам теж: усе приходить у ваш Telegram.</p>
+  <div class="phone-scene rv" style="--d:120ms">
+    <div class="phone">
+      <div class="screen">
+        <div class="tgbar"><div class="ava">B</div><div class="tgname">Барбершоп — запис онлайн<small id="exWho">бот · бачить клієнт</small></div></div>
+        <div class="chat ex-chat" id="exChat"></div>
+      </div>
+    </div>
+  </div>
 </div></section>
 
 <!-- БУЛО / СТАЛО -->
@@ -947,7 +967,7 @@
 </div>
 
 <!-- РЕЖИМИ -->
-<section style="background:var(--paper2)"><div class="wrap">
+<section class="sec-off" style="background:var(--paper2)"><div class="wrap">
   <div class="eyebrow rv">Два варіанти роботи</div>
   <h2 class="rv">Працює окремо або разом з Altegio</h2>
   <p class="sub rv">Обираємо під ваш салон. Перемкнутися можна будь-коли.</p>
@@ -1080,7 +1100,7 @@
 </div></section>
 
 <!-- ЯК ПОЧАТИ -->
-<section style="background:var(--paper2)"><div class="wrap">
+<section class="sec-off" style="background:var(--paper2)"><div class="wrap">
   <div class="eyebrow rv">Як почати</div>
   <h2 class="rv">Чотири кроки до першого запису</h2>
   <p class="sub rv">Більшість роботи беру на себе.</p>
@@ -1153,7 +1173,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#what" data-sec="what"><span>Що це</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
@@ -1821,6 +1841,43 @@
     pu._t = setTimeout(function () { pu.classList.remove("on"); }, 3800);
   }
 
+  // ---------- що робить бот: натискаєш пункт — телефон показує ----------
+  (function () {
+    var tabs = $$("#exTabs .ex-tab"), chat = $("#exChat"), who = $("#exWho");
+    if (!tabs.length || !chat) return;
+    var S = [
+      { m: [{ me: 1, t: "/start" }, { t: "👋 Вітаємо в Барбершопі!<br>Оберіть послугу:" }, { kb: ["✂️ Стрижка · 300 грн", "🧔 Борода · 200 грн", "💈 Стрижка + борода · 450 грн"] }] },
+      { m: [{ t: "📅 Оберіть день:" }, { kb: ["Пт 13.11", "Сб 14.11", "Пн 16.11"], c3: 1 }, { me: 1, t: "Сб 14.11" }, { t: "🕐 Вільний час у суботу:" }, { kb: ["10:00", "12:00", "15:30"], c3: 1 }] },
+      { m: [{ me: 1, t: "12:00" }, { t: "✅ <b>Ви записані!</b><br>✂️ Стрижка · 300 грн<br>📅 Сб 14.11 · 🕐 12:00" }, { mst: 1, t: "🆕 <b>Вам: новий запис</b><br>Андрій · Стрижка<br>Сб 14.11 о 12:00" }], push: "🆕 Новий запис: Сб о 12:00" },
+      { m: [{ t: "⏰ Нагадуємо: завтра о 12:00 у вас стрижка." }, { kb: ["👍 Буду", "❌ Скасувати"] }, { me: 1, t: "👍 Буду" }, { t: "Чекаємо на вас!" }] },
+      { who: "бот · бачите ви", m: [{ mst: 1, t: "☀️ <b>Розклад на сьогодні</b><br>10:00 Олег · Борода<br>12:00 Андрій · Стрижка<br>15:30 Максим · Стрижка + борода<br><br>Вільно: 13:00, 17:00" }] },
+      { m: [{ me: 1, t: "❌ Скасувати запис" }, { t: "Запис скасовано. Будемо раді бачити вас знову!" }, { mst: 1, t: "❌ <b>Вам: клієнт скасував</b><br>Сб 14.11 о 12:00 — вікно вільне" }] }
+    ];
+    var cur = -1, timer = 0, auto = true;
+    function show(i, byUser) {
+      cur = i;
+      tabs.forEach(function (t, k) { t.classList.toggle("on", k === i); t.classList.remove("run"); t.setAttribute("aria-selected", k === i ? "true" : "false"); });
+      who.textContent = S[i].who || "бот · бачить клієнт";
+      chat.innerHTML = S[i].m.map(function (m, n) {
+        if (m.kb) return '<div class="kb' + (m.c3 ? " c3" : "") + '" style="--n:' + n + '">' + m.kb.map(function (k) { return "<span>" + k + "</span>"; }).join("") + "</div>";
+        return '<div class="msg' + (m.me ? " me" : "") + (m.mst ? " mst" : "") + '" style="--n:' + n + '">' + m.t + "</div>";
+      }).join("");
+      if (S[i].push && typeof pushNote === "function") setTimeout(function () { if (cur === i) pushNote(chat.closest(".screen"), S[i].push); }, 1400);
+      if (byUser && innerWidth <= 860) tabs[i].scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      clearTimeout(timer);
+      if (auto) {
+        void tabs[i].offsetWidth; tabs[i].classList.add("run");
+        timer = setTimeout(function () { if (visible()) show((cur + 1) % S.length); else wait(); }, 4200);
+      }
+    }
+    function visible() { var r = chat.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && !document.hidden; }
+    function wait() { clearTimeout(timer); timer = setTimeout(function () { if (visible()) show(cur < 0 ? 0 : cur); else wait(); }, 600); }
+    tabs.forEach(function (t, i) {
+      t.addEventListener("click", function () { auto = false; show(i, true); });
+    });
+    chat.innerHTML = ""; wait();
+  })();
+
   // ---------- презентація: кожен розділ як слайд, свої кольори, сам гортається ----------
   (function () {
     // [фон, фон-2, лінії, акцент, акцент-2, акцент-світлий, латунь, латунь-світла]
@@ -1835,10 +1892,9 @@
       blush: ["#F8E7E3", "#F0D6D0", "#E8C9C1", "#7A2430", "#96323F", "#F3D9D9", "#B8823A", "#F2E0C8"]
     };
     var VARS = ["--paper", "--paper2", "--line", "--green", "--green2", "--green-soft", "--brass", "--brass-soft"];
-    var ORDER = ["cream", "sage", "peach", "sky", "plum", "mint", "sand", "sky", "blush", "cream", "sage", "plum", "cream"];
-    var NAMES = ["Початок", "Що це", "Навіщо", "Як записуються", "Для майстра", "Спробуйте", "Два режими", "Конструктор",
-                 "Калькулятор", "Вартість", "Як почати", "Питання", "Написати"];
-    var slides = $$("section");
+    var ORDER = ["cream", "sky", "mint", "blush", "sand", "plum", "cream"];
+    var NAMES = ["Початок", "Що робить бот", "Спробуйте", "Калькулятор", "Вартість", "Питання", "Написати"];
+    var slides = $$("section").filter(function (x) { return x.offsetParent !== null || getComputedStyle(x).display !== "none"; });
     var root = document.documentElement, cur = -1;
     function applyTheme(i) {
       if (i === cur) return;
