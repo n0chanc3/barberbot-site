@@ -761,6 +761,45 @@
   .pur-card p b{color:var(--ink)}
   .pur-card .btn{margin-top:8px;width:100%;justify-content:center}
   @media(max-width:860px){.pur{padding:70px 0 40px}.pur-grid{grid-template-columns:minmax(0,1fr);gap:30px}.pur-p{font-size:17px}.pur-list li{font-size:16px}.pur-card{padding:24px 20px}}
+  /* день майстра: розклад заповнюється сам */
+  .day{padding:100px 0}
+  .day-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center}
+  .day-stats{display:flex;gap:12px;flex-wrap:wrap}
+  .day-stats div{flex:1;min-width:110px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px}
+  .day-stats b{display:block;font:700 30px/1 var(--head);color:var(--green);font-variant-numeric:tabular-nums;transition:transform .3s var(--ease)}
+  .day-stats b.bump{transform:scale(1.18)}
+  .day-stats span{font-size:14px;color:var(--muted)}
+  .day-card{position:relative;background:var(--card);border:1px solid var(--line);border-radius:26px;padding:20px 18px 18px;box-shadow:0 24px 60px rgba(21,23,28,.10)}
+  .day-head{display:flex;justify-content:space-between;align-items:center;padding:2px 6px 14px;border-bottom:1px solid var(--line);margin-bottom:10px}
+  .day-head b{display:block;font:700 17px var(--body)}
+  .day-head small{color:var(--muted);font-size:13.5px}
+  .day-live{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--green)}
+  .day-live i{width:8px;height:8px;border-radius:50%;background:#34C759;box-shadow:0 0 0 0 rgba(52,199,89,.6);animation:live 1.6s infinite}
+  @keyframes live{70%{box-shadow:0 0 0 8px rgba(52,199,89,0)}100%{box-shadow:0 0 0 0 rgba(52,199,89,0)}}
+  .day-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+  .slot{display:grid;grid-template-columns:54px 1fr auto;align-items:center;gap:12px;padding:7px 10px;border-radius:14px;border:1px dashed var(--line);
+    color:var(--muted);font-size:14.5px;transition:background .45s var(--ease),border-color .45s,color .3s,transform .3s var(--ease)}
+  .slot .t{font:700 15px var(--body);color:var(--ink2);font-variant-numeric:tabular-nums}
+  .slot .who b{display:block;color:var(--ink);font-weight:700}
+  .slot .who small{color:var(--muted)}
+  .slot .sst{font-size:12.5px;font-weight:700;padding:4px 9px;border-radius:99px;white-space:nowrap}
+  .slot.busy{border-style:solid;border-color:transparent;background:var(--green-soft);cursor:pointer}
+  .slot.busy:hover{transform:translateX(3px)}
+  .slot.busy .sst{background:#fff;color:var(--green)}
+  .slot.came{background:#E3F4E7;cursor:default}
+  .slot.came .sst{background:#34C759;color:#fff}
+  .slot.new{animation:slotin .7s var(--ease)}
+  @keyframes slotin{0%{transform:scale(.94);background:var(--brass-soft)}60%{transform:scale(1.02)}100%{transform:none}}
+  .slot.gone{animation:slotout .6s var(--ease)}
+  @keyframes slotout{0%{background:#F6DCD6}100%{background:transparent}}
+  .slot-menu{grid-column:1/-1;display:flex;gap:8px;padding-top:6px}
+  .slot-menu button{flex:1;border:0;border-radius:10px;padding:8px;font:700 13.5px var(--body);cursor:pointer;background:#fff;color:var(--ink)}
+  .slot-menu .ok{background:var(--green);color:#FFF8EA}
+  .day-toast{position:absolute;left:50%;top:-18px;transform:translate(-50%,-6px);opacity:0;background:var(--ink);color:#FFF8EA;font-size:13.5px;font-weight:700;
+    padding:9px 14px;border-radius:99px;white-space:nowrap;box-shadow:0 10px 24px rgba(0,0,0,.18);transition:opacity .35s,transform .45s var(--ease);pointer-events:none}
+  .day-toast.on{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:860px){.day{padding:76px 0}.day-in{grid-template-columns:minmax(0,1fr);gap:28px}.slot{grid-template-columns:46px 1fr auto;gap:8px;font-size:13.5px}
+    .day-toast{font-size:12.5px;white-space:normal;width:max-content;max-width:92%;text-align:center}}
   /* КОРОТКА ВЕРСІЯ: лише головне */
   #why,#how-client,#master,#build,#calc,.sec-off{display:none!important}
   /* що робить бот: вкладки + телефон */
@@ -1148,6 +1187,26 @@
   </div>
 </div></section>
 
+<!-- ДЕНЬ МАЙСТРА -->
+<section id="day" class="day"><div class="wrap day-in">
+  <div>
+    <div class="eyebrow rv">А це бачите ви</div>
+    <h2 class="rv">Ваш день <span class="acc" style="color:var(--green)">заповнюється сам</span></h2>
+    <p class="sub rv" style="margin-bottom:22px">Поки ви стрижете, клієнти записуються у вільні вікна. Натисніть на запис, щоб позначити візит або скасувати його.</p>
+    <div class="day-stats rv">
+      <div><b id="dBooked">0</b><span>записів</span></div>
+      <div><b id="dFree">0</b><span>вільних вікон</span></div>
+      <div><b id="dSum">0</b><span>грн за день</span></div>
+    </div>
+    <button type="button" class="btn light" id="dReset" style="margin-top:22px">↺ Почати день заново</button>
+  </div>
+  <div class="day-card rv" style="--d:120ms">
+    <div class="day-head"><div><b>Розклад на сьогодні</b><small>Субота, 14 листопада</small></div><span class="day-live"><i></i>онлайн</span></div>
+    <ul class="day-list" id="dList"></ul>
+    <div class="day-toast" id="dToast" role="status"></div>
+  </div>
+</div></section>
+
 <!-- ЦІНИ -->
 <section id="price"><div class="wrap">
   <div class="eyebrow rv">Вартість</div>
@@ -1272,7 +1331,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#purpose" data-sec="purpose"><span>Навіщо</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#switch" data-sec="switch"><span>Порівняти</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#purpose" data-sec="purpose"><span>Навіщо</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#day" data-sec="day"><span>Ваш день</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#switch" data-sec="switch"><span>Порівняти</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
@@ -1959,6 +2018,78 @@
     addEventListener("scroll", check, { passive: true }); check();
   })();
 
+  // ---------- день майстра: вільні вікна самі заповнюються записами ----------
+  (function () {
+    var list = $("#dList"); if (!list) return;
+    var toast = $("#dToast"), elB = $("#dBooked"), elF = $("#dFree"), elS = $("#dSum");
+    var TIMES = ["10:00", "11:00", "12:00", "13:00", "14:30", "15:30", "16:30", "17:30", "18:30"];
+    var START = { "10:00": ["Олег", "Борода", 200], "12:00": ["Андрій", "Стрижка", 300], "15:30": ["Максим", "Стрижка + борода", 450] };
+    var POOL = [["Денис", "Стрижка", 300], ["Іван", "Стрижка + борода", 450], ["Артем", "Борода", 200], ["Влад", "Стрижка", 300],
+                ["Тарас", "Стрижка", 300], ["Богдан", "Стрижка + борода", 450], ["Марко", "Борода", 200], ["Саша", "Стрижка", 300]];
+    var ORDER_T = ["17:30", "11:00", "14:30", "18:30", "13:00", "16:30"];
+    var slots, pi, timer = 0, open = null;
+    function reset() {
+      slots = TIMES.map(function (t) { var b = START[t]; return { t: t, who: b ? b[0] : "", svc: b ? b[1] : "", p: b ? b[2] : 0, came: false }; });
+      pi = 0; open = null; render(); schedule(2600);
+    }
+    function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+    function stat(el, v) {
+      v = String(v);
+      if (el.textContent === v) return;
+      el.textContent = v; el.classList.add("bump");
+      setTimeout(function () { el.classList.remove("bump"); }, 300);
+    }
+    function render(flash, gone) {
+      list.innerHTML = slots.map(function (s, i) {
+        var cls = "slot" + (s.who ? " busy" : "") + (s.came ? " came" : "") + (i === flash ? " new" : "") + (i === gone ? " gone" : "");
+        var mid = s.who ? '<span class="who"><b>' + s.who + "</b><small>" + s.svc + " · " + s.p + " грн</small></span>" : "<span>вільно</span>";
+        var st = s.who ? '<span class="sst">' + (s.came ? "✓ прийшов" : "записаний") + "</span>" : "<span></span>";
+        var menu = (open === i && s.who && !s.came)
+          ? '<div class="slot-menu"><button type="button" class="ok" data-a="came">✅ Прийшов</button><button type="button" data-a="cancel">❌ Скасувати</button></div>' : "";
+        return '<li class="' + cls + '" data-i="' + i + '"><span class="t">' + s.t + "</span>" + mid + st + menu + "</li>";
+      }).join("");
+      var busy = slots.filter(function (s) { return s.who; });
+      stat(elB, busy.length); stat(elF, slots.length - busy.length);
+      stat(elS, fmt(busy.reduce(function (a, s) { return a + s.p; }, 0)));
+    }
+    function say(t) {
+      toast.textContent = t; toast.classList.add("on");
+      clearTimeout(toast._t); toast._t = setTimeout(function () { toast.classList.remove("on"); }, 2600);
+    }
+    function visible() { var r = list.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight && !document.hidden; }
+    function schedule(ms) { clearTimeout(timer); timer = setTimeout(tick, ms); }
+    function tick() {
+      if (!visible()) return schedule(700);
+      // перше вільне вікно в «природному» порядку, інакше будь-яке вільне
+      var i = -1;
+      ORDER_T.some(function (t) { var k = TIMES.indexOf(t); if (!slots[k].who) { i = k; return true; } return false; });
+      if (i < 0) slots.some(function (s, k) { if (!s.who) { i = k; return true; } return false; });
+      if (i < 0) { say("🎉 День повністю заповнений"); return; }
+      var c = POOL[pi++ % POOL.length];
+      slots[i] = { t: TIMES[i], who: c[0], svc: c[1], p: c[2], came: false };
+      if (open === i) open = null;
+      render(i); say("🆕 Новий запис: " + TIMES[i] + " · " + c[0]);
+      schedule(3400);
+    }
+    list.addEventListener("click", function (e) {
+      var li = e.target.closest(".slot"); if (!li) return;
+      var btn = e.target.closest("button"), i = +li.dataset.i, s = slots[i];
+      if (btn) {
+        if (btn.dataset.a === "came") { s.came = true; open = null; render(); say("✅ " + s.who + " прийшов"); }
+        else {
+          slots[i] = { t: s.t, who: "", svc: "", p: 0, came: false }; open = null;
+          render(-1, i); say("❌ Скасовано. " + s.t + " знову вільно для інших");
+          schedule(3600);
+        }
+        return;
+      }
+      if (!s.who || s.came) return;
+      open = open === i ? null : i; render();
+    });
+    $("#dReset").addEventListener("click", reset);
+    reset();
+  })();
+
   // ---------- що робить бот: натискаєш пункт — телефон показує ----------
   (function () {
     var tabs = $$("#exTabs .ex-tab"), chat = $("#exChat"), who = $("#exWho");
@@ -2006,7 +2137,7 @@
       sand:  ["#F4ECDA", "#EBE0C7", "#E0D2B4", "#1B4534", "#2A6149", "#E3E7D1", "#B8842C", "#F1E1BE"]
     };
     var VARS = ["--paper", "--paper2", "--line", "--green", "--green2", "--green-soft", "--brass", "--brass-soft"];
-    var ORDER = ["cream", "cream", "sage", "mint", "cream", "sand", "sage", "cream"];
+    var ORDER = ["cream", "cream", "sage", "mint", "sand", "cream", "sand", "sage", "cream"];
     var slides = $$("section").filter(function (x) { return x.offsetParent !== null || getComputedStyle(x).display !== "none"; });
     var root = document.documentElement, cur = -1;
     function applyTheme(i) {
