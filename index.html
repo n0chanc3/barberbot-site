@@ -695,6 +695,10 @@
   @property --green-soft{syntax:"<color>";inherits:true;initial-value:#E3EEE7}
   @property --brass{syntax:"<color>";inherits:true;initial-value:#C8963E}
   @property --brass-soft{syntax:"<color>";inherits:true;initial-value:#F3E6CC}
+  /* підказка в демо: маленька пульсуюча точка замість пальця */
+  .tap-hint .hand,.tap-hint .bubble{display:none}
+  .tap-hint::before{content:"";width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.75);animation:tapdot 1.5s ease-out infinite}
+  @keyframes tapdot{70%{box-shadow:0 0 0 12px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
   /* КОРОТКА ВЕРСІЯ: лише головне */
   #why,#how-client,#master,#build,.sec-off{display:none!important}
   /* що робить бот: вкладки + телефон */
@@ -2243,7 +2247,7 @@
     if (!b) { tapHint.classList.remove("on"); return; }
     var sr = scene.getBoundingClientRect(), br = b.getBoundingClientRect(), cr = chat.getBoundingClientRect();
     if (br.bottom > cr.bottom || br.top < cr.top) { tapHint.classList.remove("on"); return; }
-    var x = br.left - sr.left + br.width / 2 - 26, yy = br.top - sr.top + br.height * 0.55;
+    var x = br.right - sr.left - 24, yy = br.top - sr.top + br.height / 2 - 6;  // точка біля правого краю кнопки
     tapHint.style.transform = "translate(" + x.toFixed(0) + "px," + yy.toFixed(0) + "px)";
     tapHint.classList.add("on");
   }
