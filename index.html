@@ -761,6 +761,18 @@
   .pur-card p b{color:var(--ink)}
   .pur-card .btn{margin-top:8px;width:100%;justify-content:center}
   @media(max-width:860px){.pur{padding:70px 0 40px}.pur-grid{grid-template-columns:minmax(0,1fr);gap:30px}.pur-p{font-size:17px}.pur-list li{font-size:16px}.pur-card{padding:24px 20px}}
+  /* лінійні іконки замість смайликів */
+  .ico{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+  #openZoom .ico{margin-right:8px}
+  .float-card .ic{color:var(--green)}
+  .float-card .ic .ico{width:19px;height:19px}
+  .ex-tabs .ex-tab>b{display:flex;align-items:center;gap:11px}
+  .ex-tab b .ico{width:34px;height:34px;padding:8px;border-radius:10px;background:var(--green-soft);color:var(--green);transition:background .3s,color .3s}
+  .ex-tab.on b .ico{background:var(--green);color:#FFF8EA}
+  .sw-list li>span.a,.sw-list li>span.b{display:flex;align-items:center;gap:11px}
+  .sw-list .ico{width:20px;height:20px}
+  .scroll-cue .finger .ico{width:26px;height:26px;color:var(--green)}
+  @media(max-width:860px){.ex-tab b .ico{width:26px;height:26px;padding:5px;border-radius:8px}.ex-tab.on b .ico{background:rgba(255,248,234,.18)}}
   /* КОРОТКА ВЕРСІЯ: лише головне */
   #why,#how-client,#master,#build,#calc,.sec-off{display:none!important}
   /* що робить бот: вкладки + телефон */
@@ -808,6 +820,7 @@
 <div class="progress" id="progress"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- лінійні іконки за мотивами Lucide (ISC) --><symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M11 18h2"/></symbol><symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></symbol><symbol id="i-calplus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v4M10 16h4"/></symbol><symbol id="i-scissors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12"/></symbol><symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol><symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol><symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol><symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></symbol><symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6M9 9l6 6"/></symbol><symbol id="i-call" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol><symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol><symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol><symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></symbol><symbol id="i-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/></symbol><symbol id="i-userx" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="m17 8 5 5M22 8l-5 5"/></symbol><symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m7 7 5 5 5-5M7 13l5 5 5-5"/></symbol>
   <symbol id="tg" viewBox="0 0 24 24"><path fill="currentColor" d="M21.9 4.6 18.7 19.8c-.2 1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.3 13.4l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 3.1c.9-.3 1.6.2 1.4 1.5Z"/></symbol>
   <symbol id="scis" viewBox="0 0 64 64"><g fill="none" stroke="currentColor" stroke-width="3"><circle cx="16" cy="48" r="9"/><circle cx="16" cy="16" r="9"/><path d="M23 42 58 8M23 22l35 34"/></g></symbol>
 </svg>
@@ -824,7 +837,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <a class="scroll-cue" id="scrollCue" href="#purpose"><span class="mouse"><i></i></span><span class="finger">👆</span><span>Гортайте вниз</span><span class="chev">↓</span></a>
+  <a class="scroll-cue" id="scrollCue" href="#purpose"><span class="mouse"><i></i></span><span class="finger"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg></span><span>Гортайте вниз</span><span class="chev">↓</span></a>
   <div class="blob g" data-par="0.12"></div>
   <div class="blob b" data-par="-0.08"></div>
   <div class="icons" aria-hidden="true" data-par="0.2">
@@ -845,7 +858,7 @@
       <p class="lead rv" style="--d:300ms">Telegram-бот сам записує клієнтів 24/7, нагадує їм про візит і надсилає вам розклад.</p>
       <div class="cta rv" style="--d:420ms">
         <a class="btn contact magnetic" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 7 днів."><svg class="tg-ico"><use href="#tg"/></svg>Спробувати безкоштовно</a>
-        <button class="btn light magnetic" type="button" id="openZoom">📱 Записатися самому</button>
+        <button class="btn light magnetic" type="button" id="openZoom"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Записатися самому</button>
       </div>
       <ul class="checks rv" style="--d:540ms">
         <li><i>✓</i>7 днів безкоштовно</li>
@@ -867,8 +880,8 @@
         <div class="side l"></div><div class="side r"></div><div class="side t"></div><div class="side b"></div>
       </div>
       <div class="shadow-floor"></div>
-      <div class="float-card fc1"><span class="ic">🔔</span><div>Нагадування клієнту<small>завтра о 12:00</small></div></div>
-      <div class="float-card fc2"><span class="ic">🆕</span><div>Новий запис<small>Стрижка + борода · 450 грн</small></div></div>
+      <div class="float-card fc1"><span class="ic"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg></span><div>Нагадування клієнту<small>завтра о 12:00</small></div></div>
+      <div class="float-card fc2"><span class="ic"><svg class="ico" aria-hidden="true"><use href="#i-calplus"/></svg></span><div>Новий запис<small>Стрижка + борода · 450 грн</small></div></div>
       <div class="spin-hint"><b>↻</b> Покрутіть або натисніть, щоб записатися</div>
     </div>
   </div>
@@ -913,12 +926,12 @@
     <h2 class="rv">Що робить <span class="acc" style="color:var(--green)">бот</span></h2>
     <p class="sub rv" style="margin-bottom:22px">Натискайте пункти й дивіться в телефон.</p>
     <div class="ex-tabs rv" id="exTabs" role="tablist">
-      <button type="button" class="ex-tab on" role="tab"><b>💈 Показує послуги й ціни</b><p>Клієнт відкриває чат за посиланням з Instagram.</p><i></i></button>
-      <button type="button" class="ex-tab" role="tab"><b>📅 Дає обрати вільний час</b><p>Зайняті години й вихідні сховані.</p><i></i></button>
-      <button type="button" class="ex-tab" role="tab"><b>✅ Записує сам, 24/7</b><p>Навіть уночі. Вам одразу приходить сповіщення.</p><i></i></button>
-      <button type="button" class="ex-tab" role="tab"><b>⏰ Нагадує про візит</b><p>За добу й за 2 години. Менше тих, хто забув.</p><i></i></button>
-      <button type="button" class="ex-tab" role="tab"><b>☀️ Зранку надсилає розклад</b><p>Усі клієнти на день одним повідомленням.</p><i></i></button>
-      <button type="button" class="ex-tab" role="tab"><b>❌ Скасовує в один дотик</b><p>Вікно одразу звільняється для інших.</p><i></i></button>
+      <button type="button" class="ex-tab on" role="tab"><b><svg class="ico" aria-hidden="true"><use href="#i-scissors"/></svg>Показує послуги й ціни</b><p>Клієнт відкриває чат за посиланням з Instagram.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b><svg class="ico" aria-hidden="true"><use href="#i-cal"/></svg>Дає обрати вільний час</b><p>Зайняті години й вихідні сховані.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>Записує сам, 24/7</b><p>Навіть уночі. Вам одразу приходить сповіщення.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>Нагадує про візит</b><p>За добу й за 2 години. Менше тих, хто забув.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg>Зранку надсилає розклад</b><p>Усі клієнти на день одним повідомленням.</p><i></i></button>
+      <button type="button" class="ex-tab" role="tab"><b><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg>Скасовує в один дотик</b><p>Вікно одразу звільняється для інших.</p><i></i></button>
     </div>
   </div>
   <div class="phone-scene rv" style="--d:120ms">
@@ -1203,10 +1216,10 @@
       <span class="sw-l l0">Без бота</span><span class="sw-knob"><i></i></span><span class="sw-l l1">З ботом</span>
     </button>
     <ul class="sw-list">
-      <li style="--k:0"><span class="a">📞 3 пропущені дзвінки, поки ви стригли</span><span class="b">✅ 3 нові записи, поки ви стригли</span></li>
-      <li style="--k:1"><span class="a">💬 «А на завтра є час?» о 23:40. Ви вже спите</span><span class="b">🌙 О 23:40 бот сам записав клієнта на завтра</span></li>
-      <li style="--k:2"><span class="a">🤷 «Скільки коштує борода?» уп'яте за день</span><span class="b">💈 Ціни й вільний час клієнт бачить сам</span></li>
-      <li style="--k:3"><span class="a">😶 Клієнт на 14:00 забув і не прийшов</span><span class="b">⏰ Клієнт на 14:00 отримав нагадування й прийшов</span></li>
+      <li style="--k:0"><span class="a"><svg class="ico" aria-hidden="true"><use href="#i-call"/></svg>3 пропущені дзвінки, поки ви стригли</span><span class="b"><svg class="ico" aria-hidden="true"><use href="#i-check"/></svg>3 нові записи, поки ви стригли</span></li>
+      <li style="--k:1"><span class="a"><svg class="ico" aria-hidden="true"><use href="#i-msg"/></svg>«А на завтра є час?» о 23:40. Ви вже спите</span><span class="b"><svg class="ico" aria-hidden="true"><use href="#i-moon"/></svg>О 23:40 бот сам записав клієнта на завтра</span></li>
+      <li style="--k:2"><span class="a"><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg>«Скільки коштує борода?» уп'яте за день</span><span class="b"><svg class="ico" aria-hidden="true"><use href="#i-tag"/></svg>Ціни й вільний час клієнт бачить сам</span></li>
+      <li style="--k:3"><span class="a"><svg class="ico" aria-hidden="true"><use href="#i-userx"/></svg>Клієнт на 14:00 забув і не прийшов</span><span class="b"><svg class="ico" aria-hidden="true"><use href="#i-bell"/></svg>Клієнт на 14:00 отримав нагадування й прийшов</span></li>
     </ul>
     <p class="sw-sum"><span class="a">Ви відповідаєте між клієнтами й увечері.</span><span class="b">Ви просто стрижете. Записи приходять самі.</span></p>
   </div>
@@ -1244,7 +1257,7 @@
 
 <footer><div class="wrap">
   <span>© BarberBot · Андрій</span>
-  <span>Боти для запису клієнтів у Telegram · смайлики: <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Microsoft Fluent Emoji</a> (MIT)</span>
+  <span>Боти для запису клієнтів у Telegram · іконки: <a href="https://lucide.dev" target="_blank" rel="noopener">Lucide</a> (ISC) · смайлики в чатах: <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Microsoft Fluent Emoji</a> (MIT)</span>
 </div></footer>
 
 <div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="Запис у демо-боті" aria-hidden="true">
