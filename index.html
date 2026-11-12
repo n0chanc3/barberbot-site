@@ -184,6 +184,33 @@
   .bnote{color:var(--muted);font-size:14px}
   @media(max-width:960px){.builder{grid-template-columns:minmax(0,1fr)}.bpreview{position:static}.bpanel{padding:22px}}
 
+  /* системні смайлики Apple (iPhone, iPad, Mac): показуємо текстом, без картинок */
+  .emj-n{width:auto!important;height:auto!important;line-height:1;vertical-align:baseline;font-style:normal;display:inline-block}
+  .avatars .emj-n{font-size:32px;animation:popav .45s cubic-bezier(.3,1.6,.5,1) both}
+  .locs .emj-n{font-size:18px}
+
+  /* ---------- гра «Підстрижіть бороду» ---------- */
+  .game{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:48px;align-items:center}
+  .gwrap{position:relative;border-radius:28px;overflow:hidden;background:radial-gradient(circle at 50% 38%,#FFFDF8,#EFE6D4);
+    border:1px solid var(--line);box-shadow:var(--shadow);cursor:none;touch-action:none;user-select:none;-webkit-user-select:none}
+  #gCanvas{display:block;width:100%;aspect-ratio:520/440;touch-action:none}
+  .gstats{display:flex;align-items:center;gap:14px;margin:0 0 22px;max-width:420px}
+  .gbar{flex:1;height:12px;border-radius:6px;background:var(--line);overflow:hidden}
+  .gbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--green2),var(--brass));transition:width .25s var(--ease)}
+  #gPct{font:700 20px var(--head);min-width:64px}
+  .gtip{font-weight:700;color:var(--muted);font-size:15px;margin-bottom:18px}
+  .gwin{position:absolute;inset:0;display:grid;place-items:center;background:rgba(246,241,231,.84);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    opacity:0;pointer-events:none;transition:opacity .4s;cursor:auto}
+  .gwin.on{opacity:1;pointer-events:auto}
+  .gwin-in{text-align:center;display:grid;gap:12px;justify-items:center;padding:20px;transform:scale(.8);transition:transform .55s cubic-bezier(.3,1.6,.5,1)}
+  .gwin.on .gwin-in{transform:none}
+  .gbig{font-size:56px;line-height:1}
+  .gbig .emj{width:68px;height:68px}
+  .gwin h3{font-size:28px}
+  .gwin p{color:var(--muted)}
+  .gbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+  @media(max-width:960px){.game{grid-template-columns:minmax(0,1fr);gap:26px}}
+
   /* ---------- телефон підлітає до вас ---------- */
   .zoom{position:fixed;inset:0;z-index:80;display:grid;place-items:center;visibility:hidden;pointer-events:none}
   .zoom.open{visibility:visible;pointer-events:auto}
@@ -856,6 +883,32 @@
   </div>
 </div></section>
 
+<!-- ГРА -->
+<section id="game" style="background:var(--paper2)"><div class="wrap game">
+  <div>
+    <div class="eyebrow rv">Хвилинка гри</div>
+    <h2 class="rv">Поки бот приймає записи, <span class="acc" style="color:var(--green)">підстрижіть бороду</span></h2>
+    <p class="sub rv" style="margin-bottom:20px">Клієнт у кріслі, ножиці у вас ✂️ Зробіть з нього красеня.</p>
+    <div class="gtip rv" id="gTip">Водіть мишкою по бороді: ножиці стрижуть самі.</div>
+    <div class="gstats rv"><div class="gbar"><i id="gBar"></i></div><b id="gPct">0%</b></div>
+    <div class="rv"><button class="btn light" id="gReset" type="button">↺ Відрастити бороду знову</button></div>
+  </div>
+  <div class="gwrap rv" id="gWrap" data-nocursor style="--d:120ms">
+    <canvas id="gCanvas" role="img" aria-label="Гра: підстрижіть бороду клієнту, водячи ножицями"></canvas>
+    <div class="gwin" id="gWin">
+      <div class="gwin-in">
+        <div class="gbig">🎉</div>
+        <h3>Красень!</h3>
+        <p id="gTime"></p>
+        <div class="gbtns">
+          <a class="btn contact" href="#" data-msg="Добрий день! Підстриг бороду на вашому сайті 😄 Хочу бота для свого барбершопу.">Хочу такого бота</a>
+          <button class="btn light" type="button" id="gAgain">↺ Ще раз</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
 <!-- КАЛЬКУЛЯТОР -->
 <section id="calc"><div class="wrap">
   <div class="eyebrow rv">Порахуйте самі</div>
@@ -985,7 +1038,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#game" data-sec="game"><span>Гра</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
@@ -1534,8 +1587,8 @@
       if (p.scis) {
         fctx.save(); fctx.translate(p.x, p.y); fctx.rotate(p.rot);
         var sz = 14 + p.size * 2.4;
-        if (SCIS_IMG.complete && SCIS_IMG.naturalWidth) fctx.drawImage(SCIS_IMG, -sz / 2, -sz / 2, sz, sz);
-        else { fctx.font = sz.toFixed(0) + "px serif"; fctx.fillStyle = "#1E4D3A"; fctx.fillText("✂", -7, 5); }
+        if (!IS_APPLE && SCIS_IMG.complete && SCIS_IMG.naturalWidth) fctx.drawImage(SCIS_IMG, -sz / 2, -sz / 2, sz, sz);
+        else { fctx.font = sz.toFixed(0) + "px serif"; fctx.fillStyle = "#1E4D3A"; fctx.textAlign = "center"; fctx.textBaseline = "middle"; fctx.fillText("✂️", 0, 0); }
         fctx.restore();
       } else {
         fctx.fillStyle = p.col;
@@ -1618,13 +1671,25 @@
   [cCheck, cLost, cShare].forEach(function (el) { el.addEventListener("input", calc); });
   calc();
 
-  // ---------- обʼємні смайлики: замінюємо системні на картинки Fluent 3D ----------
+  // ---------- смайлики: на iPhone/iPad/Mac системні Apple, на інших пристроях обʼємні Fluent 3D ----------
+  var IS_APPLE = /iPhone|iPad|iPod|Macintosh/.test(navigator.userAgent);
+  if (IS_APPLE) document.documentElement.classList.add("apple");
+  function emojiEl(code) {
+    if (IS_APPLE) {
+      var s = document.createElement("span");
+      s.className = "emj emj-n"; s.setAttribute("aria-hidden", "true"); s.textContent = String.fromCodePoint(parseInt(code, 16));
+      return s;
+    }
+    var img = document.createElement("img");
+    img.className = "emj"; img.alt = ""; img.src = "emoji/" + code + ".png"; img.draggable = false;
+    return img;
+  }
   var EMJ = ("2702 1f488 2705 1f4c5 1f550 1f446 1f9d4 1f4f1 1f64b 1f514 274c 1fa92 1f629 1f60e 1f4cb 2600 1f6ab 1f6e1 " +
     "1f4cd 1f9fe 1f4ac 1f195 1f9e0 1f3a8 1f389 1f464 1f487 1f3ea 1f3d9 1f525 2728 1f3b2 1f512 1f4e9 1f3e0 1f501 1f5d3 1f4b0 1f680 1f91d 1f517 1f447").split(" ");
   var EMJ_SET = {}; EMJ.forEach(function (c) { EMJ_SET[c] = 1; });
   var EMJ_RE = /(\p{Extended_Pictographic})(️)?/gu;
   function emojify(root) {
-    if (!root) return;
+    if (!root || IS_APPLE) return;  // на техніці Apple смайлики й так айфонівські
     var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         var p = n.parentNode;
@@ -1753,8 +1818,7 @@
     var box = $("#bAvatars");
     while (box.children.length > B.masters) box.removeChild(box.lastChild);
     for (var i = box.children.length; i < B.masters; i++) {
-      var img = document.createElement("img");
-      img.className = "emj"; img.alt = ""; img.src = "emoji/" + (i % 3 === 1 ? "1f9d4" : "1f487") + ".png";
+      var img = emojiEl(i % 3 === 1 ? "1f9d4" : "1f487");
       img.style.animationDelay = ((i - (prev || 0)) * 40) + "ms";
       box.appendChild(img);
     }
@@ -1764,7 +1828,7 @@
     while (box.children.length > B.locs) box.removeChild(box.lastChild);
     for (var i = box.children.length; i < B.locs; i++) {
       var lab = document.createElement("label"), inp = document.createElement("input");
-      lab.innerHTML = '<img class="emj" src="emoji/1f4cd.png" alt="">';
+      lab.appendChild(emojiEl("1f4cd"));
       inp.className = "btext"; inp.maxLength = 30; inp.value = B.locNames[i]; inp.setAttribute("aria-label", "Назва філії " + (i + 1));
       (function (k) {
         inp.addEventListener("input", function () { B.locNames[k] = inp.value; renderBuilder("locs"); });
@@ -1813,6 +1877,205 @@
   });
   bSend.addEventListener("click", function () { confetti(bSend); });
   renderAvatars(0); renderLocInputs(); syncSteppers(); renderBuilder();
+
+  // ---------- гра «Підстрижіть бороду» ----------
+  (function () {
+    var wrap = $("#gWrap"), cv = $("#gCanvas"), g = cv.getContext("2d"), bar = $("#gBar"), pct = $("#gPct"),
+        win = $("#gWin"), tip = $("#gTip");
+    var W = 520, H = 440, CX = 260, CY = 175, R = 112, MIN = 9, CUT_R = 24;
+    var strands = [], bits = [], P = { x: -999, y: -999, in: false, down: false, snip: 0 }, totalLen = 0,
+        startT = 0, done = false, scale = 1, dpr = Math.min(window.devicePixelRatio || 1, 2), last = 0;
+    var touch = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (touch) tip.textContent = "Проведіть пальцем по бороді, щоб підстригти.";
+    var COLORS = ["#5B3A22", "#6E4A2E", "#4A2E1A", "#7A5536"];
+    var scisImg = null;
+    if (!IS_APPLE) { scisImg = new Image(); scisImg.src = "emoji/2702.png"; }
+
+    function rnd(a, b) { return a + Math.random() * (b - a); }
+    function grow() {
+      strands = []; bits = []; done = false; startT = 0; totalLen = 0;
+      win.classList.remove("on");
+      // борода: корені по нижній половині обличчя, волосся росте вниз і назовні
+      for (var i = 0; i < 150; i++) {
+        var a = rnd(0.15, Math.PI - 0.15), rr = R * rnd(0.55, 1.02);
+        var x = CX + Math.cos(a) * rr, y = CY + 30 + Math.sin(a) * rr * 0.95;
+        if (Math.hypot(x - CX, y - (CY + 52)) < 26) continue;  // рот лишаємо вільним
+        var dir = Math.atan2(y - CY + 40, x - CX) * 0.55 + Math.PI / 2 * 0.45;
+        var len = rnd(55, 110);
+        strands.push({ x: x, y: y, a: dir + rnd(-0.25, 0.25), len: len, orig: len, curl: rnd(-18, 18), w: rnd(3, 5),
+          c: COLORS[(Math.random() * COLORS.length) | 0] });
+      }
+      // вуса
+      for (var k = 0; k < 26; k++) {
+        var side = k % 2 ? 1 : -1, mx = CX + side * rnd(6, 34), my = CY + 38 + rnd(-3, 3);
+        var ml = rnd(28, 46);
+        strands.push({ x: mx, y: my, a: side > 0 ? rnd(0.15, 0.6) : Math.PI - rnd(0.15, 0.6), len: ml, orig: ml, curl: side * rnd(4, 10),
+          w: rnd(3, 4.5), c: COLORS[k % COLORS.length] });
+      }
+      strands.forEach(function (s) { totalLen += s.orig - MIN; });
+      update();
+    }
+    function tipOf(s, len) { return { x: s.x + Math.cos(s.a) * len, y: s.y + Math.sin(s.a) * len }; }
+    function cutAt(px, py) {
+      var cut = false;
+      for (var i = 0; i < strands.length; i++) {
+        var s = strands[i];
+        if (s.len <= MIN + 0.5) continue;
+        var t = tipOf(s, s.len), vx = t.x - s.x, vy = t.y - s.y, L2 = vx * vx + vy * vy;
+        var u = Math.max(0, Math.min(1, ((px - s.x) * vx + (py - s.y) * vy) / L2));
+        var qx = s.x + vx * u, qy = s.y + vy * u;
+        if (Math.hypot(px - qx, py - qy) > CUT_R) continue;
+        var nl = Math.max(MIN, s.len * u);
+        if (s.len - nl < 2) continue;
+        var from = tipOf(s, nl);
+        bits.push({ x1: from.x, y1: from.y, x2: t.x, y2: t.y, vx: rnd(-1.2, 1.2), vy: rnd(-1, 0.5), rot: 0, vr: rnd(-0.08, 0.08),
+          c: s.c, w: s.w, life: 1 });
+        s.len = nl; cut = true;
+      }
+      if (bits.length > 400) bits.splice(0, bits.length - 400);
+      if (cut) {
+        P.snip = 1;
+        if (!startT) startT = performance.now();
+        update();
+      }
+    }
+    function progress() {
+      var left = 0;
+      strands.forEach(function (s) { left += s.len - MIN; });
+      return totalLen ? 1 - left / totalLen : 0;
+    }
+    function update() {
+      var p = Math.min(1, progress() / 0.9);
+      bar.style.width = (p * 100).toFixed(0) + "%";
+      pct.textContent = Math.round(p * 100) + "%";
+      if (p >= 1 && !done) {
+        done = true;
+        var sec = startT ? Math.max(1, Math.round((performance.now() - startT) / 1000)) : 0;
+        $("#gTime").textContent = sec ? "Ви впоралися за " + sec + " с. А записатися до барбера з ботом ще швидше 😎" : "";
+        emojify($("#gTime"));
+        setTimeout(function () { win.classList.add("on"); confetti(cv); }, 350);
+      }
+    }
+    function toLogical(e) {
+      var r = cv.getBoundingClientRect();
+      return { x: (e.clientX - r.left) / r.width * W, y: (e.clientY - r.top) / r.height * H };
+    }
+    function move(e) {
+      var q = toLogical(e);
+      var px = P.x, py = P.y;
+      P.x = q.x; P.y = q.y; P.in = true;
+      if (done) return;
+      if (e.pointerType === "mouse" || P.down) {
+        // ріжемо вздовж шляху, щоб швидкий рух не «перестрибував» волосся
+        var steps = px > -900 ? Math.max(1, Math.ceil(Math.hypot(q.x - px, q.y - py) / 8)) : 1;
+        for (var i = 1; i <= steps; i++) cutAt(px > -900 ? px + (q.x - px) * i / steps : q.x, px > -900 ? py + (q.y - py) * i / steps : q.y);
+      }
+    }
+    cv.addEventListener("pointermove", move);
+    cv.addEventListener("pointerdown", function (e) { P.down = true; if (e.pointerType !== "mouse") cv.setPointerCapture(e.pointerId); move(e); });
+    window.addEventListener("pointerup", function () { P.down = false; });
+    cv.addEventListener("pointerleave", function () { P.in = false; P.x = P.y = -999; });
+    $("#gReset").addEventListener("click", grow);
+    $("#gAgain").addEventListener("click", grow);
+
+    function resize() {
+      var w = cv.clientWidth || W;
+      scale = w / W;
+      cv.width = Math.round(w * dpr); cv.height = Math.round(w * H / W * dpr);
+      g.setTransform(scale * dpr, 0, 0, scale * dpr, 0, 0);
+    }
+    window.addEventListener("resize", resize);
+
+    function face(happy, t) {
+      // плечі й накидка барбера
+      g.fillStyle = "#1E4D3A";
+      g.beginPath(); g.ellipse(CX, H + 40, 210, 150, 0, Math.PI, 0); g.fill();
+      g.fillStyle = "#FFF8EA";
+      g.beginPath(); g.moveTo(CX - 40, H - 108); g.lineTo(CX + 40, H - 108); g.lineTo(CX, H - 70); g.fill();
+      // шия
+      g.fillStyle = "#E7B48C"; g.fillRect(CX - 38, CY + 80, 76, 90);
+      // вуха
+      g.fillStyle = "#E9B892";
+      g.beginPath(); g.ellipse(CX - R + 4, CY, 18, 28, 0, 0, 7); g.fill();
+      g.beginPath(); g.ellipse(CX + R - 4, CY, 18, 28, 0, 0, 7); g.fill();
+      // обличчя
+      var grd = g.createRadialGradient(CX - 30, CY - 40, 20, CX, CY, R + 10);
+      grd.addColorStop(0, "#F8D3B0"); grd.addColorStop(1, "#E6B08A");
+      g.fillStyle = grd;
+      g.beginPath(); g.ellipse(CX, CY, R * 0.92, R * 1.08, 0, 0, 7); g.fill();
+      // зачіска
+      g.fillStyle = "#3E2615";
+      g.beginPath(); g.ellipse(CX, CY - R * 0.72, R * 0.95, R * 0.5, 0, Math.PI, 0); g.fill();
+      g.beginPath(); g.ellipse(CX + 20, CY - R * 0.8, R * 0.7, R * 0.32, -0.2, 0, 7); g.fill();
+      // брови
+      g.strokeStyle = "#3E2615"; g.lineWidth = 6; g.lineCap = "round";
+      var lift = happy ? -6 : 0;
+      g.beginPath(); g.moveTo(CX - 58, CY - 34 + lift); g.lineTo(CX - 22, CY - 40 + lift); g.stroke();
+      g.beginPath(); g.moveTo(CX + 22, CY - 40 + lift); g.lineTo(CX + 58, CY - 34 + lift); g.stroke();
+      // очі (кліпають)
+      var blink = (t % 3800) < 140;
+      g.fillStyle = "#2A1A10";
+      [-40, 40].forEach(function (dx) {
+        g.beginPath();
+        if (blink) g.ellipse(CX + dx, CY - 12, 10, 1.6, 0, 0, 7); else g.ellipse(CX + dx, CY - 12, 8, 10, 0, 0, 7);
+        g.fill();
+        if (!blink) { g.fillStyle = "#fff"; g.beginPath(); g.arc(CX + dx + 3, CY - 15, 2.6, 0, 7); g.fill(); g.fillStyle = "#2A1A10"; }
+      });
+      // ніс
+      g.strokeStyle = "rgba(160,95,60,.6)"; g.lineWidth = 4;
+      g.beginPath(); g.moveTo(CX, CY - 6); g.quadraticCurveTo(CX + 10, CY + 16, CX - 4, CY + 20); g.stroke();
+      // рот: що коротша борода, то ширша усмішка
+      g.strokeStyle = "#8A3B2A"; g.lineWidth = 5;
+      g.beginPath(); g.arc(CX, CY + 40, 18 + happy * 10, 0.15 * Math.PI, (0.85) * Math.PI); g.stroke();
+      // рум'янець
+      if (happy > 0.5) {
+        g.fillStyle = "rgba(232,105,90," + (0.25 * happy).toFixed(2) + ")";
+        g.beginPath(); g.ellipse(CX - 64, CY + 18, 16, 10, 0, 0, 7); g.fill();
+        g.beginPath(); g.ellipse(CX + 64, CY + 18, 16, 10, 0, 0, 7); g.fill();
+      }
+    }
+    function strand(s, len) {
+      var t = tipOf(s, len), mx = (s.x + t.x) / 2 + Math.cos(s.a + Math.PI / 2) * s.curl * (len / s.orig),
+          my = (s.y + t.y) / 2 + Math.sin(s.a + Math.PI / 2) * s.curl * (len / s.orig);
+      g.strokeStyle = s.c; g.lineWidth = s.w; g.lineCap = "round";
+      g.beginPath(); g.moveTo(s.x, s.y); g.quadraticCurveTo(mx, my, t.x, t.y); g.stroke();
+    }
+    function scissors(t) {
+      if (!P.in || P.x < -900) return;
+      var open = P.snip > 0 ? Math.sin(t / 40) * 0.35 : 0;
+      P.snip = Math.max(0, P.snip - 0.05);
+      g.save(); g.translate(P.x, P.y); g.rotate(-0.6 + open);
+      var sz = 46;
+      if (scisImg && scisImg.complete && scisImg.naturalWidth) g.drawImage(scisImg, -sz / 2, -sz / 2, sz, sz);
+      else { g.font = sz + "px serif"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillText("✂️", 0, 0); }
+      g.restore();
+      // зона зрізу
+      g.strokeStyle = "rgba(30,77,58,.25)"; g.lineWidth = 2; g.setLineDash([4, 5]);
+      g.beginPath(); g.arc(P.x, P.y, CUT_R, 0, 7); g.stroke(); g.setLineDash([]);
+    }
+    function frameG(t) {
+      requestAnimationFrame(frameG);
+      var r = wrap.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;  // не видно: не малюємо
+      if (cv.clientWidth && Math.abs(cv.clientWidth / W - scale) > 0.001) resize();
+      g.clearRect(0, 0, W, H);
+      var happy = Math.min(1, progress() / 0.9);
+      face(happy, t);
+      strands.forEach(function (s) { strand(s, s.len); });
+      for (var i = bits.length - 1; i >= 0; i--) {
+        var b = bits[i];
+        b.vy += 0.25; b.x1 += b.vx; b.x2 += b.vx; b.y1 += b.vy; b.y2 += b.vy; b.rot += b.vr; b.life -= 0.008;
+        if (b.y1 > H + 40 || b.life <= 0) { bits.splice(i, 1); continue; }
+        var cx = (b.x1 + b.x2) / 2, cy = (b.y1 + b.y2) / 2;
+        g.save(); g.translate(cx, cy); g.rotate(b.rot); g.globalAlpha = Math.min(1, b.life * 1.5);
+        g.strokeStyle = b.c; g.lineWidth = b.w; g.lineCap = "round";
+        g.beginPath(); g.moveTo(b.x1 - cx, b.y1 - cy); g.lineTo(b.x2 - cx, b.y2 - cy); g.stroke();
+        g.restore();
+      }
+      scissors(t);
+    }
+    resize(); grow(); requestAnimationFrame(frameG);
+  })();
 
   // ---------- підказки: що натискати й куди гортати ----------
   var scrollCue = $("#scrollCue"), storyCueT = $("#storyCueT"), storyCue = $("#storyCue"),
