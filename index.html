@@ -233,7 +233,7 @@
 
   /* шапка */
   header{position:fixed;left:0;right:0;top:0;z-index:50;padding:14px 0;transition:background .3s,box-shadow .3s}
-  header.scrolled{background:rgba(246,241,231,.86);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
+  header.scrolled{background:rgba(246,241,231,.86);background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--line)}
   header .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px}
   .logo{display:flex;align-items:center;gap:10px;font-family:var(--head);font-weight:700;font-size:18px;text-decoration:none}
   .pole{width:14px;height:30px;border-radius:7px;border:2px solid var(--ink);overflow:hidden;position:relative;background:#fff}
@@ -687,14 +687,31 @@
   .what-card li::before{background:var(--brass)}
   .hs.done .n{box-shadow:0 0 0 4px var(--brass-soft)}
   .plan:not(.hot) .p{color:var(--green)}
-  /* кнопка автогортання */
-  .auto-btn{position:fixed;left:20px;bottom:20px;z-index:56;display:flex;align-items:center;gap:8px;padding:10px 16px 10px 13px;border-radius:99px;
-    border:1px solid var(--line);background:rgba(255,253,248,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-    color:var(--green);font:700 14px var(--body);cursor:pointer;box-shadow:0 8px 24px rgba(21,23,28,.10);transition:background .3s,color .3s,transform .2s}
-  .auto-btn:hover{transform:translateY(-2px)}
-  .auto-btn svg{width:12px;height:12px}
-  .auto-btn.on{background:var(--green);color:#FFF8EA;border-color:var(--green)}
-  @media(max-width:860px){.auto-btn{left:12px;bottom:84px;padding:9px 14px 9px 11px;font-size:13px}}
+  @property --paper{syntax:"<color>";inherits:true;initial-value:#F6F1E7}
+  @property --paper2{syntax:"<color>";inherits:true;initial-value:#EEE6D6}
+  @property --line{syntax:"<color>";inherits:true;initial-value:#E3D9C7}
+  @property --green{syntax:"<color>";inherits:true;initial-value:#1E4D3A}
+  @property --green2{syntax:"<color>";inherits:true;initial-value:#2C6A51}
+  @property --green-soft{syntax:"<color>";inherits:true;initial-value:#E3EEE7}
+  @property --brass{syntax:"<color>";inherits:true;initial-value:#C8963E}
+  @property --brass-soft{syntax:"<color>";inherits:true;initial-value:#F3E6CC}
+  /* кольори плавно перетікають між розділами */
+  :root{transition:--paper 1s ease,--paper2 1s ease,--line 1s ease,--green 1s ease,--green2 1s ease,--green-soft 1s ease,--brass 1s ease,--brass-soft 1s ease}
+  /* пульт презентації */
+  .pres{position:fixed;left:20px;bottom:20px;z-index:56;display:flex;align-items:center;gap:4px;padding:5px;border-radius:99px;
+    border:1px solid var(--line);background:rgba(255,253,248,.9);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    box-shadow:0 10px 28px rgba(21,23,28,.12);font:700 13px var(--body);color:var(--green)}
+  .pres button{display:flex;align-items:center;justify-content:center;gap:7px;height:36px;min-width:36px;border:0;border-radius:99px;background:transparent;color:inherit;font:inherit;cursor:pointer;transition:background .25s,color .25s,transform .2s}
+  .pres button:hover{background:var(--green-soft)}
+  .pres button:active{transform:scale(.94)}
+  .pres button svg{width:12px;height:12px;flex:none}
+  .pres .pp{padding:0 15px 0 13px;background:var(--green);color:#FFF8EA}
+  .pres .pp:hover{background:var(--green2)}
+  .pres .pp.on{background:var(--brass);color:#fff}
+  .pres .pc{display:flex;flex-direction:column;gap:5px;padding:0 12px 0 6px;color:var(--ink2);font-size:12.5px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pres .pc i{display:block;height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+  .pres .pc u{display:block;height:100%;background:var(--brass);transform-origin:0 50%;transform:scaleX(0);transition:transform .6s var(--ease)}
+  @media(max-width:860px){.pres{left:12px;bottom:84px}.pres .pc{display:none}}
   @media(max-width:960px){
     .story .tgbar{height:92px;padding-top:44px}
     .story .chat{top:92px;bottom:56px}
@@ -1804,49 +1821,138 @@
     pu._t = setTimeout(function () { pu.classList.remove("on"); }, 3800);
   }
 
-  // ---------- автогортання: сторінка гортається сама, будь-який дотик чи колесо зупиняє ----------
+  // ---------- презентація: кожен розділ як слайд, свої кольори, сам гортається ----------
   (function () {
-    var btn = document.createElement("button");
-    btn.type = "button"; btn.id = "autoBtn"; btn.className = "auto-btn";
+    // [фон, фон-2, лінії, акцент, акцент-2, акцент-світлий, латунь, латунь-світла]
+    var T = {
+      cream: ["#F6F1E7", "#EEE6D6", "#E3D9C7", "#1E4D3A", "#2C6A51", "#E3EEE7", "#C8963E", "#F3E6CC"],
+      sage:  ["#E8F0E5", "#DAE6D5", "#CFDDC9", "#1E4D3A", "#2C6A51", "#D5E5D9", "#B8862F", "#EFE3C6"],
+      peach: ["#F9EADB", "#F2DCC5", "#EAD0B6", "#8A3B22", "#A84E30", "#F5DCCF", "#C07A2C", "#F5DFC2"],
+      sky:   ["#E5EDF6", "#D5E2EF", "#C9D7E6", "#1F3F68", "#2E5A8F", "#D9E5F2", "#B98A3A", "#EEE2C8"],
+      plum:  ["#EFE9F5", "#E2D9EC", "#D8CDE6", "#4A2C6B", "#634089", "#E4DAEF", "#B8873A", "#F0E3CB"],
+      mint:  ["#E4F2EB", "#D3E9DD", "#C6DECF", "#145A44", "#1E7357", "#D0E8DB", "#B98A34", "#EEE3C6"],
+      sand:  ["#F5EEDC", "#ECE1C7", "#E2D4B4", "#5E4212", "#7D5A1C", "#EFE3C9", "#B07A22", "#F1E0BC"],
+      blush: ["#F8E7E3", "#F0D6D0", "#E8C9C1", "#7A2430", "#96323F", "#F3D9D9", "#B8823A", "#F2E0C8"]
+    };
+    var VARS = ["--paper", "--paper2", "--line", "--green", "--green2", "--green-soft", "--brass", "--brass-soft"];
+    var ORDER = ["cream", "sage", "peach", "sky", "plum", "mint", "sand", "sky", "blush", "cream", "sage", "plum", "cream"];
+    var NAMES = ["Початок", "Що це", "Навіщо", "Як записуються", "Для майстра", "Спробуйте", "Два режими", "Конструктор",
+                 "Калькулятор", "Вартість", "Як почати", "Питання", "Написати"];
+    var slides = $$("section");
+    var root = document.documentElement, cur = -1;
+    function applyTheme(i) {
+      if (i === cur) return;
+      cur = i;
+      var t = T[ORDER[i % ORDER.length]] || T.cream;
+      VARS.forEach(function (v, k) { root.style.setProperty(v, t[k]); });
+      var mc = document.querySelector('meta[name="theme-color"]');
+      if (mc) mc.setAttribute("content", t[0]);
+      paint();
+    }
+    function slideAt(yLine) {
+      var idx = 0;
+      for (var i = 0; i < slides.length; i++) {
+        if (slides[i].getBoundingClientRect().top <= yLine) idx = i;
+      }
+      return idx;
+    }
+    addEventListener("scroll", function () { applyTheme(slideAt(innerHeight * 0.5)); }, { passive: true });
+
+    // кнопка-пульт: ◀ ▶‖ ▶ і лічильник слайдів
+    var bar = document.createElement("div");
+    bar.className = "pres"; bar.id = "pres";
     var IC_PLAY = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1.6v8.8L10.2 6z" fill="currentColor"/></svg>';
     var IC_PAUSE = '<svg viewBox="0 0 12 12" aria-hidden="true"><rect x="2.4" y="1.8" width="2.6" height="8.4" rx=".8" fill="currentColor"/><rect x="7" y="1.8" width="2.6" height="8.4" rx=".8" fill="currentColor"/></svg>';
-    document.body.appendChild(btn);
-    var on = false, y = 0, last = 0, touched = false;
-    var SPEED = innerWidth < 760 ? 80 : 70;  // пікселів за секунду
-    function maxY() { return document.documentElement.scrollHeight - innerHeight; }
+    var IC_PREV = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M7.8 2 3.8 6l4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var IC_NEXT = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M4.2 2l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    bar.innerHTML = '<button type="button" class="pv" aria-label="Попередній розділ">' + IC_PREV + '</button>' +
+      '<button type="button" class="pp" id="autoBtn"></button>' +
+      '<button type="button" class="nx" aria-label="Наступний розділ">' + IC_NEXT + '</button>' +
+      '<span class="pc"><b></b><i><u></u></i></span>';
+    document.body.appendChild(bar);
+    var pp = bar.querySelector(".pp"), pcB = bar.querySelector(".pc b"), pcU = bar.querySelector(".pc u");
+
+    var on = false, touched = false;
+    var SPEED = innerWidth < 760 ? 85 : 75;
     function paint() {
-      btn.innerHTML = on ? IC_PAUSE + "<span>Пауза</span>" : IC_PLAY + "<span>Гортати самому</span>";
-      btn.classList.toggle("on", on);
-      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      if (!pp) return;
+      pp.innerHTML = on ? IC_PAUSE + "<span>Пауза</span>" : IC_PLAY + "<span>Презентація</span>";
+      pp.classList.toggle("on", on);
+      pp.setAttribute("aria-pressed", on ? "true" : "false");
+      var i = Math.max(cur, 0);
+      pcB.textContent = String(i + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0") + " · " + (NAMES[i] || "");
+      pcU.style.transform = "scaleX(" + ((i + 1) / slides.length) + ")";
     }
-    function step(t) {
+    function maxY() { return document.documentElement.scrollHeight - innerHeight; }
+    function topOf(i) { return Math.min(maxY(), Math.max(0, slides[i].getBoundingClientRect().top + scrollY - (i ? 20 : 0))); }
+    function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+
+    // рух між слайдами
+    var anim = null;
+    function glide(to, ms, done) {
+      var from = scrollY, t0 = performance.now(), my = {};
+      anim = my;
+      (function f(t) {
+        if (anim !== my) return;
+        var k = Math.min(1, (t - t0) / ms);
+        window.scrollTo({ top: from + (to - from) * ease(k), behavior: "instant" });
+        if (k < 1) requestAnimationFrame(f); else { anim = null; if (done) done(); }
+      })(t0);
+    }
+    function zoomOpen() { var z = document.getElementById("zoom"); return z && z.classList.contains("open"); }
+
+    // автопоказ: доїхати до слайда → якщо він довгий, повільно прогорнути → постояти → далі
+    var timer = 0, idx = 0;
+    function wait(ms, fn) {
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        if (!on) return;
+        if (document.hidden || zoomOpen()) return wait(800, fn);
+        fn();
+      }, ms);
+    }
+    function read(i) {
+      var s = slides[i], end = Math.min(maxY(), s.getBoundingClientRect().bottom + scrollY - innerHeight);
+      var dist = end - scrollY;
+      if (dist > 40) glide(end, dist / SPEED * 1000, function () { if (on) wait(1600, next); });
+      else wait(i === 0 ? 3200 : 4300, next);
+    }
+    function next() {
       if (!on) return;
-      var zoomEl = document.getElementById("zoom");
-      if (document.hidden || (zoomEl && zoomEl.classList.contains("open"))) { last = t; requestAnimationFrame(step); return; }
-      var dt = Math.min(t - last, 60) / 1000; last = t;
-      y = Math.min(y + SPEED * dt, maxY());
-      window.scrollTo({ top: y, behavior: "instant" });
-      if (y >= maxY() - 1) { stop(); return; }
-      requestAnimationFrame(step);
+      if (idx >= slides.length - 1) { stop(); return; }
+      idx++;
+      glide(topOf(idx), 1150, function () { if (on) wait(700, function () { read(idx); }); });
     }
     function start() {
-      if (scrollY >= maxY() - 5) window.scrollTo({ top: 0, behavior: "instant" });
-      on = true; y = scrollY; last = performance.now(); paint();
-      requestAnimationFrame(step);
+      on = true; paint();
+      if (scrollY >= maxY() - 5) { idx = 0; glide(0, 900, function () { wait(1500, function () { read(0); }); }); return; }
+      idx = slideAt(innerHeight * 0.5);
+      read(idx);
     }
-    function stop() { on = false; paint(); }
-    btn.addEventListener("click", function (e) { e.stopPropagation(); touched = true; on ? stop() : start(); });
+    function stop() { on = false; anim = null; clearTimeout(timer); paint(); }
+    function go(d) {
+      stop();
+      var i = Math.min(slides.length - 1, Math.max(0, slideAt(innerHeight * 0.5) + d));
+      glide(topOf(i), 900);
+    }
+    pp.addEventListener("click", function (e) { e.stopPropagation(); touched = true; on ? stop() : start(); });
+    bar.querySelector(".pv").addEventListener("click", function (e) { e.stopPropagation(); touched = true; go(-1); });
+    bar.querySelector(".nx").addEventListener("click", function (e) { e.stopPropagation(); touched = true; go(1); });
     function userInput(e) {
-      if (e.target && e.target.closest && e.target.closest("#autoBtn")) return;
+      if (e.target && e.target.closest && e.target.closest("#pres")) return;
       touched = true;
-      if (on) stop();
+      if (on || anim) stop();
     }
     ["wheel", "touchstart", "mousedown"].forEach(function (ev) { addEventListener(ev, userInput, { passive: true }); });
     addEventListener("keydown", function (e) {
-      if (/^(Arrow|Page|Home|End| |Space|Escape)/.test(e.key)) userInput(e);
+      var tag = (e.target && e.target.tagName) || "";
+      if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+      if (e.key === "ArrowRight") { e.preventDefault(); touched = true; go(1); return; }
+      if (e.key === "ArrowLeft") { e.preventDefault(); touched = true; go(-1); return; }
+      if (/^(Arrow|Page|Home|End| |Escape)/.test(e.key)) userInput(e);
     });
+    applyTheme(slideAt(innerHeight * 0.5));
     paint();
-    // сам стартує через кілька секунд після заставки, якщо людина ще нічого не чіпала
     if (!reduce) setTimeout(function () { if (!touched && !on && scrollY < 60) start(); }, 5200);
   })();
 
