@@ -6,6 +6,15 @@
 <title>BarberBot — запис у барбершоп через Telegram</title>
 <meta name="description" content="Клієнти записуються самі 24/7 за 3 дотики, отримують нагадування, а майстер бачить розклад у Telegram. 2 тижні безкоштовно.">
 <meta name="theme-color" content="#1E4D3A">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://n0chanc3.github.io/barberbot-site/">
+<meta property="og:title" content="BarberBot — клієнти записуються самі">
+<meta property="og:description" content="Telegram-бот для барбершопу: запис 24/7, нагадування клієнтам, розклад майстру. 2 тижні безкоштовно.">
+<meta property="og:image" content="https://n0chanc3.github.io/barberbot-site/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="uk_UA">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@300..900&family=Playfair+Display:ital,wght@1,500..800&display=swap" rel="stylesheet">
@@ -699,6 +708,13 @@
   .tap-hint .hand,.tap-hint .bubble{display:none}
   .tap-hint::before{content:"";width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 0 0 rgba(255,255,255,.75);animation:tapdot 1.5s ease-out infinite}
   @keyframes tapdot{70%{box-shadow:0 0 0 12px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+  /* смужка фактів під першим екраном */
+  .facts{background:var(--green);color:#F3EEE2;padding:34px 0}
+  .facts .wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  .fact{display:flex;flex-direction:column;gap:4px;padding-left:18px;border-left:2px solid rgba(255,227,166,.35)}
+  .fact b{font:700 clamp(26px,3.2vw,40px)/1.05 var(--head);letter-spacing:-.02em;color:#FFE3A6;white-space:nowrap}
+  .fact span{font-size:15px;line-height:1.35;color:rgba(243,238,226,.85)}
+  @media(max-width:860px){.facts{padding:26px 0}.facts .wrap{grid-template-columns:1fr 1fr;gap:20px 14px}.fact{padding-left:12px}.fact span{font-size:14px}}
   /* КОРОТКА ВЕРСІЯ: лише головне */
   #why,#how-client,#master,#build,.sec-off{display:none!important}
   /* що робить бот: вкладки + телефон */
@@ -828,6 +844,13 @@
 </section>
 
 <div class="ribbon-band" aria-hidden="true"><div class="track" id="track"></div></div>
+
+<div class="facts"><div class="wrap">
+  <div class="fact rv"><b>24/7</b><span>приймає записи, навіть уночі</span></div>
+  <div class="fact rv" style="--d:80ms"><b>15 с</b><span>і клієнт записаний</span></div>
+  <div class="fact rv" style="--d:160ms"><b>2</b><span>нагадування перед візитом</span></div>
+  <div class="fact rv" style="--d:240ms"><b>0 грн</b><span>перші 2 тижні</span></div>
+</div></div>
 
 <!-- ЩО РОБИТЬ БОТ -->
 <section id="what" class="what"><div class="wrap ex">
@@ -1886,17 +1909,13 @@
   (function () {
     // [фон, фон-2, лінії, акцент, акцент-2, акцент-світлий, латунь, латунь-світла]
     var T = {
-      cream: ["#F6F1E7", "#EEE6D6", "#E3D9C7", "#1E4D3A", "#2C6A51", "#E3EEE7", "#C8963E", "#F3E6CC"],
-      sage:  ["#E8F0E5", "#DAE6D5", "#CFDDC9", "#1E4D3A", "#2C6A51", "#D5E5D9", "#B8862F", "#EFE3C6"],
-      peach: ["#F9EADB", "#F2DCC5", "#EAD0B6", "#8A3B22", "#A84E30", "#F5DCCF", "#C07A2C", "#F5DFC2"],
-      sky:   ["#E5EDF6", "#D5E2EF", "#C9D7E6", "#1F3F68", "#2E5A8F", "#D9E5F2", "#B98A3A", "#EEE2C8"],
-      plum:  ["#EFE9F5", "#E2D9EC", "#D8CDE6", "#4A2C6B", "#634089", "#E4DAEF", "#B8873A", "#F0E3CB"],
-      mint:  ["#E4F2EB", "#D3E9DD", "#C6DECF", "#145A44", "#1E7357", "#D0E8DB", "#B98A34", "#EEE3C6"],
-      sand:  ["#F5EEDC", "#ECE1C7", "#E2D4B4", "#5E4212", "#7D5A1C", "#EFE3C9", "#B07A22", "#F1E0BC"],
-      blush: ["#F8E7E3", "#F0D6D0", "#E8C9C1", "#7A2430", "#96323F", "#F3D9D9", "#B8823A", "#F2E0C8"]
+      cream: ["#F7F3EA", "#EFE8D9", "#E4DAC8", "#1B4534", "#2A6149", "#E1ECE4", "#C2913A", "#F3E6CC"],
+      sage:  ["#E8F0E7", "#DBE7DA", "#CDDCCC", "#1B4534", "#2A6149", "#D2E4D6", "#B98A34", "#EFE4C8"],
+      mint:  ["#E2F0E9", "#D2E7DC", "#C4DBCE", "#134A3A", "#1F6A52", "#CDE5D8", "#B98A34", "#EEE3C6"],
+      sand:  ["#F4ECDA", "#EBE0C7", "#E0D2B4", "#1B4534", "#2A6149", "#E3E7D1", "#B8842C", "#F1E1BE"]
     };
     var VARS = ["--paper", "--paper2", "--line", "--green", "--green2", "--green-soft", "--brass", "--brass-soft"];
-    var ORDER = ["cream", "sky", "mint", "blush", "sand", "plum", "cream"];
+    var ORDER = ["cream", "sage", "mint", "sand", "cream", "sage", "cream"];
     var NAMES = ["Початок", "Що робить бот", "Спробуйте", "Калькулятор", "Вартість", "Питання", "Написати"];
     var slides = $$("section").filter(function (x) { return x.offsetParent !== null || getComputedStyle(x).display !== "none"; });
     var root = document.documentElement, cur = -1;
