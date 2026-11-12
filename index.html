@@ -120,6 +120,65 @@
   .secnav:hover a span{opacity:1;transform:none}
   @media (min-width:1180px) and (hover:hover){.secnav{display:flex}}
 
+  /* ---------- обʼємні смайлики (Microsoft Fluent Emoji, MIT) ---------- */
+  .emj{display:inline-block;width:1.25em;height:1.25em;vertical-align:-.28em;margin:0 .04em;object-fit:contain;user-select:none;-webkit-user-drag:none;pointer-events:none}
+  .ic .emj{width:30px;height:30px;margin:0;vertical-align:middle}
+  .float-card .ic .emj{width:24px;height:24px}
+  .icons .emj{width:40px;height:40px}
+  .tap-hint .hand .emj,.slide-hint .hand .emj{width:1.1em;height:1.1em}
+  .tilt:hover .ic .emj,.f:hover .ic .emj,.col h3:hover .emj{animation:jelly .7s var(--ease)}
+  @keyframes jelly{30%{transform:scale(1.25,.8)}50%{transform:scale(.85,1.2) rotate(-8deg)}70%{transform:scale(1.08,.95)}100%{transform:none}}
+
+  /* ---------- конструктор «Зберіть свого бота» ---------- */
+  .builder{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:28px;align-items:start}
+  .bpanel{background:var(--card);border:1px solid var(--line);border-radius:24px;padding:28px;display:grid;gap:26px}
+  .blabel{display:flex;align-items:center;gap:8px;font-weight:800;margin-bottom:10px}
+  .blabel small{font-weight:600;color:var(--muted);font-size:13px}
+  .stepper{display:inline-flex;align-items:center;gap:6px;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:5px}
+  .stepper button{width:42px;height:42px;border-radius:10px;border:0;background:var(--card);font:700 22px var(--body);color:var(--green);cursor:pointer;
+    box-shadow:0 1px 2px rgba(0,0,0,.08);transition:transform .2s var(--ease),background .2s;touch-action:manipulation}
+  .stepper button:hover{background:var(--green-soft)}
+  .stepper button:active{transform:scale(.88)}
+  .stepper button:disabled{opacity:.35;cursor:default}
+  .stepper output{min-width:48px;text-align:center;font:700 22px var(--head);display:inline-block}
+  .stepper output.bump{animation:bump .35s var(--ease)}
+  @keyframes bump{40%{transform:scale(1.4)}}
+  .avatars{display:flex;flex-wrap:wrap;gap:2px;margin-top:12px;min-height:38px}
+  .avatars .emj{width:38px;height:38px;animation:popav .45s cubic-bezier(.3,1.6,.5,1) both}
+  @keyframes popav{from{transform:scale(0) translateY(10px)}}
+  .btext{width:100%;font:600 16px var(--body);padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--paper);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+  .btext:focus{outline:none;border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+  .locs{display:grid;gap:8px;margin-top:12px}
+  .locs label{display:flex;align-items:center;gap:8px;animation:popav .4s var(--ease) both}
+  .locs .btext{padding:9px 12px;font-size:15px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips button{border:1.5px solid var(--line);background:var(--paper);border-radius:99px;padding:8px 14px;font:700 14px var(--body);cursor:pointer;color:var(--ink2);
+    transition:background .25s,border-color .25s,color .25s,transform .25s var(--ease);touch-action:manipulation}
+  .chips button:hover{border-color:var(--green)}
+  .chips button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#FFF8EA}
+  .chips button:active{transform:scale(.94)}
+  .toggles{display:grid;gap:12px}
+  .tgl{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:600;cursor:pointer}
+  .tgl input{appearance:none;-webkit-appearance:none;width:48px;height:28px;border-radius:14px;background:var(--line);position:relative;cursor:pointer;transition:background .25s;flex:none;margin:0}
+  .tgl input::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+  .tgl input:checked{background:var(--green)}
+  .tgl input:checked::after{transform:translateX(20px)}
+  .bpreview{position:sticky;top:90px;display:grid;gap:18px;justify-items:center}
+  .bpreview .phone{transform:none;width:min(320px,86vw)}
+  .bpreview .screen{height:min(520px,60vh)}
+  #bChat{justify-content:flex-start;overflow-y:auto;scrollbar-width:none;padding-top:12px}
+  #bChat::-webkit-scrollbar{display:none}
+  #bChat .msg,#bChat .kb{animation:none}
+  #bChat .flash{animation:flash 1.1s var(--ease)}
+  @keyframes flash{0%{box-shadow:0 0 0 0 rgba(200,150,62,.95);transform:scale(1.03)}100%{box-shadow:0 0 0 14px rgba(200,150,62,0);transform:none}}
+  .msg.mst{background:#FFF3D6;border:1px dashed var(--brass)}
+  .msg .tag{display:block;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#8A5F17;margin-bottom:3px}
+  .bsummary{width:100%;max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px;display:grid;gap:12px}
+  #bSummary{font-weight:700;line-height:1.55}
+  #bSummary span{display:block;font-weight:600;color:var(--ink2)}
+  .bnote{color:var(--muted);font-size:14px}
+  @media(max-width:960px){.builder{grid-template-columns:minmax(0,1fr)}.bpreview{position:static}.bpanel{padding:22px}}
+
   /* ---------- телефон підлітає до вас ---------- */
   .zoom{position:fixed;inset:0;z-index:80;display:grid;place-items:center;visibility:hidden;pointer-events:none}
   .zoom.open{visibility:visible;pointer-events:auto}
@@ -737,6 +796,61 @@
   </div>
 </div></section>
 
+<!-- КОНСТРУКТОР -->
+<section id="build"><div class="wrap">
+  <div class="eyebrow rv">Під ваш салон</div>
+  <h2 class="rv">Зберіть свого <span class="acc" style="color:var(--green)">бота</span></h2>
+  <p class="sub rv">Кількість майстрів, філії, місто, послуги й графік: усе обговоримо й додамо. Покрутіть налаштування й подивіться, як бот виглядатиме для ваших клієнтів.</p>
+  <div class="builder">
+    <div class="bpanel rv">
+      <div>
+        <div class="blabel">💇 Скільки майстрів</div>
+        <div class="stepper" data-key="masters" data-min="1" data-max="15">
+          <button type="button" data-d="-1" aria-label="Менше майстрів">−</button><output id="bMasters">3</output><button type="button" data-d="1" aria-label="Більше майстрів">+</button>
+        </div>
+        <div class="avatars" id="bAvatars" aria-hidden="true"></div>
+      </div>
+      <div>
+        <label class="blabel" for="bCity">🏙 Місто</label>
+        <input class="btext" id="bCity" value="Дніпро" maxlength="30" autocomplete="off">
+      </div>
+      <div>
+        <div class="blabel">🏪 Філії <small>назви можна змінити</small></div>
+        <div class="stepper" data-key="locs" data-min="1" data-max="6">
+          <button type="button" data-d="-1" aria-label="Менше філій">−</button><output id="bLocs">2</output><button type="button" data-d="1" aria-label="Більше філій">+</button>
+        </div>
+        <div class="locs" id="bLocList"></div>
+      </div>
+      <div>
+        <div class="blabel">✂️ Послуги</div>
+        <div class="chips" id="bServices"></div>
+      </div>
+      <div>
+        <div class="blabel">✨ Можливості</div>
+        <div class="toggles" id="bOpts">
+          <label class="tgl">🔔 Нагадування клієнтам <input type="checkbox" data-opt="remind" checked></label>
+          <label class="tgl">✅ Кнопка «Буду» в нагадуванні <input type="checkbox" data-opt="confirm" checked></label>
+          <label class="tgl">☀️ Розклад майстру щоранку <input type="checkbox" data-opt="morning" checked></label>
+          <label class="tgl">🔗 Працює з нашим Altegio <input type="checkbox" data-opt="altegio"></label>
+        </div>
+      </div>
+    </div>
+    <div class="bpreview rv" style="--d:120ms">
+      <div class="phone">
+        <div class="screen">
+          <div class="tgbar"><div class="ava">B</div><div class="tgname">Барбершоп — запис онлайн<small>бот · ваша версія</small></div></div>
+          <div class="chat" id="bChat"></div>
+        </div>
+      </div>
+      <div class="bsummary">
+        <div id="bSummary"></div>
+        <a class="btn" id="bSend" href="#" target="_blank" rel="noopener">💬 Обговорити мого бота</a>
+        <p class="bnote">🤝 Це ще не замовлення: надішліть, і ми разом обговоримо деталі та ціну.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
 <!-- КАЛЬКУЛЯТОР -->
 <section id="calc"><div class="wrap">
   <div class="eyebrow rv">Порахуйте самі</div>
@@ -838,7 +952,7 @@
 
 <footer><div class="wrap">
   <span>© BarberBot · Андрій</span>
-  <span>Боти для запису клієнтів у Telegram</span>
+  <span>Боти для запису клієнтів у Telegram · смайлики: <a href="https://github.com/microsoft/fluentui-emoji" target="_blank" rel="noopener">Microsoft Fluent Emoji</a> (MIT)</span>
 </div></footer>
 
 <div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="Запис у демо-боті" aria-hidden="true">
@@ -866,7 +980,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div>
 
@@ -1307,6 +1421,7 @@
   var M = { x: -999, y: -999, px: -999, py: -999, inside: false };
   var RG = { x: -999, y: -999, vx: 0, vy: 0 };
   var parts = [], wob = [], hoverEl = null, fxDpr = Math.min(window.devicePixelRatio || 1, 2);
+  var SCIS_IMG = new Image(); SCIS_IMG.src = "emoji/2702.png";
   var PALETTE = ["#1E4D3A", "#2C6A51", "#C8963E", "#E8B95A", "#C23B2B", "#2B5C9E"];
 
   function fxResize() {
@@ -1403,8 +1518,10 @@
       fctx.globalAlpha = p.life;
       if (p.scis) {
         fctx.save(); fctx.translate(p.x, p.y); fctx.rotate(p.rot);
-        fctx.font = (12 + p.size * 2).toFixed(0) + "px serif"; fctx.fillStyle = "#1E4D3A";
-        fctx.fillText("✂", -7, 5); fctx.restore();
+        var sz = 14 + p.size * 2.4;
+        if (SCIS_IMG.complete && SCIS_IMG.naturalWidth) fctx.drawImage(SCIS_IMG, -sz / 2, -sz / 2, sz, sz);
+        else { fctx.font = sz.toFixed(0) + "px serif"; fctx.fillStyle = "#1E4D3A"; fctx.fillText("✂", -7, 5); }
+        fctx.restore();
       } else {
         fctx.fillStyle = p.col;
         fctx.beginPath(); fctx.arc(p.x, p.y, p.size * (0.4 + p.life * 0.6), 0, 6.283); fctx.fill();
@@ -1485,6 +1602,202 @@
   }
   [cCheck, cLost, cShare].forEach(function (el) { el.addEventListener("input", calc); });
   calc();
+
+  // ---------- обʼємні смайлики: замінюємо системні на картинки Fluent 3D ----------
+  var EMJ = ("2702 1f488 2705 1f4c5 1f550 1f446 1f9d4 1f4f1 1f64b 1f514 274c 1fa92 1f629 1f60e 1f4cb 2600 1f6ab 1f6e1 " +
+    "1f4cd 1f9fe 1f4ac 1f195 1f9e0 1f3a8 1f389 1f464 1f487 1f3ea 1f3d9 1f525 2728 1f3b2 1f512 1f4e9 1f3e0 1f501 1f5d3 1f4b0 1f680 1f91d 1f517 1f447").split(" ");
+  var EMJ_SET = {}; EMJ.forEach(function (c) { EMJ_SET[c] = 1; });
+  var EMJ_RE = /(\p{Extended_Pictographic})(️)?/gu;
+  function emojify(root) {
+    if (!root) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        var p = n.parentNode;
+        if (!p || /^(SCRIPT|STYLE|TEXTAREA|INPUT|OPTION|TITLE)$/.test(p.nodeName) || p.closest("svg")) return NodeFilter.FILTER_REJECT;
+        EMJ_RE.lastIndex = 0;
+        return EMJ_RE.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function (n) {
+      var text = n.nodeValue, frag = document.createDocumentFragment(), last = 0, m, changed = false;
+      EMJ_RE.lastIndex = 0;
+      while ((m = EMJ_RE.exec(text))) {
+        var code = m[1].codePointAt(0).toString(16);
+        if (!EMJ_SET[code]) continue;
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        var img = document.createElement("img");
+        img.className = "emj"; img.src = "emoji/" + code + ".png"; img.alt = m[0]; img.draggable = false;
+        frag.appendChild(img);
+        last = m.index + m[0].length; changed = true;
+      }
+      if (!changed) return;
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      n.parentNode.replaceChild(frag, n);
+    });
+  }
+  emojify(document.body);
+  // нові повідомлення в чатах теж отримують обʼємні смайлики
+  if (window.MutationObserver) {
+    var emjObs = new MutationObserver(function (list) {
+      list.forEach(function (rec) {
+        rec.addedNodes.forEach(function (n) {
+          if (n.nodeType === 1 && !n.classList.contains("emj")) emojify(n);
+          else if (n.nodeType === 3 && n.parentNode) emojify(n.parentNode);
+        });
+      });
+    });
+    ["#heroChat", "#storyChat", "#demoChat", "#zChat", "#notifText", "#zNotifText", "#bChat", "#bSummary", "#bAvatars"].forEach(function (s) {
+      var el = $(s); if (el) emjObs.observe(el, { childList: true, subtree: true });
+    });
+  }
+
+  // ---------- конструктор «Зберіть свого бота» ----------
+  var B = {
+    masters: 3, locs: 2, city: "Дніпро",
+    locNames: ["Центр", "Лівий берег", "Перемога", "Тополя", "Сокіл", "Набережна"],
+    services: [
+      ["✂️ Стрижка", 300, true], ["🧔 Борода", 200, true], ["💈 Стрижка + борода", 450, true],
+      ["Дитяча стрижка", 250, false], ["🪒 Королівське гоління", 350, false], ["Камуфляж сивини", 300, false], ["Укладка", 150, false]
+    ],
+    opts: { remind: true, confirm: true, morning: true, altegio: false }
+  };
+  var MASTER_NAMES = ["Олег", "Іван", "Марко", "Денис", "Артем", "Максим", "Богдан", "Влад", "Саша", "Тарас", "Юра", "Андрій", "Роман", "Ігор", "Павло"];
+  var bChat = $("#bChat"), bSummary = $("#bSummary"), bSend = $("#bSend");
+  function escH(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function plural(n, one, few, many) {
+    var a = n % 10, b = n % 100;
+    return n + " " + (a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many);
+  }
+  function kb(items, cols) {
+    return '<div class="kb' + (cols === 3 ? " c3" : "") + '"' + (cols === 2 ? ' style="grid-template-columns:1fr 1fr"' : "") + ">" +
+      items.map(function (t) { return "<span>" + escH(t) + "</span>"; }).join("") + "</div>";
+  }
+  function bot(html, block, cls) { return '<div class="msg' + (cls ? " " + cls : "") + '" data-b="' + block + '">' + html + "</div>"; }
+
+  function renderBuilder(changed) {
+    var locs = B.locNames.slice(0, B.locs).map(function (s) { return s.trim() || "Філія"; });
+    var svc = B.services.filter(function (s) { return s[2]; });
+    var city = B.city.trim() || "ваше місто";
+    var h = '<div class="msg me">/start</div>';
+    h += bot("💈 <b>Барбершоп</b> · м. " + escH(city) + "<br>Привіт! Запишу вас за хвилину 👇", "city");
+    if (B.locs > 1) h += bot("📍 <b>Оберіть філію:</b>", "locs") + kb(locs, 2).replace("<div", '<div data-b="locs"');
+    if (svc.length) {
+      h += bot("✂️ <b>Оберіть послугу:</b>", "svc") +
+        kb(svc.map(function (s) { return s[0] + " · " + s[1] + " грн"; }), 1).replace("<div", '<div data-b="svc"');
+    } else {
+      h += bot("Додайте хоча б одну послугу ☝️", "svc");
+    }
+    if (B.masters > 1) {
+      var names = ["🎲 Будь-який"].concat(MASTER_NAMES.slice(0, Math.min(B.masters, 8)));
+      if (B.masters > 8) names.push("ще " + (B.masters - 8));
+      h += bot("💇 <b>Оберіть майстра:</b>", "masters") + kb(names, 3).replace("<div", '<div data-b="masters"');
+    }
+    h += bot("📅 Далі день і час, і готово ✅", "rest");
+    if (B.opts.altegio) h += bot("🔗 Запис одразу зʼявиться у вашому Altegio", "altegio");
+    if (B.opts.remind) {
+      h += bot("🔔 <b>Нагадування:</b> завтра о 12:00 чекаємо на вас" + (locs.length > 1 ? " у філії «" + escH(locs[0]) + "»" : "") + ".", "remind");
+      if (B.opts.confirm) h += kb(["✅ Буду", "❌ Не зможу"], 2).replace("<div", '<div data-b="confirm"');
+    } else if (B.opts.confirm) {
+      h += bot("✅ Кнопка «Буду» працює разом із нагадуваннями: увімкніть їх", "confirm");
+    }
+    if (B.opts.morning) h += bot('<span class="tag">Майстру щоранку</span>☀️ 📋 Розклад на сьогодні: 5 записів', "morning", "mst");
+    bChat.innerHTML = h;
+    if (changed) {
+      var target = bChat.querySelector('[data-b="' + changed + '"]');
+      if (target) {
+        $$('[data-b="' + changed + '"]', bChat).forEach(function (el) { el.classList.add("flash"); });
+        var top = target.offsetTop - 60;
+        bChat.scrollTo({ top: Math.max(0, top), behavior: reduce ? "auto" : "smooth" });
+      }
+    }
+
+    // короткий підсумок і готове повідомлення в Telegram
+    var opts = [];
+    if (B.opts.remind) opts.push("нагадування");
+    if (B.opts.confirm) opts.push("кнопка «Буду»");
+    if (B.opts.morning) opts.push("розклад майстру зранку");
+    if (B.opts.altegio) opts.push("Altegio");
+    bSummary.innerHTML = "Ваш бот: " + plural(B.masters, "майстер", "майстри", "майстрів") + " · " +
+      plural(B.locs, "філія", "філії", "філій") + ", м. " + escH(city) +
+      "<span>📍 " + locs.map(escH).join(", ") + "</span>" +
+      "<span>✂️ " + (svc.length ? svc.map(function (s) { return escH(s[0].replace(/^\S+\s/, function (m) { return /\p{Extended_Pictographic}/u.test(m) ? "" : m; })); }).join(", ") : "послуги додамо") + "</span>" +
+      (opts.length ? "<span>✨ " + opts.join(", ") + "</span>" : "");
+    var msg = "Добрий день! Хочу бота для свого барбершопу:\n" +
+      "• Майстрів: " + B.masters + "\n" +
+      "• Місто: " + city + "\n" +
+      "• Філії (" + B.locs + "): " + locs.join(", ") + "\n" +
+      "• Послуги: " + (svc.length ? svc.map(function (s) { return s[0].replace(/\p{Extended_Pictographic}️?\s?/gu, ""); }).join(", ") : "обговоримо") + "\n" +
+      "• Можливості: " + (opts.length ? opts.join(", ") : "базові") + "\n" +
+      "Давайте обговоримо?";
+    bSend.href = "https://t.me/" + TELEGRAM_USERNAME + "?text=" + encodeURIComponent(msg);
+  }
+
+  function renderAvatars(prev) {
+    var box = $("#bAvatars");
+    while (box.children.length > B.masters) box.removeChild(box.lastChild);
+    for (var i = box.children.length; i < B.masters; i++) {
+      var img = document.createElement("img");
+      img.className = "emj"; img.alt = ""; img.src = "emoji/" + (i % 3 === 1 ? "1f9d4" : "1f487") + ".png";
+      img.style.animationDelay = ((i - (prev || 0)) * 40) + "ms";
+      box.appendChild(img);
+    }
+  }
+  function renderLocInputs() {
+    var box = $("#bLocList");
+    while (box.children.length > B.locs) box.removeChild(box.lastChild);
+    for (var i = box.children.length; i < B.locs; i++) {
+      var lab = document.createElement("label"), inp = document.createElement("input");
+      lab.innerHTML = '<img class="emj" src="emoji/1f4cd.png" alt="">';
+      inp.className = "btext"; inp.maxLength = 30; inp.value = B.locNames[i]; inp.setAttribute("aria-label", "Назва філії " + (i + 1));
+      (function (k) {
+        inp.addEventListener("input", function () { B.locNames[k] = inp.value; renderBuilder("locs"); });
+      })(i);
+      lab.appendChild(inp); box.appendChild(lab);
+    }
+  }
+  function syncSteppers() {
+    $$(".stepper").forEach(function (st) {
+      var key = st.dataset.key, v = B[key];
+      st.querySelector("[data-d='-1']").disabled = v <= +st.dataset.min;
+      st.querySelector("[data-d='1']").disabled = v >= +st.dataset.max;
+    });
+  }
+  $$(".stepper").forEach(function (st) {
+    var key = st.dataset.key, out = st.querySelector("output");
+    $$("button", st).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var prev = B[key];
+        B[key] = clamp(prev + (+btn.dataset.d), +st.dataset.min, +st.dataset.max);
+        if (B[key] === prev) return;
+        out.textContent = B[key];
+        out.classList.remove("bump"); void out.offsetWidth; out.classList.add("bump");
+        if (key === "masters") renderAvatars(prev); else renderLocInputs();
+        syncSteppers();
+        renderBuilder(key);
+      });
+    });
+  });
+  $("#bCity").addEventListener("input", function (e) { B.city = e.target.value; renderBuilder("city"); });
+  var chipBox = $("#bServices");
+  B.services.forEach(function (s, i) {
+    var c = document.createElement("button");
+    c.type = "button"; c.textContent = s[0] + " · " + s[1] + " грн"; c.setAttribute("aria-pressed", String(s[2]));
+    c.addEventListener("click", function () {
+      s[2] = !s[2]; c.setAttribute("aria-pressed", String(s[2])); renderBuilder("svc");
+    });
+    chipBox.appendChild(c);
+  });
+  emojify(chipBox);
+  $$("#bOpts input").forEach(function (inp) {
+    inp.addEventListener("change", function () {
+      B.opts[inp.dataset.opt] = inp.checked;
+      renderBuilder(inp.dataset.opt === "confirm" ? (B.opts.remind ? "confirm" : "confirm") : inp.dataset.opt);
+    });
+  });
+  bSend.addEventListener("click", function () { confetti(bSend); });
+  renderAvatars(0); renderLocInputs(); syncSteppers(); renderBuilder();
 
   // ---------- підказки: що натискати й куди гортати ----------
   var scrollCue = $("#scrollCue"), storyCueT = $("#storyCueT"), storyCue = $("#storyCue"),
