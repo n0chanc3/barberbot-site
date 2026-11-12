@@ -44,12 +44,17 @@
   .fx-on #cring,.fx-on #cdot{opacity:1}
   #cdot{width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--green);will-change:transform}
   #cring{width:42px;height:42px;margin:-21px 0 0 -21px;will-change:transform}
-  #cring>span{position:absolute;inset:0;border-radius:50%;border:2px solid var(--green);display:grid;place-items:center;
-    font:800 8px var(--body);letter-spacing:.1em;text-transform:uppercase;color:transparent;
-    transition:transform .4s var(--ease),background .3s,border-color .3s,color .2s}
-  #cring.hover>span{transform:scale(1.9);background:rgba(30,77,58,.88);border-color:transparent;color:#FFF8EA}
-  #cring.press>span{transform:scale(1.35);background:rgba(200,150,62,.85)}
-  #cring.hover.press>span{transform:scale(1.6)}
+  #cring>span{position:absolute;inset:0;border-radius:50%;border:2px solid var(--green);
+    transition:transform .4s var(--ease),background .3s,border-color .3s,border-width .3s}
+  /* над кнопками кільце лише обводить, нічого не закриває */
+  #cring.hover>span{transform:scale(1.45);border-color:var(--brass);border-width:1.5px;background:rgba(200,150,62,.07)}
+  #cring.press>span{transform:scale(.8);background:rgba(200,150,62,.25)}
+  #cring.hover.press>span{transform:scale(1.2)}
+  #cring.hide,#cdot.hide,#clabel.hide{opacity:0!important}
+  /* підпис збоку від курсора, лише для головних кнопок */
+  #clabel{position:fixed;left:0;top:0;pointer-events:none;z-index:66;padding:4px 9px;border-radius:99px;background:var(--ink);color:#FFF8EA;
+    font:800 10px var(--body);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;opacity:0;transition:opacity .25s;will-change:transform}
+  #clabel.on{opacity:.92}
 
   /* ---------- заставка при вході ---------- */
   #intro{position:fixed;inset:0;z-index:120;background:radial-gradient(120% 90% at 50% 40%,#2C6A51,#1E4D3A 55%,#123124);color:#FFF8EA;display:grid;place-items:center;
@@ -982,7 +987,7 @@
 
 <nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#why" data-sec="why"><span>Навіщо</span><i></i></a><a href="#how-client" data-sec="how-client"><span>Як записуються</span><i></i></a><a href="#master" data-sec="master"><span>Для майстра</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#build" data-sec="build"><span>Налаштувати</span><i></i></a><a href="#calc" data-sec="calc"><span>Калькулятор</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
-<div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div>
+<div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
 <div class="mbar" id="mbar"><a class="btn contact" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні."><svg class="tg-ico"><use href="#tg"/></svg>Спробувати безкоштовно</a></div>
 
@@ -1417,7 +1422,8 @@
 
   // ---------- ефекти за мишкою (лише комп'ютер з мишкою, без «зменшити рух») ----------
   var fxOn = fine && !reduce;
-  var fxCanvas = $("#fx"), fctx = fxCanvas.getContext("2d"), ring = $("#cring"), cdot = $("#cdot"), ringLabel = ring.firstElementChild;
+  var fxCanvas = $("#fx"), fctx = fxCanvas.getContext("2d"), ring = $("#cring"), cdot = $("#cdot"), clabel = $("#clabel");
+  var hideCursorFx = false;  // над грою власний курсор-ножиці, кільце ховаємо
   var M = { x: -999, y: -999, px: -999, py: -999, inside: false };
   var RG = { x: -999, y: -999, vx: 0, vy: 0 };
   var parts = [], wob = [], hoverEl = null, fxDpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1464,16 +1470,24 @@
         if (RG.x < -900) { RG.x = M.x; RG.y = M.y; M.px = M.x; M.py = M.y; }
       }
       var t = e.target && e.target.closest ? e.target.closest("[data-cursor], a, button, input, .tilt") : null;
+      var noFx = !!(e.target && e.target.closest && e.target.closest("[data-nocursor]"));
+      if (noFx !== hideCursorFx) {
+        hideCursorFx = noFx;
+        [ring, cdot, clabel].forEach(function (el) { el.classList.toggle("hide", noFx); });
+      }
       if (t !== hoverEl) {
         hoverEl = t;
         ring.classList.toggle("hover", !!t);
-        ringLabel.textContent = t ? (t.getAttribute("data-cursor") || (t.matches("a, button") ? "тисни" : "")) : "";
+        // підпис лише там, де він справді допомагає: головні кнопки й телефон
+        var label = t ? (t.getAttribute("data-cursor") || (t.matches(".btn") ? "тисни" : "")) : "";
+        clabel.textContent = label;
+        clabel.classList.toggle("on", !!label);
       }
     }, { passive: true });
     document.addEventListener("mouseout", function (e) {
       if (!e.relatedTarget) { M.inside = false; document.documentElement.classList.remove("fx-on"); }
     });
-    window.addEventListener("mousedown", function () { ring.classList.add("press"); spawn(M.x, M.y, 0, 0, true); });
+    window.addEventListener("mousedown", function () { ring.classList.add("press"); if (!hideCursorFx) spawn(M.x, M.y, 0, 0, true); });
     window.addEventListener("mouseup", function () { ring.classList.remove("press"); });
     window.addEventListener("resize", function () { fxResize(); collectWob(); });
     window.addEventListener("load", collectWob);
@@ -1491,14 +1505,15 @@
     ring.style.transform = "translate(" + RG.x.toFixed(1) + "px," + RG.y.toFixed(1) + "px) rotate(" + (sp ? ang : 0).toFixed(1) +
       "deg) scale(" + (1 + sp * 0.02).toFixed(3) + "," + (1 - sp * 0.012).toFixed(3) + ")";
     cdot.style.transform = "translate(" + M.x + "px," + M.y + "px)";
+    if (clabel.textContent) clabel.style.transform = "translate(" + (M.x + 22) + "px," + (M.y + 20) + "px)";
 
     // слід із конфеті й ножиць
     var dx = M.x - M.px, dy = M.y - M.py;
-    if (M.inside && Math.hypot(dx, dy) > 14) { spawn(M.x, M.y, dx, dy, false); M.px = M.x; M.py = M.y; }
+    if (M.inside && Math.hypot(dx, dy) > 14) { if (!hideCursorFx) spawn(M.x, M.y, dx, dy, false); M.px = M.x; M.py = M.y; }
 
     fctx.clearRect(0, 0, innerWidth, innerHeight);
-    // «лінза» з крапок, що розбігаються від курсора
-    if (M.inside) {
+    // «лінза» з крапок, що розбігаються від курсора (не над кнопками й полями, щоб не заважала читати)
+    if (M.inside && !hideCursorFx && !(hoverEl && hoverEl.matches("a, button, input"))) {
       var RAD = 150, S = 22, x0 = Math.floor((M.x - RAD) / S) * S, y0 = Math.floor((M.y - RAD) / S) * S;
       fctx.fillStyle = "#1E4D3A";
       for (var gx = x0; gx <= M.x + RAD; gx += S) {
