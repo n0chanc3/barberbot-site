@@ -746,6 +746,21 @@
   .sw-sum .a{color:#7A3B30}
   .sw-sum .b{color:var(--green)}
   @media(max-width:860px){.sw{padding:76px 0 60px}.sw-box{padding:22px 16px 20px;border-radius:22px}.sw-list li>span{font-size:15px;padding:12px 13px}.sw-toggle{font-size:15.5px;gap:10px}}
+  /* навіщо бот і чому я пишу */
+  .pur{padding:100px 0 70px}
+  .pur-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.9fr);gap:56px;align-items:start}
+  .pur h2{font-size:clamp(28px,3.6vw,44px);margin-bottom:20px}
+  .pur-p{font-size:19px;line-height:1.6;color:var(--ink2);margin:0 0 22px;max-width:620px}
+  .pur-list{list-style:none;margin:0;padding:0;display:grid;gap:12px;max-width:620px}
+  .pur-list li{position:relative;padding-left:26px;font-size:17px;line-height:1.5;color:var(--ink2)}
+  .pur-list li::before{content:"";position:absolute;left:3px;top:.6em;width:9px;height:9px;border-radius:50%;background:var(--brass)}
+  .pur-list b{color:var(--ink)}
+  .pur-card{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:30px 30px 32px;box-shadow:0 20px 50px rgba(21,23,28,.08)}
+  .pur-k{font:700 13px var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
+  .pur-card p{margin:0 0 14px;font-size:17px;line-height:1.55;color:var(--ink2)}
+  .pur-card p b{color:var(--ink)}
+  .pur-card .btn{margin-top:8px;width:100%;justify-content:center}
+  @media(max-width:860px){.pur{padding:70px 0 40px}.pur-grid{grid-template-columns:minmax(0,1fr);gap:30px}.pur-p{font-size:17px}.pur-list li{font-size:16px}.pur-card{padding:24px 20px}}
   /* КОРОТКА ВЕРСІЯ: лише головне */
   #why,#how-client,#master,#build,#calc,.sec-off{display:none!important}
   /* що робить бот: вкладки + телефон */
@@ -800,7 +815,7 @@
 <header id="header"><div class="wrap">
   <a class="logo" href="#top"><span class="pole" aria-hidden="true"></span>BarberBot</a>
   <nav class="links" aria-label="Розділи">
-    <a href="#what">Що це</a><a href="#try">Спробувати</a><a href="#price">Вартість</a><a href="#faq">Питання</a>
+    <a href="#purpose">Навіщо</a><a href="#what">Що робить</a><a href="#try">Спробувати</a><a href="#price">Вартість</a><a href="#faq">Питання</a>
   </nav>
   <a class="btn sm contact" href="#"><svg class="tg-ico"><use href="#tg"/></svg>Написати</a>
 </div></header>
@@ -809,7 +824,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <a class="scroll-cue" id="scrollCue" href="#what"><span class="mouse"><i></i></span><span class="finger">👆</span><span>Гортайте вниз</span><span class="chev">↓</span></a>
+  <a class="scroll-cue" id="scrollCue" href="#purpose"><span class="mouse"><i></i></span><span class="finger">👆</span><span>Гортайте вниз</span><span class="chev">↓</span></a>
   <div class="blob g" data-par="0.12"></div>
   <div class="blob b" data-par="-0.08"></div>
   <div class="icons" aria-hidden="true" data-par="0.2">
@@ -868,21 +883,27 @@
   <div class="fact rv" style="--d:240ms"><b>0 грн</b><span>перші 2 тижні</span></div>
 </div></div>
 
-<!-- ПЕРЕМИКАЧ: БЕЗ БОТА / З БОТОМ -->
-<section id="switch" class="sw"><div class="wrap">
-  <div class="eyebrow rv">Навіщо це вам</div>
-  <h2 class="rv">Увімкніть бота і <span class="acc" style="color:var(--green)">порівняйте</span></h2>
-  <div class="sw-box rv" id="swBox">
-    <button type="button" class="sw-toggle" id="swToggle" role="switch" aria-checked="false" aria-label="Увімкнути бота">
-      <span class="sw-l l0">Без бота</span><span class="sw-knob"><i></i></span><span class="sw-l l1">З ботом</span>
-    </button>
-    <ul class="sw-list">
-      <li style="--k:0"><span class="a">📞 3 пропущені дзвінки, поки ви стригли</span><span class="b">✅ 3 нові записи, поки ви стригли</span></li>
-      <li style="--k:1"><span class="a">💬 «А на завтра є час?» о 23:40. Ви вже спите</span><span class="b">🌙 О 23:40 бот сам записав клієнта на завтра</span></li>
-      <li style="--k:2"><span class="a">🤷 «Скільки коштує борода?» уп'яте за день</span><span class="b">💈 Ціни й вільний час клієнт бачить сам</span></li>
-      <li style="--k:3"><span class="a">😶 Клієнт на 14:00 забув і не прийшов</span><span class="b">⏰ Клієнт на 14:00 отримав нагадування й прийшов</span></li>
-    </ul>
-    <p class="sw-sum"><span class="a">Ви відповідаєте між клієнтами й увечері.</span><span class="b">Ви просто стрижете. Записи приходять самі.</span></p>
+<!-- НАВІЩО БОТ І ЧОМУ Я ПИШУ -->
+<section id="purpose" class="pur"><div class="wrap">
+  <div class="pur-grid">
+    <div>
+      <div class="eyebrow rv">Навіщо цей бот</div>
+      <h2 class="rv">Щоб клієнт міг записатися до вас за хвилину, не дзвонячи й не чекаючи відповіді</h2>
+      <p class="pur-p rv">Більшість ваших клієнтів і так щодня в Telegram. Бот дає їм записатися прямо там: обрати послугу, день і вільний час. Вам не треба відповідати на кожне повідомлення, а запис уже стоїть у розкладі.</p>
+      <ul class="pur-list rv">
+        <li><b>Клієнту</b> швидше: без дзвінків, без очікування відповіді в Direct, без реєстрацій і додатків.</li>
+        <li><b>Вам</b> менше переписок: кожен новий запис і розклад на день приходять вам у Telegram.</li>
+        <li><b>Менше неявок:</b> бот сам нагадує клієнту про візит.</li>
+        <li><b>Якщо у вас Altegio,</b> бот записує клієнтів прямо у ваш Altegio. Нічого не змінюється, просто зʼявляється ще один зручний спосіб записатися.</li>
+      </ul>
+    </div>
+    <div class="pur-card rv" style="--d:120ms">
+      <div class="pur-k">Чому я вам пишу</div>
+      <p>Мене звати Андрій, я роблю Telegram-ботів для запису в барбершопи.</p>
+      <p>Пишу, бо думаю, що вашим клієнтам буде зручніше записуватися через Telegram. Хочу запропонувати спробувати такого бота у вашому салоні.</p>
+      <p><b>Перші 2 тижні безкоштовно.</b> Я сам налаштую бота під ваші послуги, ціни й графік. Якщо не підійде, просто відключимо, нічого платити не треба.</p>
+      <a class="btn contact" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні."><svg class="tg-ico"><use href="#tg"/></svg>Написати Андрію</a>
+    </div>
   </div>
 </div></section>
 
@@ -1174,6 +1195,24 @@
   </div>
 </div></section>
 
+<!-- ПЕРЕМИКАЧ: БЕЗ БОТА / З БОТОМ -->
+<section id="switch" class="sw"><div class="wrap">
+  <div class="eyebrow rv">Якщо ви записуєте в Direct і по телефону</div>
+  <h2 class="rv">Увімкніть бота і <span class="acc" style="color:var(--green)">порівняйте</span></h2>
+  <div class="sw-box rv" id="swBox">
+    <button type="button" class="sw-toggle" id="swToggle" role="switch" aria-checked="false" aria-label="Увімкнути бота">
+      <span class="sw-l l0">Без бота</span><span class="sw-knob"><i></i></span><span class="sw-l l1">З ботом</span>
+    </button>
+    <ul class="sw-list">
+      <li style="--k:0"><span class="a">📞 3 пропущені дзвінки, поки ви стригли</span><span class="b">✅ 3 нові записи, поки ви стригли</span></li>
+      <li style="--k:1"><span class="a">💬 «А на завтра є час?» о 23:40. Ви вже спите</span><span class="b">🌙 О 23:40 бот сам записав клієнта на завтра</span></li>
+      <li style="--k:2"><span class="a">🤷 «Скільки коштує борода?» уп'яте за день</span><span class="b">💈 Ціни й вільний час клієнт бачить сам</span></li>
+      <li style="--k:3"><span class="a">😶 Клієнт на 14:00 забув і не прийшов</span><span class="b">⏰ Клієнт на 14:00 отримав нагадування й прийшов</span></li>
+    </ul>
+    <p class="sw-sum"><span class="a">Ви відповідаєте між клієнтами й увечері.</span><span class="b">Ви просто стрижете. Записи приходять самі.</span></p>
+  </div>
+</div></section>
+
 <!-- ПИТАННЯ -->
 <section id="faq"><div class="wrap">
   <div style="text-align:center">
@@ -1234,7 +1273,7 @@
   </div>
 </div>
 
-<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#switch" data-sec="switch"><span>Навіщо</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
+<nav class="secnav" id="secnav" aria-label="Розділи сторінки"><a href="#top" data-sec="top"><span>Початок</span><i></i></a><a href="#purpose" data-sec="purpose"><span>Навіщо</span><i></i></a><a href="#what" data-sec="what"><span>Що робить</span><i></i></a><a href="#try" data-sec="try"><span>Спробувати</span><i></i></a><a href="#price" data-sec="price"><span>Ціни</span><i></i></a><a href="#switch" data-sec="switch"><span>Порівняти</span><i></i></a><a href="#faq" data-sec="faq"><span>Питання</span><i></i></a></nav>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div><div id="clabel" aria-hidden="true"></div>
 
@@ -1375,7 +1414,7 @@
 
   // ---------- заголовки: розбиваємо на слова ----------
   $$("section h2").forEach(function (h) {
-    if (h.closest(".st")) return;
+    if (h.closest(".st") || h.closest(".pur")) return;  // у «Навіщо цей бот» без анімації слів
     h.classList.add("split", "rv");  // rv: інакше заголовок без .rv лишається схованим
     var i = 0;
     (function walk(node) {
@@ -1968,7 +2007,7 @@
       sand:  ["#F4ECDA", "#EBE0C7", "#E0D2B4", "#1B4534", "#2A6149", "#E3E7D1", "#B8842C", "#F1E1BE"]
     };
     var VARS = ["--paper", "--paper2", "--line", "--green", "--green2", "--green-soft", "--brass", "--brass-soft"];
-    var ORDER = ["cream", "sand", "sage", "mint", "cream", "sage", "cream"];
+    var ORDER = ["cream", "cream", "sage", "mint", "cream", "sand", "sage", "cream"];
     var slides = $$("section").filter(function (x) { return x.offsetParent !== null || getComputedStyle(x).display !== "none"; });
     var root = document.documentElement, cur = -1;
     function applyTheme(i) {
