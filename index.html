@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1E4D3A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@300..900&family=Playfair+Display:ital,wght@1,500..800&family=Yeseva+One&family=Oswald:wght@500..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@300..900&family=Playfair+Display:ital,wght@1,500..800&display=swap" rel="stylesheet">
 <style>
   /* Палітра «барбершоп класика»: папір, пляшково-зелений, латунь, червоний барбер-пола */
   :root{
@@ -28,32 +28,28 @@
   h1,h2,h3{font-family:var(--head);letter-spacing:var(--head-ls,-.02em);line-height:var(--head-lh,1.08);font-weight:var(--head-w,700);text-transform:var(--head-tt,none)}
   h3{text-transform:none}
 
-  /* ---------- шрифтові набори (перемикач «Aa») ---------- */
-  html[data-font="vintage"]{--head:"Yeseva One",Georgia,serif;--head-w:400;--head-ls:0;--head-lh:1.12}
-  html[data-font="poster"]{--head:"Oswald","Arial Narrow",sans-serif;--head-w:600;--head-ls:.01em;--head-lh:1.02;--head-tt:uppercase}
-  html[data-font="poster"] h1{font-size:clamp(44px,6vw,80px)}
-  html[data-font="poster"] h2{font-size:clamp(36px,5.4vw,64px)}
   /* курсивний акцент у ключових словах */
   .acc,.acc i{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:700;letter-spacing:0;text-transform:none}
-  html[data-font="poster"] .acc,html[data-font="poster"] .acc i{font-size:1.04em}
   /* «живі» заголовки: товщають під курсором (змінний шрифт Unbounded) */
-  html:not([data-font]) .split .wd>i:not(.acc i),html[data-font="classic"] .split .wd>i{transition:transform .9s var(--ease),font-weight .45s var(--ease),color .3s;transition-delay:calc(var(--i)*55ms),0s,0s}
-  html:not([data-font]) .split.in .wd>i:hover,html[data-font="classic"] .split.in .wd>i:hover{font-weight:900;color:var(--green2)}
+  .split .wd>i:not(.acc i){transition:transform .9s var(--ease),font-weight .45s var(--ease),color .3s;transition-delay:calc(var(--i)*55ms),0s,0s}
+  .split.in .wd>i:not(.acc i):hover{font-weight:900;color:var(--green2)}
   h1 .w{transition:font-weight .45s var(--ease)}
-  html:not([data-font]) h1 .w:not(.acc):hover,html[data-font="classic"] h1 .w:not(.acc):hover{font-weight:900}
+  h1 .w:not(.acc):hover{font-weight:900}
+  /* після появи слова можуть вистрибувати за межі рядка */
+  .js .split.settled .wd{overflow:visible}
 
-  .fontsw{position:fixed;left:16px;bottom:16px;z-index:56}
-  .fs-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);cursor:pointer;
-    font:700 17px "Playfair Display",serif;font-style:italic;color:var(--ink);transition:transform .35s var(--ease)}
-  .fs-btn:hover{transform:rotate(-12deg) scale(1.08)}
-  .fs-menu{position:absolute;left:0;bottom:60px;width:230px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:var(--shadow);
-    opacity:0;transform:translateY(10px) scale(.96);transform-origin:0 100%;pointer-events:none;transition:opacity .3s var(--ease),transform .35s var(--ease)}
-  .fontsw.open .fs-menu{opacity:1;transform:none;pointer-events:auto}
-  .fs-menu p{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 10px 8px}
-  .fs-menu button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;padding:9px 10px;border-radius:12px;cursor:pointer;font:600 15px var(--body);color:var(--ink);text-align:left}
-  .fs-menu button b{display:grid;place-items:center;width:40px;height:34px;border-radius:9px;background:var(--paper2);font-size:18px;font-weight:700}
-  .fs-menu button:hover{background:var(--paper)}
-  .fs-menu button[aria-checked="true"]{background:var(--green-soft);color:var(--green)}
+  /* ---------- ефекти за мишкою (лише комп'ютер) ---------- */
+  #fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:64;mix-blend-mode:multiply}
+  #cring,#cdot{position:fixed;left:0;top:0;pointer-events:none;z-index:66;opacity:0;transition:opacity .3s}
+  .fx-on #cring,.fx-on #cdot{opacity:1}
+  #cdot{width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--green);will-change:transform}
+  #cring{width:42px;height:42px;margin:-21px 0 0 -21px;will-change:transform}
+  #cring>span{position:absolute;inset:0;border-radius:50%;border:2px solid var(--green);display:grid;place-items:center;
+    font:800 8px var(--body);letter-spacing:.1em;text-transform:uppercase;color:transparent;
+    transition:transform .4s var(--ease),background .3s,border-color .3s,color .2s}
+  #cring.hover>span{transform:scale(1.9);background:rgba(30,77,58,.88);border-color:transparent;color:#FFF8EA}
+  #cring.press>span{transform:scale(1.35);background:rgba(200,150,62,.85)}
+  #cring.hover.press>span{transform:scale(1.6)}
 
   /* ---------- телефон підлітає до вас ---------- */
   .zoom{position:fixed;inset:0;z-index:80;display:grid;place-items:center;visibility:hidden;pointer-events:none}
@@ -84,7 +80,6 @@
   @media(max-width:960px){
     .zoom .notif{left:50%;top:auto;bottom:70px;transform:translateX(-50%) scale(.9);width:min(260px,80vw)}
     .zoom .notif.on{transform:translateX(-50%)}
-    .fontsw{bottom:90px;left:12px}
   }
   h2{font-size:clamp(30px,4.6vw,52px);margin-bottom:16px}
   h3{font-size:19px;line-height:1.25;font-weight:600;letter-spacing:-.01em}
@@ -511,7 +506,7 @@
       </ul>
     </div>
 
-    <div class="phone-scene hero-scene rv" id="heroScene" style="--d:200ms" aria-label="Телефон із ботом, можна покрутити">
+    <div class="phone-scene hero-scene rv" id="heroScene" data-cursor="крути" style="--d:200ms" aria-label="Телефон із ботом, можна покрутити">
       <div class="p3d" id="heroPhone">
         <div class="phone face front">
           <div class="screen">
@@ -799,15 +794,8 @@
   </div>
 </div>
 
-<div class="fontsw" id="fontsw">
-  <button class="fs-btn" type="button" aria-expanded="false" aria-controls="fsMenu" title="Шрифт сайту">Aa</button>
-  <div class="fs-menu" id="fsMenu" role="menu">
-    <p>Шрифт заголовків</p>
-    <button type="button" role="menuitemradio" data-font="classic"><b style="font-family:Unbounded">Аа</b>Сучасний</button>
-    <button type="button" role="menuitemradio" data-font="vintage"><b style="font-family:'Yeseva One';font-weight:400">Аа</b>Вінтаж</button>
-    <button type="button" role="menuitemradio" data-font="poster"><b style="font-family:Oswald">АА</b>Афіша</button>
-  </div>
-</div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div id="cring" aria-hidden="true"><span></span></div><div id="cdot" aria-hidden="true"></div>
 
 <div class="mbar" id="mbar"><a class="btn contact" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні."><svg class="tg-ico"><use href="#tg"/></svg>Спробувати безкоштовно</a></div>
 
@@ -932,6 +920,7 @@
     pending = pending.filter(function (el) {
       if (el.getBoundingClientRect().top > limit) return true;
       el.classList.add("in");
+      if (el.classList.contains("split")) setTimeout(function () { el.classList.add("settled"); }, 1400);
       $$("[data-count]", el).forEach(countUp);
       if (el.classList.contains("tilt")) {  // після появи віддаємо transform нахилу
         var d = parseInt(getComputedStyle(el).getPropertyValue("--d"), 10) || 0;
@@ -1191,33 +1180,143 @@
   $("#openZoom").addEventListener("click", openZoom);
   $$("[data-close]", zoom).forEach(function (el) { el.addEventListener("click", closeZoom); });
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") { closeZoom(); fsw.classList.remove("open"); fsBtn.setAttribute("aria-expanded", "false"); }
+    if (e.key === "Escape") closeZoom();
   });
 
-  // ---------- шрифти: перемикач «Aa» ----------
-  var fsw = $("#fontsw"), fsBtn = $(".fs-btn", fsw);
-  function setFont(f) {
-    if (f === "classic") document.documentElement.removeAttribute("data-font");
-    else document.documentElement.setAttribute("data-font", f);
-    $$("button[data-font]", fsw).forEach(function (b) { b.setAttribute("aria-checked", String(b.dataset.font === f)); });
-    try { localStorage.setItem("bb-font", f); } catch (e) { /* без збереження */ }
-    ribHalf = 0;
-    setTimeout(onScroll, 50);
+  try { localStorage.removeItem("bb-font"); } catch (e) { /* старий вибір шрифту більше не потрібен */ }
+
+  // ---------- ефекти за мишкою (лише комп'ютер з мишкою, без «зменшити рух») ----------
+  var fxOn = fine && !reduce;
+  var fxCanvas = $("#fx"), fctx = fxCanvas.getContext("2d"), ring = $("#cring"), cdot = $("#cdot"), ringLabel = ring.firstElementChild;
+  var M = { x: -999, y: -999, px: -999, py: -999, inside: false };
+  var RG = { x: -999, y: -999, vx: 0, vy: 0 };
+  var parts = [], wob = [], hoverEl = null, fxDpr = Math.min(window.devicePixelRatio || 1, 2);
+  var PALETTE = ["#1E4D3A", "#2C6A51", "#C8963E", "#E8B95A", "#C23B2B", "#2B5C9E"];
+
+  function fxResize() {
+    fxCanvas.width = innerWidth * fxDpr; fxCanvas.height = innerHeight * fxDpr;
+    fctx.setTransform(fxDpr, 0, 0, fxDpr, 0, 0);
   }
-  var savedFont = "classic";
-  try { savedFont = localStorage.getItem("bb-font") || "classic"; } catch (e) { /* без збереження */ }
-  setFont(["classic", "vintage", "poster"].indexOf(savedFont) >= 0 ? savedFont : "classic");
-  fsBtn.addEventListener("click", function (e) {
-    e.stopPropagation();
-    var open = !fsw.classList.contains("open");
-    fsw.classList.toggle("open", open); fsBtn.setAttribute("aria-expanded", String(open));
-  });
-  $$("button[data-font]", fsw).forEach(function (b) {
-    b.addEventListener("click", function () { setFont(b.dataset.font); });
-  });
-  document.addEventListener("click", function (e) {
-    if (!fsw.contains(e.target)) { fsw.classList.remove("open"); fsBtn.setAttribute("aria-expanded", "false"); }
-  });
+  // запамʼятовуємо центри елементів, які «юлозяться» (рахуємо рідко, а не щокадру)
+  function collectWob() {
+    if (!fxOn) return;
+    wob.forEach(function (w) { w.el.style.translate = ""; w.el.style.rotate = ""; });
+    var sy = scrollY;
+    wob = $$("h1 .w, .split .wd > i, .icons span, .float-card, .checks li, .eyebrow, .demo-steps li i, .hs .n, .badge").map(function (el) {
+      var r = el.getBoundingClientRect();
+      return { el: el, cx: r.left + r.width / 2, cy: r.top + r.height / 2 + sy, x: 0, y: 0, vx: 0, vy: 0, r: 0, vr: 0,
+        k: el.matches(".icons span") ? 2.4 : el.matches(".float-card, .badge") ? 0.8 : 1 };
+    });
+  }
+  function spawn(x, y, dx, dy, burst) {
+    var n = burst ? 18 : 1;
+    for (var i = 0; i < n; i++) {
+      var a = Math.random() * 6.283, sp = burst ? 2 + Math.random() * 5 : 0;
+      parts.push({
+        x: x, y: y,
+        vx: burst ? Math.cos(a) * sp : -dx * 0.06 + (Math.random() - 0.5) * 1.6,
+        vy: burst ? Math.sin(a) * sp - 2 : -dy * 0.06 + (Math.random() - 0.5) * 1.6 - 0.8,
+        life: 1, decay: 0.016 + Math.random() * 0.014, size: 2.5 + Math.random() * 3.5,
+        col: PALETTE[(Math.random() * PALETTE.length) | 0], scis: Math.random() < (burst ? 0.25 : 0.1),
+        rot: Math.random() * 6.283, vr: (Math.random() - 0.5) * 0.3
+      });
+    }
+    if (parts.length > 90) parts.splice(0, parts.length - 90);
+  }
+
+  if (fxOn) {
+    fxResize();
+    window.addEventListener("mousemove", function (e) {
+      M.x = e.clientX; M.y = e.clientY;
+      if (!M.inside) {
+        M.inside = true; document.documentElement.classList.add("fx-on");
+        if (RG.x < -900) { RG.x = M.x; RG.y = M.y; M.px = M.x; M.py = M.y; }
+      }
+      var t = e.target && e.target.closest ? e.target.closest("[data-cursor], a, button, input, .tilt") : null;
+      if (t !== hoverEl) {
+        hoverEl = t;
+        ring.classList.toggle("hover", !!t);
+        ringLabel.textContent = t ? (t.getAttribute("data-cursor") || (t.matches("a, button") ? "тисни" : "")) : "";
+      }
+    }, { passive: true });
+    document.addEventListener("mouseout", function (e) {
+      if (!e.relatedTarget) { M.inside = false; document.documentElement.classList.remove("fx-on"); }
+    });
+    window.addEventListener("mousedown", function () { ring.classList.add("press"); spawn(M.x, M.y, 0, 0, true); });
+    window.addEventListener("mouseup", function () { ring.classList.remove("press"); });
+    window.addEventListener("resize", function () { fxResize(); collectWob(); });
+    window.addEventListener("load", collectWob);
+    setTimeout(collectWob, 1300);
+    var wobTimer = 0;
+    window.addEventListener("scroll", function () { clearTimeout(wobTimer); wobTimer = setTimeout(collectWob, 220); }, { passive: true });
+  }
+
+  function fxFrame() {
+    if (!fxOn) return;
+    // кільце-желе: пружина з перельотом, тягнеться в напрямку руху
+    RG.vx = (RG.vx + (M.x - RG.x) * 0.16) * 0.72; RG.vy = (RG.vy + (M.y - RG.y) * 0.16) * 0.72;
+    RG.x += RG.vx; RG.y += RG.vy;
+    var sp = hoverEl ? 0 : Math.min(Math.hypot(RG.vx, RG.vy), 40), ang = Math.atan2(RG.vy, RG.vx) * 57.2958;
+    ring.style.transform = "translate(" + RG.x.toFixed(1) + "px," + RG.y.toFixed(1) + "px) rotate(" + (sp ? ang : 0).toFixed(1) +
+      "deg) scale(" + (1 + sp * 0.02).toFixed(3) + "," + (1 - sp * 0.012).toFixed(3) + ")";
+    cdot.style.transform = "translate(" + M.x + "px," + M.y + "px)";
+
+    // слід із конфеті й ножиць
+    var dx = M.x - M.px, dy = M.y - M.py;
+    if (M.inside && Math.hypot(dx, dy) > 14) { spawn(M.x, M.y, dx, dy, false); M.px = M.x; M.py = M.y; }
+
+    fctx.clearRect(0, 0, innerWidth, innerHeight);
+    // «лінза» з крапок, що розбігаються від курсора
+    if (M.inside) {
+      var RAD = 150, S = 22, x0 = Math.floor((M.x - RAD) / S) * S, y0 = Math.floor((M.y - RAD) / S) * S;
+      fctx.fillStyle = "#1E4D3A";
+      for (var gx = x0; gx <= M.x + RAD; gx += S) {
+        for (var gy = y0; gy <= M.y + RAD; gy += S) {
+          var ddx = gx - M.x, ddy = gy - M.y, dist = Math.hypot(ddx, ddy);
+          if (dist > RAD) continue;
+          var f = 1 - dist / RAD, push = f * f * 26, nx = dist ? ddx / dist : 0, ny = dist ? ddy / dist : 0;
+          fctx.globalAlpha = f * 0.5;
+          fctx.beginPath(); fctx.arc(gx + nx * push, gy + ny * push, 0.8 + f * 2.6, 0, 6.283); fctx.fill();
+        }
+      }
+    }
+    for (var i = parts.length - 1; i >= 0; i--) {
+      var p = parts[i];
+      p.vy += 0.12; p.vx *= 0.98; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= p.decay;
+      if (p.life <= 0) { parts.splice(i, 1); continue; }
+      fctx.globalAlpha = p.life;
+      if (p.scis) {
+        fctx.save(); fctx.translate(p.x, p.y); fctx.rotate(p.rot);
+        fctx.font = (12 + p.size * 2).toFixed(0) + "px serif"; fctx.fillStyle = "#1E4D3A";
+        fctx.fillText("✂", -7, 5); fctx.restore();
+      } else {
+        fctx.fillStyle = p.col;
+        fctx.beginPath(); fctx.arc(p.x, p.y, p.size * (0.4 + p.life * 0.6), 0, 6.283); fctx.fill();
+      }
+    }
+    fctx.globalAlpha = 1;
+
+    // слова, іконки й плашки розбігаються від курсора й пружинять назад
+    var sy = scrollY, vh = innerHeight;
+    for (var j = 0; j < wob.length; j++) {
+      var w = wob[j], cy = w.cy - sy;
+      if (cy < -200 || cy > vh + 200) continue;
+      var ex = w.cx - M.x, ey = cy - M.y, d = Math.hypot(ex, ey), RR = w.k > 2 ? 220 : 150, tx = 0, ty = 0, tr = 0;
+      if (M.inside && d < RR) {
+        var ff = 1 - d / RR, s = ff * ff * 16 * w.k;
+        tx = (ex / (d || 1)) * s; ty = (ey / (d || 1)) * s; tr = (ex > 0 ? 1 : -1) * ff * 8 * Math.min(w.k, 1.6);
+      }
+      w.vx = (w.vx + (tx - w.x) * 0.14) * 0.78; w.vy = (w.vy + (ty - w.y) * 0.14) * 0.78; w.vr = (w.vr + (tr - w.r) * 0.12) * 0.78;
+      w.x += w.vx; w.y += w.vy; w.r += w.vr;
+      if (Math.abs(w.x) + Math.abs(w.y) + Math.abs(w.r) < 0.05 && Math.abs(w.vx) + Math.abs(w.vy) + Math.abs(w.vr) < 0.05) {
+        if (w.el.style.translate) { w.el.style.translate = ""; w.el.style.rotate = ""; }
+        w.x = w.y = w.r = w.vx = w.vy = w.vr = 0;
+        continue;
+      }
+      w.el.style.translate = w.x.toFixed(2) + "px " + w.y.toFixed(2) + "px";
+      w.el.style.rotate = w.r.toFixed(2) + "deg";
+    }
+  }
 
   var demoStarted = false;
 
@@ -1313,6 +1412,7 @@
     ribOff = (ribOff + 0.9 + Math.abs(vel) * 0.4) % (ribHalf || 1);
     track.style.transform = "translate3d(" + (-ribOff) + "px,0,0) skewX(" + clamp(-vel * 0.3, -12, 12) + "deg)";
     phoneFrame(y);
+    fxFrame();
     requestAnimationFrame(frame);
   }
 
