@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#1E4D3A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@300..900&family=Playfair+Display:ital,wght@1,500..800&family=Yeseva+One&family=Oswald:wght@500..700&display=swap" rel="stylesheet">
 <style>
   /* Палітра «барбершоп класика»: папір, пляшково-зелений, латунь, червоний барбер-пола */
   :root{
@@ -25,7 +25,67 @@
   img,svg{display:block}
   .wrap{max-width:1140px;margin:0 auto;padding:0 20px}
   section{position:relative;padding:110px 0}
-  h1,h2,h3{font-family:var(--head);letter-spacing:-.02em;line-height:1.08;font-weight:700}
+  h1,h2,h3{font-family:var(--head);letter-spacing:var(--head-ls,-.02em);line-height:var(--head-lh,1.08);font-weight:var(--head-w,700);text-transform:var(--head-tt,none)}
+  h3{text-transform:none}
+
+  /* ---------- шрифтові набори (перемикач «Aa») ---------- */
+  html[data-font="vintage"]{--head:"Yeseva One",Georgia,serif;--head-w:400;--head-ls:0;--head-lh:1.12}
+  html[data-font="poster"]{--head:"Oswald","Arial Narrow",sans-serif;--head-w:600;--head-ls:.01em;--head-lh:1.02;--head-tt:uppercase}
+  html[data-font="poster"] h1{font-size:clamp(44px,6vw,80px)}
+  html[data-font="poster"] h2{font-size:clamp(36px,5.4vw,64px)}
+  /* курсивний акцент у ключових словах */
+  .acc,.acc i{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:700;letter-spacing:0;text-transform:none}
+  html[data-font="poster"] .acc,html[data-font="poster"] .acc i{font-size:1.04em}
+  /* «живі» заголовки: товщають під курсором (змінний шрифт Unbounded) */
+  html:not([data-font]) .split .wd>i:not(.acc i),html[data-font="classic"] .split .wd>i{transition:transform .9s var(--ease),font-weight .45s var(--ease),color .3s;transition-delay:calc(var(--i)*55ms),0s,0s}
+  html:not([data-font]) .split.in .wd>i:hover,html[data-font="classic"] .split.in .wd>i:hover{font-weight:900;color:var(--green2)}
+  h1 .w{transition:font-weight .45s var(--ease)}
+  html:not([data-font]) h1 .w:not(.acc):hover,html[data-font="classic"] h1 .w:not(.acc):hover{font-weight:900}
+
+  .fontsw{position:fixed;left:16px;bottom:16px;z-index:56}
+  .fs-btn{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow);cursor:pointer;
+    font:700 17px "Playfair Display",serif;font-style:italic;color:var(--ink);transition:transform .35s var(--ease)}
+  .fs-btn:hover{transform:rotate(-12deg) scale(1.08)}
+  .fs-menu{position:absolute;left:0;bottom:60px;width:230px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:var(--shadow);
+    opacity:0;transform:translateY(10px) scale(.96);transform-origin:0 100%;pointer-events:none;transition:opacity .3s var(--ease),transform .35s var(--ease)}
+  .fontsw.open .fs-menu{opacity:1;transform:none;pointer-events:auto}
+  .fs-menu p{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 10px 8px}
+  .fs-menu button{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;padding:9px 10px;border-radius:12px;cursor:pointer;font:600 15px var(--body);color:var(--ink);text-align:left}
+  .fs-menu button b{display:grid;place-items:center;width:40px;height:34px;border-radius:9px;background:var(--paper2);font-size:18px;font-weight:700}
+  .fs-menu button:hover{background:var(--paper)}
+  .fs-menu button[aria-checked="true"]{background:var(--green-soft);color:var(--green)}
+
+  /* ---------- телефон підлітає до вас ---------- */
+  .zoom{position:fixed;inset:0;z-index:80;display:grid;place-items:center;visibility:hidden;pointer-events:none}
+  .zoom.open{visibility:visible;pointer-events:auto}
+  .zoom-bg{position:absolute;inset:0;background:rgba(18,22,20,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;transition:opacity .5s var(--ease)}
+  .zoom.open .zoom-bg{opacity:1}
+  .zoom-stage{position:relative;perspective:1600px;display:flex;flex-direction:column;align-items:center;gap:16px}
+  .zphone{transform-origin:50% 50%;will-change:transform}
+  /* збільшений телефон завжди пласкій: у 3D Safari на iPhone погано влучає по кнопках */
+  .zphone .p3d{width:min(370px,88vw);transform:none!important;transform-style:flat}
+  .zphone .face.back,.zphone .side{display:none}
+  .zphone .phone,.zphone .p3d .phone{width:100%;transform:none;box-shadow:0 60px 120px rgba(0,0,0,.45)}
+  .kb a{display:block;text-align:center;text-decoration:none;background:var(--green);color:#FFF8EA;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:800;
+    box-shadow:0 6px 16px rgba(30,77,58,.25);transition:transform .2s var(--ease);touch-action:manipulation}
+  .kb a:hover{transform:translateY(-1px)}
+  .zphone .screen{height:min(660px,calc(100svh - 150px))}
+  .zphone .chat{justify-content:flex-start;overflow-y:auto;scroll-behavior:smooth;padding-bottom:16px;scrollbar-width:none}
+  .zphone .chat::-webkit-scrollbar{display:none}
+  .zphone .chat>:first-child{margin-top:auto}
+  .zoom-tip{color:#FFF8EA;font-weight:700;font-size:15px;opacity:0;transition:opacity .4s .5s}
+  .zoom.open .zoom-tip{opacity:.9}
+  .zoom-close{position:absolute;top:18px;right:18px;width:48px;height:48px;border-radius:50%;border:0;background:#FFF8EA;color:var(--ink);font-size:20px;cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);opacity:0;transform:scale(.6) rotate(-90deg);transition:opacity .35s,transform .45s var(--ease);z-index:3}
+  .zoom.open .zoom-close{opacity:1;transform:none}
+  .zoom .notif{position:absolute;left:calc(100% + 24px);top:120px}
+  html.lock,html.lock body{overflow:hidden}
+  .hero-scene.flown .p3d{visibility:hidden}
+  @media(max-width:960px){
+    .zoom .notif{left:50%;top:auto;bottom:70px;transform:translateX(-50%) scale(.9);width:min(260px,80vw)}
+    .zoom .notif.on{transform:translateX(-50%)}
+    .fontsw{bottom:90px;left:12px}
+  }
   h2{font-size:clamp(30px,4.6vw,52px);margin-bottom:16px}
   h3{font-size:19px;line-height:1.25;font-weight:600;letter-spacing:-.01em}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--green2);margin-bottom:16px}
@@ -100,7 +160,12 @@
   /* ТЕЛЕФОН у стилі Telegram */
   .phone-scene{position:relative;display:grid;place-items:center;perspective:1400px}
   .phone{position:relative;width:min(320px,80vw);background:#121318;border-radius:46px;padding:11px;box-shadow:0 50px 90px rgba(21,23,28,.28),0 0 0 1px rgba(0,0,0,.4) inset;
-    transform:rotateY(var(--ry,-10deg)) rotateX(var(--rx,4deg));transform-style:preserve-3d;will-change:transform}
+    transform:rotateY(var(--ry,-10deg)) rotateX(var(--rx,4deg))}
+  /* лише телефон на першому екрані обʼємний; решта пласкі, щоб кнопки натискались на iPhone */
+  .story .phone-scene,.demo .phone-scene,.master .phone-scene{perspective:none}
+  /* яку сторону показувати, вирішує скрипт за кутом (Safari плутає backface-visibility) */
+  .p3d.showback .phone{visibility:hidden}
+  .p3d:not(.showback) .face.back{visibility:hidden}
   .phone::before{content:"";position:absolute;left:50%;top:20px;width:92px;height:26px;margin-left:-46px;border-radius:14px;background:#000;z-index:5}
   .phone::after{content:"";position:absolute;inset:11px;border-radius:36px;pointer-events:none;z-index:6;
     background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);background-size:260% 100%;background-position:var(--gl,50%) 0}
@@ -206,7 +271,7 @@
   .demo .chat::-webkit-scrollbar{display:none}
   .demo .chat>:first-child{margin-top:auto}
   .kb button{font:inherit;border:0;background:rgba(255,255,255,.85);border-radius:10px;padding:9px 6px;font-size:12.5px;font-weight:700;color:#2A6FB8;cursor:pointer;
-    box-shadow:0 1px 1px rgba(0,0,0,.06);transition:transform .2s var(--ease),background .2s}
+    box-shadow:0 1px 1px rgba(0,0,0,.06);transition:transform .2s var(--ease),background .2s;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .kb button:hover{background:#fff;transform:translateY(-1px)}
   .kb button:active{transform:scale(.94);background:#cfe3f7}
   .kb button:disabled{opacity:.45;cursor:default;transform:none}
@@ -431,13 +496,13 @@
       <div class="badge"><span class="live"></span>Telegram-бот для барбершопів</div>
       <h1 aria-label="Клієнти записуються самі. Ви просто стрижете.">
         <span class="w" style="--i:0">Клієнти</span> <span class="w" style="--i:1">записуються</span>
-        <span class="w mark" style="--i:2">самі.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 50 4, 120 4, 197 12"/></svg></span>
+        <span class="w mark acc" style="--i:2">самі.<svg viewBox="0 0 200 20" preserveAspectRatio="none" aria-hidden="true"><path d="M3 14 C 50 4, 120 4, 197 12"/></svg></span>
         <span class="w" style="--i:3">Ви</span> <span class="w" style="--i:4">просто</span> <span class="w" style="--i:5">стрижете.</span>
       </h1>
       <p class="lead rv" style="--d:300ms">Бот приймає записи 24/7: клієнт обирає послугу, день і час за кілька дотиків, отримує нагадування, а ви бачите весь розклад у Telegram. Без дзвінків і переписок у Direct.</p>
       <div class="cta rv" style="--d:420ms">
         <a class="btn contact magnetic" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні."><svg class="tg-ico"><use href="#tg"/></svg>Спробувати безкоштовно</a>
-        <a class="btn light magnetic" href="#how-client">Як це працює <span class="arr">↓</span></a>
+        <button class="btn light magnetic" type="button" id="openZoom">📱 Записатися самому</button>
       </div>
       <ul class="checks rv" style="--d:540ms">
         <li><i>✓</i>2 тижні безкоштовно</li>
@@ -461,7 +526,7 @@
       <div class="shadow-floor"></div>
       <div class="float-card fc1"><span class="ic">🔔</span><div>Нагадування клієнту<small>завтра о 12:00</small></div></div>
       <div class="float-card fc2"><span class="ic">🆕</span><div>Новий запис<small>Стрижка + борода · 450 грн</small></div></div>
-      <div class="spin-hint"><b>↻</b> Покрутіть телефон</div>
+      <div class="spin-hint"><b>↻</b> Покрутіть або натисніть, щоб записатися</div>
     </div>
   </div>
 </section>
@@ -471,7 +536,7 @@
 <!-- БУЛО / СТАЛО -->
 <section id="why"><div class="wrap">
   <div class="eyebrow rv">Навіщо це салону</div>
-  <h2 class="rv">Менше переписок, <span style="color:var(--green)">більше записів</span></h2>
+  <h2 class="rv">Менше переписок, <span class="acc" style="color:var(--green)">більше записів</span></h2>
   <p class="sub rv">Клієнт хоче записатися тут і зараз. Якщо доводиться чекати відповіді, він іде туди, де записатися простіше.</p>
   <div class="compare">
     <div class="col before rv">
@@ -538,7 +603,7 @@
   </div>
   <div>
     <div class="eyebrow rv">Для майстра</div>
-    <h2 class="rv">Весь розклад у вашому Telegram</h2>
+    <h2 class="rv">Весь розклад у вашому <span class="acc" style="color:var(--green)">Telegram</span></h2>
     <p class="sub rv" style="margin-bottom:34px">Нічого нового вчити не треба: усе приходить звичайними повідомленнями в чат, який у вас і так відкритий.</p>
     <div class="feat">
       <div class="f rv"><div class="ic">🆕</div><h3>Сповіщення про запис</h3><p>Хто, на яку послугу й коли, з номером телефону.</p></div>
@@ -608,7 +673,7 @@
 <!-- КАЛЬКУЛЯТОР -->
 <section id="calc"><div class="wrap">
   <div class="eyebrow rv">Порахуйте самі</div>
-  <h2 class="split rv">Скільки коштують пропущені записи</h2>
+  <h2 class="split rv">Скільки коштують <span class="acc" style="color:var(--green)">пропущені</span> записи</h2>
   <p class="sub rv">Пересуньте повзунки під свій салон. Рахуємо лише ваші цифри.</p>
   <div class="calc">
     <div class="panel rv">
@@ -631,7 +696,7 @@
 <!-- ЦІНИ -->
 <section id="price"><div class="wrap">
   <div class="eyebrow rv">Вартість</div>
-  <h2 class="rv">Прозоро і без сюрпризів</h2>
+  <h2 class="rv">Прозоро і без <span class="acc" style="color:var(--green)">сюрпризів</span></h2>
   <p class="sub rv">Спочатку 2 тижні безкоштовно. Платите, лише якщо бот сподобався.</p>
   <div class="price">
     <div class="plan hot rv">
@@ -696,7 +761,7 @@
   <div class="final-box rv">
     <svg class="scis s1" aria-hidden="true"><use href="#scis"/></svg>
     <svg class="scis s2" aria-hidden="true"><use href="#scis"/></svg>
-    <h2>Спробуйте бота на собі за 1 хвилину</h2>
+    <h2>Спробуйте бота на собі <span class="acc" style="color:#FFE3A6">за 1 хвилину</span></h2>
     <p>Напишіть мені, я надішлю демо-бота. Пройдіть запис так, як це зробить ваш клієнт.</p>
     <a class="btn cream contact magnetic" href="#" data-msg="Добрий день! Хочу подивитися демо-бота для запису."><svg class="tg-ico"><use href="#tg"/></svg>Отримати демо в Telegram</a>
   </div>
@@ -708,6 +773,41 @@
   <span>© BarberBot · Андрій</span>
   <span>Боти для запису клієнтів у Telegram</span>
 </div></footer>
+
+<div class="zoom" id="zoom" role="dialog" aria-modal="true" aria-label="Запис у демо-боті" aria-hidden="true">
+  <div class="zoom-bg" data-close></div>
+  <button class="zoom-close" type="button" data-close aria-label="Закрити">✕</button>
+  <div class="zoom-stage">
+    <div class="zphone" id="zphone">
+      <div class="p3d" style="--rx:0deg;--ry:0deg">
+        <div class="phone face front">
+          <div class="screen">
+            <div class="tgbar"><div class="ava">B</div><div class="tgname">Барбершоп — запис онлайн<small>бот · демо</small></div></div>
+            <div class="chat" id="zChat"></div>
+          </div>
+        </div>
+        <div class="face back"><div class="cam"><i></i><i></i><i></i><i></i></div>
+          <div class="back-logo"><span class="pole"></span>BarberBot<small>запис 24/7</small></div></div>
+        <div class="side l"></div><div class="side r"></div><div class="side t"></div><div class="side b"></div>
+      </div>
+    </div>
+    <div class="notif" id="zNotif">
+      <div class="who"><span class="ava" style="width:28px;height:28px;font-size:11px">B</span>Майстру прийшло</div>
+      <b>🆕 Новий запис</b><span id="zNotifText"></span>
+    </div>
+    <p class="zoom-tip">Натискайте кнопки в чаті, щоб записатися</p>
+  </div>
+</div>
+
+<div class="fontsw" id="fontsw">
+  <button class="fs-btn" type="button" aria-expanded="false" aria-controls="fsMenu" title="Шрифт сайту">Aa</button>
+  <div class="fs-menu" id="fsMenu" role="menu">
+    <p>Шрифт заголовків</p>
+    <button type="button" role="menuitemradio" data-font="classic"><b style="font-family:Unbounded">Аа</b>Сучасний</button>
+    <button type="button" role="menuitemradio" data-font="vintage"><b style="font-family:'Yeseva One';font-weight:400">Аа</b>Вінтаж</button>
+    <button type="button" role="menuitemradio" data-font="poster"><b style="font-family:Oswald">АА</b>Афіша</button>
+  </div>
+</div>
 
 <div class="mbar" id="mbar"><a class="btn contact" href="#" data-msg="Добрий день! Хочу спробувати бота для запису безкоштовно 2 тижні."><svg class="tg-ico"><use href="#tg"/></svg>Спробувати безкоштовно</a></div>
 
@@ -899,13 +999,15 @@
     ph.rx = clamp(ph.rx - dy * 0.25, -28, 28);
   });
   function endDrag() {
-    if (!ph.drag) return;
+    if (!ph.drag) return false;
     ph.drag = false; scene.classList.remove("drag");
-    if (ph.moved < 4) ph.vy = 22;  // просто натиснули: телефон робить оберт
+    return ph.moved < 6;  // true = це було просте натискання
   }
-  scene.addEventListener("pointerup", endDrag);
+  scene.addEventListener("pointerup", function () { if (endDrag()) openZoom(); });
   scene.addEventListener("pointercancel", endDrag);
   scene.addEventListener("lostpointercapture", endDrag);
+  scene.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openZoom(); } });
+  scene.tabIndex = 0;
 
   function phoneFrame(y) {
     var swayY = -10 + mouse.x * 22 - clamp(y / innerHeight, 0, 1) * 25;
@@ -922,12 +1024,12 @@
     }
     heroPhone.style.setProperty("--rx", ph.rx.toFixed(2) + "deg");
     heroPhone.style.setProperty("--ry", ph.ry.toFixed(2) + "deg");
-    var norm = ((ph.ry % 360) + 540) % 360 - 180;
+    var norm = ((ph.ry % 360) + 540) % 360 - 180;  // 0 = екраном до вас
     heroPhone.style.setProperty("--gl", (50 - norm * 0.8).toFixed(1) + "%");
+    heroPhone.classList.toggle("showback", Math.abs(norm) > 90);
   }
 
-  // ---------- живе демо: справжні кнопки ----------
-  var demoChat = $("#demoChat"), notif = $("#notif"), demoSteps = $$("#demoSteps li"), demoRun = 0;
+  // ---------- живе демо (той самий сценарій у розділі й у збільшеному телефоні) ----------
   var WD = ["Нд", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"];
   function dayLabels() {
     var out = [], d = new Date();
@@ -939,60 +1041,76 @@
     }
     return out;
   }
-  function addMsg(html, me) {
-    var m = document.createElement("div");
-    m.className = "msg" + (me ? " me" : ""); m.innerHTML = html;
-    demoChat.appendChild(m); demoChat.scrollTop = demoChat.scrollHeight;
-    return m;
-  }
-  function botSay(html, run, then) {
-    var t = addMsg('<span class="typing"><i></i><i></i><i></i></span>');
-    setTimeout(function () {
-      if (run !== demoRun) return;
-      t.innerHTML = html; demoChat.scrollTop = demoChat.scrollHeight;
-      if (then) then();
-    }, reduce ? 0 : 650);
-  }
-  function addKb(items, cols, run, onPick) {
-    var kb = document.createElement("div");
-    kb.className = "kb pulse" + (cols === 3 ? " c3" : "");
-    items.forEach(function (label) {
-      var b = document.createElement("button"); b.type = "button"; b.textContent = label;
-      b.addEventListener("click", function () {
-        if (run !== demoRun) return;
-        $$("button", kb).forEach(function (x) { x.disabled = true; });
-        kb.classList.remove("pulse");
-        onPick(label);
+  var TG_LINK = "https://t.me/" + TELEGRAM_USERNAME + "?text=" +
+    encodeURIComponent("Добрий день! Спробував демо на сайті, хочу такого бота для свого салону.");
+
+  function makeDemo(o) {
+    var chat = o.chat, run = 0;
+    function addMsg(html, me) {
+      var m = document.createElement("div");
+      m.className = "msg" + (me ? " me" : ""); m.innerHTML = html;
+      chat.appendChild(m); chat.scrollTop = chat.scrollHeight;
+      return m;
+    }
+    function botSay(html, r, then) {
+      var t = addMsg('<span class="typing"><i></i><i></i><i></i></span>');
+      setTimeout(function () {
+        if (r !== run) return;
+        t.innerHTML = html; chat.scrollTop = chat.scrollHeight;
+        if (then) then();
+      }, reduce ? 0 : 650);
+    }
+    function addKb(items, cols, r, onPick) {
+      var kb = document.createElement("div");
+      kb.className = "kb pulse" + (cols === 3 ? " c3" : "");
+      items.forEach(function (it) {
+        if (it.href) {
+          var a = document.createElement("a"); a.href = it.href; a.target = "_blank"; a.rel = "noopener"; a.textContent = it.label;
+          kb.appendChild(a); return;
+        }
+        var b = document.createElement("button"); b.type = "button"; b.textContent = it;
+        b.addEventListener("click", function () {
+          if (r !== run) return;
+          $$("button", kb).forEach(function (x) { x.disabled = true; });
+          kb.classList.remove("pulse");
+          onPick(it);
+        });
+        kb.appendChild(b);
       });
-      kb.appendChild(b);
-    });
-    demoChat.appendChild(kb); demoChat.scrollTop = demoChat.scrollHeight;
-  }
-  function stepDone(n) { demoSteps.forEach(function (li, k) { li.classList.toggle("done", k < n); }); }
-  function startDemo() {
-    var run = ++demoRun, pick = {};
-    demoChat.innerHTML = ""; notif.classList.remove("on"); stepDone(0);
-    addMsg("/start", true);
-    botSay("✂️ <b>Крок 1 з 3</b><br>Оберіть послугу:", run, function () {
-      addKb(["✂️ Стрижка · 300 грн", "🧔 Борода · 200 грн", "💈 Стрижка + борода · 450 грн"], 1, run, function (s) {
-        pick.s = s; addMsg(s, true); stepDone(1);
-        botSay("📅 <b>Крок 2 з 3</b><br>Оберіть день:", run, function () {
-          addKb(dayLabels(), 3, run, function (d) {
-            pick.d = d; addMsg(d, true); stepDone(2);
-            botSay("🕐 <b>Крок 3 з 3</b><br>Оберіть вільний час:", run, function () {
-              addKb(["10:00", "11:00", "12:00", "14:00", "15:00", "17:00"], 3, run, function (t) {
-                pick.t = t; addMsg(t, true);
-                botSay("🧾 <b>Перевірте запис</b><br>" + pick.s + "<br>📅 " + pick.d + " · 🕐 " + pick.t + "<br>🙋 Андрій", run, function () {
-                  addKb(["✅ Підтвердити запис"], 1, run, function () {
-                    addMsg("✅ Підтвердити", true); stepDone(4);
-                    botSay('<div class="ok"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M12 20.5l5.5 5.5L28.5 14.5"/></svg><div><b>Ви записані!</b><br>' +
-                      pick.d + " о " + pick.t + "</div></div>", run, function () {
-                      confetti(demoChat);
-                      $("#notifText").innerHTML = pick.s + "<br>📅 " + pick.d + " · 🕐 " + pick.t + "<br>🙋 Андрій · 📱 +380…";
-                      setTimeout(function () { if (run === demoRun) notif.classList.add("on"); }, 500);
-                      setTimeout(function () {
-                        if (run === demoRun) addMsg("🔔 Нагадаємо за добу та за 2 години до візиту. Чекаємо на вас! 💈");
-                      }, 900);
+      chat.appendChild(kb); chat.scrollTop = chat.scrollHeight;
+    }
+    function stepDone(n) { (o.steps || []).forEach(function (li, k) { li.classList.toggle("done", k < n); }); }
+    function start() {
+      var r = ++run, pick = {};
+      chat.innerHTML = ""; o.notif.classList.remove("on"); stepDone(0);
+      addMsg("/start", true);
+      botSay("✂️ <b>Крок 1 з 3</b><br>Оберіть послугу:", r, function () {
+        addKb(["✂️ Стрижка · 300 грн", "🧔 Борода · 200 грн", "💈 Стрижка + борода · 450 грн"], 1, r, function (s) {
+          pick.s = s; addMsg(s, true); stepDone(1);
+          botSay("📅 <b>Крок 2 з 3</b><br>Оберіть день:", r, function () {
+            addKb(dayLabels(), 3, r, function (d) {
+              pick.d = d; addMsg(d, true); stepDone(2);
+              botSay("🕐 <b>Крок 3 з 3</b><br>Оберіть вільний час:", r, function () {
+                addKb(["10:00", "11:00", "12:00", "14:00", "15:00", "17:00"], 3, r, function (t) {
+                  pick.t = t; addMsg(t, true);
+                  botSay("🧾 <b>Перевірте запис</b><br>" + pick.s + "<br>📅 " + pick.d + " · 🕐 " + pick.t + "<br>🙋 Андрій", r, function () {
+                    addKb(["✅ Підтвердити запис"], 1, r, function () {
+                      addMsg("✅ Підтвердити", true); stepDone(4);
+                      botSay('<div class="ok"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M12 20.5l5.5 5.5L28.5 14.5"/></svg><div><b>Ви записані!</b><br>' +
+                        pick.d + " о " + pick.t + "</div></div>", r, function () {
+                        confetti(chat);
+                        o.notifText.innerHTML = pick.s + "<br>📅 " + pick.d + " · 🕐 " + pick.t + "<br>🙋 Андрій · 📱 +380…";
+                        setTimeout(function () { if (r === run) o.notif.classList.add("on"); }, 500);
+                        if (o.autoHide && o.autoHide()) {  // на телефоні картка не закриває кнопки
+                          setTimeout(function () { if (r === run) o.notif.classList.remove("on"); }, 4000);
+                        }
+                        setTimeout(function () {
+                          if (r !== run) return;
+                          botSay("Сподобалось? Такий бот може приймати записи і у вашому салоні 💈", r, function () {
+                            addKb([{ label: "💬 Хочу такого бота", href: TG_LINK }, "↺ Записатися ще раз"], 1, r, start);
+                          });
+                        }, 1100);
+                      });
                     });
                   });
                 });
@@ -1001,9 +1119,106 @@
           });
         });
       });
-    });
+    }
+    return { start: start, stop: function () { run++; } };
   }
+
+  var mainDemo = makeDemo({ chat: $("#demoChat"), notif: $("#notif"), notifText: $("#notifText"), steps: $$("#demoSteps li") });
+  function startDemo() { mainDemo.start(); }
   $("#demoReset").addEventListener("click", startDemo);
+
+  // ---------- телефон підлітає до вас ----------
+  var zoom = $("#zoom"), zphone = $("#zphone"), zoomOpen = false, lastFocus = null;
+  var zDemo = makeDemo({ chat: $("#zChat"), notif: $("#zNotif"), notifText: $("#zNotifText"),
+    autoHide: function () { return window.matchMedia("(max-width: 960px)").matches; } });
+  function heroFront() { return heroPhone.querySelector(".phone").getBoundingClientRect(); }
+  function onScreen(r) { return r.width > 0 && r.bottom > 0 && r.top < innerHeight; }
+  function delta(from, to) {
+    return {
+      x: (from.left + from.width / 2) - (to.left + to.width / 2),
+      y: (from.top + from.height / 2) - (to.top + to.height / 2),
+      s: from.width / to.width
+    };
+  }
+  function openZoom() {
+    if (zoomOpen) return;
+    zoomOpen = true; lastFocus = document.activeElement;
+    var from = heroFront();
+    zoom.classList.add("open"); zoom.setAttribute("aria-hidden", "false");
+    document.documentElement.classList.add("lock");
+    scene.classList.add("touched");
+    zDemo.start();
+    if (!reduce) {
+      // Телефон летить екраном до вас (без повного оберту: так кнопки працюють на iPhone)
+      var to = zphone.getBoundingClientRect();
+      if (onScreen(from)) {
+        scene.classList.add("flown");
+        var d = delta(from, to);
+        zphone.animate([
+          { transform: "perspective(1400px) translate(" + d.x + "px," + d.y + "px) scale(" + d.s + ") rotateY(-12deg) rotateX(6deg)" },
+          { transform: "perspective(1400px) translate(" + d.x * 0.3 + "px," + d.y * 0.3 + "px) scale(" + (1.06) + ") rotateY(16deg) rotateX(-4deg) rotateZ(-2deg)", offset: 0.6 },
+          { transform: "perspective(1400px) translate(0,0) scale(1) rotateY(0deg)" }
+        ], { duration: 950, easing: "cubic-bezier(.2,.8,.2,1)" });
+      } else {
+        zphone.animate([
+          { transform: "perspective(1400px) translateY(70vh) scale(.5) rotateX(35deg)" },
+          { transform: "perspective(1400px) translateY(0) scale(1) rotateX(0deg)" }
+        ], { duration: 850, easing: "cubic-bezier(.2,.8,.2,1)" });
+      }
+    }
+    setTimeout(function () { var c = $(".zoom-close"); if (c) c.focus({ preventScroll: true }); }, 400);
+  }
+  function closeZoom() {
+    if (!zoomOpen) return;
+    zoomOpen = false;
+    var finish = function () {
+      zoom.classList.remove("open", "closing"); zoom.setAttribute("aria-hidden", "true");
+      document.documentElement.classList.remove("lock");
+      scene.classList.remove("flown");
+      zDemo.stop();
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    };
+    var target = heroFront();
+    if (reduce || !onScreen(target)) { finish(); return; }
+    var d = delta(target, zphone.getBoundingClientRect());
+    $(".zoom-bg").style.opacity = "0";
+    var a = zphone.animate([
+      { transform: "perspective(1400px) translate(0,0) scale(1) rotateY(0deg)" },
+      { transform: "perspective(1400px) translate(" + d.x + "px," + d.y + "px) scale(" + d.s + ") rotateY(-12deg) rotateX(6deg)" }
+    ], { duration: 750, easing: "cubic-bezier(.55,0,.35,1)", fill: "forwards" });
+    a.onfinish = function () { a.cancel(); $(".zoom-bg").style.opacity = ""; ph.ry = -10 + ph.base; finish(); };
+  }
+  $("#openZoom").addEventListener("click", openZoom);
+  $$("[data-close]", zoom).forEach(function (el) { el.addEventListener("click", closeZoom); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { closeZoom(); fsw.classList.remove("open"); fsBtn.setAttribute("aria-expanded", "false"); }
+  });
+
+  // ---------- шрифти: перемикач «Aa» ----------
+  var fsw = $("#fontsw"), fsBtn = $(".fs-btn", fsw);
+  function setFont(f) {
+    if (f === "classic") document.documentElement.removeAttribute("data-font");
+    else document.documentElement.setAttribute("data-font", f);
+    $$("button[data-font]", fsw).forEach(function (b) { b.setAttribute("aria-checked", String(b.dataset.font === f)); });
+    try { localStorage.setItem("bb-font", f); } catch (e) { /* без збереження */ }
+    ribHalf = 0;
+    setTimeout(onScroll, 50);
+  }
+  var savedFont = "classic";
+  try { savedFont = localStorage.getItem("bb-font") || "classic"; } catch (e) { /* без збереження */ }
+  setFont(["classic", "vintage", "poster"].indexOf(savedFont) >= 0 ? savedFont : "classic");
+  fsBtn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    var open = !fsw.classList.contains("open");
+    fsw.classList.toggle("open", open); fsBtn.setAttribute("aria-expanded", String(open));
+  });
+  $$("button[data-font]", fsw).forEach(function (b) {
+    b.addEventListener("click", function () { setFont(b.dataset.font); });
+  });
+  document.addEventListener("click", function (e) {
+    if (!fsw.contains(e.target)) { fsw.classList.remove("open"); fsBtn.setAttribute("aria-expanded", "false"); }
+  });
+
   var demoStarted = false;
 
   // ---------- конфеті ----------
