@@ -2,30 +2,36 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
+<meta name="theme-color" content="#f3f7ff">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Умови · Без директу</title>
 <meta name="description" content="Умови користування Telegram-ботом для запису клієнтів «Без директу»: пробний період, оплата, відмова, підтримка, дані клієнтів.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='16' width='88' height='78' rx='18' fill='%23f3c468'/%3E%3Crect x='6' y='16' width='88' height='22' rx='18' fill='%23d6963e'/%3E%3Crect x='22' y='4' width='12' height='24' rx='6' fill='%23f6f2ea'/%3E%3Crect x='66' y='4' width='12' height='24' rx='6' fill='%23f6f2ea'/%3E%3Cpath d='M28 62l14 14 30-30' stroke='%230c0d16' stroke-width='11' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234c9bff'/%3E%3Cstop offset='1' stop-color='%231f6bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='4' y='4' width='92' height='92' rx='26' fill='url(%23g)'/%3E%3Crect x='22' y='28' width='56' height='50' rx='12' fill='%23fff'/%3E%3Crect x='32' y='20' width='8' height='16' rx='4' fill='%23fff'/%3E%3Crect x='60' y='20' width='8' height='16' rx='4' fill='%23fff'/%3E%3Cpath d='M36 54l9 9 19-19' stroke='%231f6bff' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@500..900&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#0c0d16;--line:rgba(255,255,255,.12);--cream:#f6f2ea;--muted:#a8acc4;--gold:#f3c468;--gold2:#d6963e}
+:root{--bg:#f3f7ff;--card:#fff;--blue:#1f6bff;--blue2:#4c9bff;--sky:#e9f1ff;--navy:#0d1b3d;--muted:#5b6b8c;--line:#dfe8f8;
+  --shadow:0 30px 70px -20px rgba(31,107,255,.22),0 4px 14px rgba(13,27,61,.04);--grad:linear-gradient(160deg,#5aa4ff 0%,#1f6bff 70%)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--ink);color:var(--cream);font-family:Manrope,system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
-a{color:var(--gold)}
-.wrap{max-width:760px;margin:0 auto;padding:40px 16px 64px}
-.back{display:inline-block;margin-bottom:28px;text-decoration:none;font-weight:700}
-h1{font-family:Unbounded,Manrope,sans-serif;font-size:clamp(28px,6vw,42px);line-height:1.1;margin-bottom:10px}
-.date{color:var(--muted);margin-bottom:28px}
-h2{font-family:Unbounded,Manrope,sans-serif;font-size:19px;margin:30px 0 10px;color:var(--gold)}
-p,li{color:#dcdae4}
+body{background:var(--bg) radial-gradient(900px 700px at -10% -10%,#cfe2ff 0%,rgba(243,247,255,0) 70%) no-repeat;
+  color:var(--navy);font-family:Manrope,system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:var(--blue);font-weight:700}
+.wrap{max-width:780px;margin:0 auto;padding:40px 16px 64px}
+.back{display:inline-flex;align-items:center;gap:10px;margin-bottom:30px;text-decoration:none;font-weight:800;background:#fff;padding:10px 18px;
+  border-radius:99px;box-shadow:0 10px 24px -12px rgba(31,107,255,.4)}
+h1{font-family:Unbounded,Manrope,sans-serif;font-size:clamp(30px,6vw,46px);line-height:1.08;margin-bottom:12px;font-weight:800}
+p,li{color:#33415f;font-weight:500}
+.date{color:var(--muted);margin-bottom:28px;font-weight:600}
+h2{font-family:Unbounded,Manrope,sans-serif;font-size:19px;margin:34px 0 12px;color:var(--blue);font-weight:800}
 ul{padding-left:22px}
 li{margin:6px 0}
-.box{border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin:18px 0;background:rgba(255,255,255,.04)}
-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:16px}
-td,th{border-bottom:1px solid var(--line);padding:10px 6px;text-align:left}
-th{color:var(--muted);font-weight:600}
+.box{border-radius:26px;padding:22px 24px;margin:18px 0;background:var(--grad);color:#fff;font-weight:700;box-shadow:0 30px 60px -24px rgba(31,107,255,.6)}
+table{width:100%;border-collapse:separate;border-spacing:0;margin:12px 0;font-size:16px;background:#fff;border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+td,th{border-bottom:1px solid var(--line);padding:13px 14px;text-align:left}
+tr:last-child td{border-bottom:0}
+th{color:var(--muted);font-weight:700;background:var(--sky)}
+td{font-weight:600}
 </style>
 </head>
 <body>

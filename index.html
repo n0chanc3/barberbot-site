@@ -4,147 +4,177 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Без директу — бот, який записує клієнтів за вас</title>
-<meta name="description" content="Онлайн-запис у Telegram для масажистів, майстрів манікюру й барберів. Запис 24/7, нагадування, без листування в директі. 7 днів безкоштовно.">
+<meta name="description" content="Онлайн-запис у Telegram для майстрів: манікюр, масаж, брови, барбери. Запис 24/7, нагадування, дизайни з фото, без листування в директі. 7 днів безкоштовно.">
 <meta property="og:title" content="Без директу — клієнти записуються самі, поки ви працюєте">
-<meta property="og:description" content="Telegram-бот для масажистів, манікюру й барберів: запис 24/7, нагадування, жодного «а є віконце?» у директі. 7 днів безкоштовно.">
+<meta property="og:description" content="Telegram-бот для майстрів: запис 24/7, нагадування, жодного «а є віконце?» у директі. 7 днів безкоштовно.">
 <meta property="og:image" content="og.png">
-<meta name="theme-color" content="#0c0d16">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='16' width='88' height='78' rx='18' fill='%23f3c468'/%3E%3Crect x='6' y='16' width='88' height='22' rx='18' fill='%23d6963e'/%3E%3Crect x='22' y='4' width='12' height='24' rx='6' fill='%23f6f2ea'/%3E%3Crect x='66' y='4' width='12' height='24' rx='6' fill='%23f6f2ea'/%3E%3Cpath d='M28 62l14 14 30-30' stroke='%230c0d16' stroke-width='11' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#f3f7ff">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234c9bff'/%3E%3Cstop offset='1' stop-color='%231f6bff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='4' y='4' width='92' height='92' rx='26' fill='url(%23g)'/%3E%3Crect x='22' y='28' width='56' height='50' rx='12' fill='%23fff'/%3E%3Crect x='32' y='20' width='8' height='16' rx='4' fill='%23fff'/%3E%3Crect x='60' y='20' width='8' height='16' rx='4' fill='%23fff'/%3E%3Cpath d='M36 54l9 9 19-19' stroke='%231f6bff' stroke-width='8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400..800&family=Unbounded:wght@500..900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#0c0d16; --card:rgba(255,255,255,.055); --line:rgba(255,255,255,.12);
-  --cream:#f6f2ea; --muted:#a8acc4; --gold:#f3c468; --gold2:#d6963e; --violet:#805cf6;
-  --r:28px; --max:1140px;
+  --bg:#f3f7ff; --card:#ffffff; --blue:#1f6bff; --blue2:#4c9bff; --sky:#e9f1ff; --navy:#0d1b3d; --muted:#5b6b8c;
+  --red:#ff3b3b; --line:#dfe8f8; --r:32px; --max:1160px;
+  --shadow:0 30px 70px -20px rgba(31,107,255,.22),0 4px 14px rgba(13,27,61,.04);
+  --grad:linear-gradient(160deg,#5aa4ff 0%,#1f6bff 70%);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{background:var(--ink);color:var(--cream);font-family:Manrope,system-ui,sans-serif;font-size:18px;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--navy);font-family:Manrope,system-ui,sans-serif;font-size:18px;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
-.wrap{max-width:var(--max);margin:0 auto;padding:0 22px}
-.aurora{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.aurora i{position:absolute;border-radius:50%;filter:blur(110px);opacity:.55;animation:float 18s ease-in-out infinite}
-.aurora i:nth-child(1){width:560px;height:560px;background:#8a5c1e;top:-160px;right:-120px}
-.aurora i:nth-child(2){width:620px;height:620px;background:#3f2c8f;bottom:-220px;left:-180px;animation-delay:-6s}
-.aurora i:nth-child(3){width:380px;height:380px;background:#174a55;top:45%;right:10%;opacity:.35;animation-delay:-11s}
-@keyframes float{50%{transform:translate(40px,-30px) scale(1.08)}}
-.grain{position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-h1,h2,h3{font-family:Unbounded,Manrope,sans-serif;line-height:1.08;letter-spacing:-.01em}
-h1{font-size:clamp(38px,6.2vw,76px);font-weight:800}
-h2{font-size:clamp(28px,4.4vw,52px);font-weight:700}
-h3{font-size:22px;font-weight:600}
-.gold{background:linear-gradient(180deg,var(--gold),var(--gold2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+.blobs{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.blobs i{position:absolute;border-radius:50%;filter:blur(30px)}
+.blobs i:nth-child(1){width:900px;height:820px;left:-320px;top:-300px;background:radial-gradient(circle at 60% 60%,#bcd8ff 0%,#dbe9ff 45%,rgba(243,247,255,0) 72%)}
+.blobs i:nth-child(2){width:860px;height:860px;right:-340px;top:35%;background:radial-gradient(circle at 40% 40%,#a9ccff 0%,#d6e7ff 45%,rgba(243,247,255,0) 72%);animation:float 20s ease-in-out infinite}
+@keyframes float{50%{transform:translate(-40px,30px) scale(1.06)}}
+
+h1,h2,h3{font-family:Unbounded,Manrope,sans-serif;line-height:1.06;letter-spacing:-.01em}
+h1{font-size:clamp(40px,5.4vw,70px);font-weight:800}
+h2{font-size:clamp(30px,4.4vw,54px);font-weight:800}
+h3{font-size:22px;font-weight:700}
+em{font-style:normal;color:var(--blue)}
 .muted{color:var(--muted)}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:99px;border:1px solid rgba(243,196,104,.45);background:rgba(255,255,255,.04);color:var(--gold);font-weight:700;font-size:14px;letter-spacing:.02em}
-.glass{background:var(--card);border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 30px;border-radius:99px;font-weight:800;font-size:17px;transition:transform .2s,box-shadow .2s,background .2s;border:0;cursor:pointer;font-family:inherit}
-.btn-gold{background:linear-gradient(180deg,var(--gold),var(--gold2));color:var(--ink);box-shadow:0 14px 40px -12px rgba(243,196,104,.6)}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 20px 50px -12px rgba(243,196,104,.75)}
-.btn-ghost{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--cream)}
-.btn-ghost:hover{background:rgba(255,255,255,.09)}
+.kicker{display:inline-flex;align-items:center;gap:10px;padding:10px 20px;border-radius:99px;background:#fff;color:var(--blue);
+  font-weight:800;font-size:14px;letter-spacing:.06em;text-transform:uppercase;box-shadow:0 10px 26px rgba(31,107,255,.13)}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:18px 30px;border-radius:99px;font-weight:800;font-size:17px;
+  transition:transform .2s,box-shadow .2s;border:0;cursor:pointer;font-family:inherit}
+.btn-blue{background:var(--grad);color:#fff;box-shadow:0 18px 40px -12px rgba(31,107,255,.55)}
+.btn-blue:hover{transform:translateY(-2px);box-shadow:0 24px 50px -12px rgba(31,107,255,.65)}
+.btn-white{background:#fff;color:var(--blue);box-shadow:0 12px 30px -12px rgba(31,107,255,.3)}
+.btn-white:hover{transform:translateY(-2px)}
+.ico{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;flex:none;background:var(--grad);
+  box-shadow:0 14px 30px rgba(31,107,255,.32),inset 0 2px 0 rgba(255,255,255,.35)}
+.ico svg{width:34px;height:34px}
 section{padding:110px 0}
-.head{max-width:760px;margin-bottom:56px}
+.head{max-width:780px;margin-bottom:54px}
+.head h2{margin-top:22px}
 .head p{margin-top:18px;font-size:20px;color:var(--muted)}
-.head .pill{margin-bottom:22px}
 
-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(12,13,22,.6);border-bottom:1px solid rgba(255,255,255,.06)}
-nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px}
-.brand{display:flex;align-items:center;gap:10px;font-family:Unbounded;font-weight:800;font-size:22px}
-.brand svg{width:34px;height:34px}
-.links{display:flex;gap:28px;font-weight:600;font-size:15px;color:var(--muted)}
-.links a:hover{color:var(--cream)}
-nav .btn{padding:11px 20px;font-size:15px}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(243,247,255,.75);border-bottom:1px solid rgba(31,107,255,.08)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px}
+.brand{display:flex;align-items:center;gap:12px;font-family:Unbounded;font-weight:800;font-size:21px}
+.logo{width:40px;height:40px;border-radius:13px;background:var(--grad);display:grid;place-items:center;box-shadow:0 10px 22px rgba(31,107,255,.35)}
+.logo svg{width:24px;height:24px}
+.links{display:flex;gap:28px;font-weight:700;font-size:15px;color:var(--muted)}
+.links a:hover{color:var(--blue)}
+nav .btn{padding:12px 22px;font-size:15px}
 
-.hero{padding:70px 0 90px}
-.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
-.hero p.lead{font-size:21px;color:var(--muted);margin:26px 0 34px;max-width:560px}
+.hero{padding:64px 0 90px}
+.hero .wrap{display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center}
+.hero h1{margin-top:24px}
+.hero p.lead{font-size:21px;color:var(--muted);margin:26px 0 34px;max-width:560px;font-weight:600}
 .cta{display:flex;gap:14px;flex-wrap:wrap}
-.trust{display:flex;gap:30px;margin-top:38px;flex-wrap:wrap}
-.trust div{font-size:15px;color:var(--muted)}
-.trust b{display:block;font-family:Unbounded;font-size:26px;color:var(--cream)}
+.trust{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap}
+.trust div{background:#fff;border-radius:22px;padding:16px 22px;font-size:14px;font-weight:700;color:var(--muted);box-shadow:0 14px 30px -14px rgba(31,107,255,.3)}
+.trust b{display:block;font-family:Unbounded;font-size:26px;color:var(--navy)}
 
-.phone{position:relative;width:340px;height:640px;margin:0 auto;border-radius:52px;background:#06070c;border:2px solid #4b4f66;padding:12px;box-shadow:0 50px 90px -30px rgba(0,0,0,.8),0 0 0 8px rgba(255,255,255,.02)}
-.phone:before{content:"";position:absolute;top:22px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#06070c;border-radius:16px;z-index:3}
-.screen{height:100%;border-radius:40px;background:#141726;overflow:hidden;display:flex;flex-direction:column}
-.chat-top{display:flex;align-items:center;gap:12px;padding:52px 18px 14px;background:#1c2030}
-.chat-top .av{width:42px;height:42px;border-radius:50%;background:#2c3044;display:grid;place-items:center}
-.chat-top .av svg{width:24px;height:24px}
+.stage{position:relative}
+.hero-art{position:absolute;width:230px;left:-120px;bottom:110px;z-index:4;mix-blend-mode:multiply;transform:rotate(-6deg);animation:bob 6s ease-in-out infinite}
+@keyframes bob{50%{transform:rotate(-6deg) translateY(-12px)}}
+.phone{position:relative;width:340px;height:650px;margin:0 auto;border-radius:54px;background:#0d1b3d;padding:12px;box-shadow:0 60px 100px -30px rgba(13,27,61,.45)}
+.phone:before{content:"";position:absolute;top:22px;left:50%;transform:translateX(-50%);width:110px;height:28px;background:#0d1b3d;border-radius:16px;z-index:3}
+.screen{height:100%;border-radius:42px;background:linear-gradient(180deg,#dfeafc,#cfe0fb);overflow:hidden;display:flex;flex-direction:column}
+.chat-top{display:flex;align-items:center;gap:12px;padding:54px 18px 14px;background:rgba(255,255,255,.85)}
+.chat-top .av{width:42px;height:42px;border-radius:50%;background:var(--grad);display:grid;place-items:center}
+.chat-top .av svg{width:22px;height:22px}
 .chat-top b{font-size:15px;display:block}
-.chat-top small{color:var(--muted);font-size:12px}
+.chat-top small{color:var(--blue);font-size:12px;font-weight:700}
 .msgs{flex:1;padding:16px 14px;display:flex;flex-direction:column;gap:9px;overflow:hidden;justify-content:flex-end}
-.m{max-width:84%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.4;animation:pop .35s ease both;white-space:pre-line}
-.m.bot{background:#283048;align-self:flex-start;border-bottom-left-radius:6px}
-.m.me{background:#7656ec;align-self:flex-end;border-bottom-right-radius:6px}
-.m.kb{align-self:stretch;max-width:100%;background:#3a3070;text-align:center;font-weight:700;border-radius:12px;padding:9px}
+.m{max-width:86%;padding:10px 14px;border-radius:18px;font-size:14px;line-height:1.42;animation:pop .35s ease both;white-space:pre-line;font-weight:600}
+.m.bot{background:#fff;align-self:flex-start;border-bottom-left-radius:6px;box-shadow:0 4px 10px rgba(13,27,61,.06)}
+.m.me{background:var(--blue);color:#fff;align-self:flex-end;border-bottom-right-radius:6px}
+.m.kb{align-self:stretch;max-width:100%;background:rgba(255,255,255,.7);color:var(--blue);text-align:center;font-weight:800;border-radius:12px;padding:9px}
 @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
-.tabs{display:flex;gap:8px;justify-content:center;margin-top:22px;flex-wrap:wrap}
-.tab{padding:9px 16px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-weight:700;font-size:14px;cursor:pointer;color:var(--muted);font-family:inherit}
-.tab.on{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.tabs{display:flex;gap:8px;justify-content:center;margin-top:24px;flex-wrap:wrap}
+.tab{padding:10px 18px;border-radius:99px;border:0;background:#fff;font-weight:800;font-size:14px;cursor:pointer;color:var(--muted);font-family:inherit;box-shadow:0 8px 20px -10px rgba(31,107,255,.4)}
+.tab.on{background:var(--blue);color:#fff}
 
-.niches{padding:26px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);overflow:hidden}
-.track{display:flex;gap:16px;width:max-content;animation:run 32s linear infinite}
-.track span{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border-radius:99px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-weight:700;white-space:nowrap}
+.niches{padding:24px 0;overflow:hidden}
+.track{display:flex;gap:14px;width:max-content;animation:run 36s linear infinite}
+.track span{display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border-radius:99px;background:#fff;font-weight:800;white-space:nowrap;box-shadow:0 10px 24px -14px rgba(31,107,255,.4)}
 @keyframes run{to{transform:translateX(-50%)}}
 
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.card{padding:32px}
-.card .e{font-size:38px;margin-bottom:14px}
-.card h3{margin-bottom:8px;font-size:20px}
-.card p{color:var(--muted);font-size:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.feat{padding:32px;display:flex;flex-direction:column;gap:14px}
+.feat h3{font-size:21px}
+.feat p{color:var(--muted);font-size:16px;font-weight:600}
 
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.step{padding:30px 26px}
-.step .n{font-family:Unbounded;font-weight:800;font-size:46px;margin-bottom:14px}
-.step h3{font-size:19px;margin-bottom:8px}
-.step p{color:var(--muted);font-size:16px}
+.pain{padding:30px 32px}
+.bubble{background:var(--sky);border-radius:22px 22px 22px 8px;padding:14px 18px;font-weight:700;font-size:16px;display:inline-block;margin-bottom:16px}
+.bubble small{color:#9aa8c4;margin-left:8px;font-weight:700}
+.pain h3{font-size:20px;margin-bottom:8px}
+.pain p{color:var(--muted);font-size:16px;font-weight:600}
 
-.owner .wrap{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
-.list{list-style:none;margin-top:26px;display:grid;gap:14px}
-.list li{display:flex;gap:14px;align-items:flex-start;font-size:18px}
-.chk{flex:none;width:28px;height:28px;border-radius:50%;background:linear-gradient(180deg,var(--gold),var(--gold2));display:grid;place-items:center;margin-top:1px}
-.chk:after{content:"";width:10px;height:6px;border-left:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(-45deg) translate(1px,-1px)}
-.settings{padding:28px}
-.settings .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.04);margin-top:10px;font-weight:600}
-.settings .row span{color:var(--muted);font-weight:500;font-size:15px;text-align:right}
-.settings .title{font-family:Unbounded;font-size:20px;margin-bottom:6px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.step{padding:30px 26px;position:relative}
+.step .n{font-family:Unbounded;font-weight:800;font-size:48px;color:#dbe7fb;position:absolute;right:22px;top:14px}
+.step h3{font-size:19px;margin:18px 0 8px}
+.step p{color:var(--muted);font-size:16px;font-weight:600}
 
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.modes .glass{padding:36px}
-.modes h3{font-size:26px;margin:12px 0}
+.owner .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.owner h2{font-size:clamp(30px,3.6vw,46px)}
+.list{list-style:none;margin-top:28px;display:grid;gap:14px}
+.list li{display:flex;gap:14px;align-items:flex-start;font-size:18px;font-weight:700}
+.chk{flex:none;width:30px;height:30px;border-radius:50%;background:var(--grad);display:grid;place-items:center;box-shadow:0 8px 18px rgba(31,107,255,.3)}
+.chk:after{content:"";width:11px;height:6px;border-left:3px solid #fff;border-bottom:3px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.settings{padding:30px}
+.settings .title{font-family:Unbounded;font-size:22px;font-weight:800;margin-bottom:4px}
+.settings .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 18px;border-radius:18px;background:var(--sky);margin-top:10px;font-weight:800;color:var(--blue)}
+.settings .row span{color:var(--muted);font-weight:600;font-size:15px;text-align:right}
 
-.demo{padding:30px;display:flex;flex-direction:column;gap:10px;transition:transform .25s,border-color .25s}
-.demo:hover{transform:translateY(-4px);border-color:rgba(243,196,104,.5)}
-.demo .e{font-size:46px}
-.demo h3{font-size:24px}
-.demo .u{color:var(--gold);font-weight:700}
-.demo .go{margin-top:auto;padding-top:16px;font-weight:800;color:var(--gold)}
+.modes{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.mode{padding:38px}
+.mode h3{font-size:28px;margin:20px 0 12px}
+.mode p{color:var(--muted);font-weight:600}
 
-.price{padding:34px;display:flex;flex-direction:column}
-.price.main{border-color:rgba(243,196,104,.6);background:linear-gradient(180deg,rgba(243,196,104,.12),rgba(255,255,255,.04))}
-.price .tag{font-weight:800;color:var(--gold);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
-.price .sum{font-family:Unbounded;font-size:42px;font-weight:800;margin:14px 0 2px}
-.price .sum small{font-size:16px;font-weight:600;color:var(--muted)}
-.price .once{color:var(--muted);font-size:15px;margin-bottom:20px}
-.price ul{list-style:none;display:grid;gap:10px;margin-bottom:26px;font-size:16px}
-.price li:before{content:"✓  ";color:var(--gold);font-weight:800}
+.demo{padding:32px;display:flex;flex-direction:column;gap:10px;transition:transform .25s,box-shadow .25s}
+.demo:hover{transform:translateY(-6px);box-shadow:0 40px 80px -24px rgba(31,107,255,.35)}
+.demo h3{font-size:26px;margin-top:8px}
+.demo .u{color:var(--blue);font-weight:800}
+.demo .muted{font-weight:600;font-size:16px}
+.demo .go{margin-top:auto;padding-top:18px;font-weight:800;color:var(--blue)}
+
+.prices{align-items:stretch}
+.price{padding:36px 32px;display:flex;flex-direction:column;position:relative}
+.price .tag{font-weight:800;color:var(--blue);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.price .sum{font-family:Unbounded;font-size:46px;font-weight:800;margin:16px 0 4px}
+.price .sum small{font-family:Manrope;font-size:17px;font-weight:700;color:var(--muted)}
+.price .once{color:var(--muted);font-size:15px;font-weight:700;margin-bottom:22px}
+.price ul{list-style:none;display:grid;gap:12px;margin-bottom:28px;font-size:16px;font-weight:700}
+.price li{display:flex;gap:10px}
+.price li:before{content:"✓";color:var(--blue);font-weight:800}
 .price .btn{margin-top:auto}
+.price.main{background:var(--grad);color:#fff;box-shadow:0 40px 80px -24px rgba(31,107,255,.6)}
+.price.main .tag,.price.main .once,.price.main li:before{color:rgba(255,255,255,.9)}
+.price.main .btn{background:#fff;color:var(--blue)}
+.badge{position:absolute;top:-16px;right:28px;background:var(--navy);color:#fff;font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;padding:8px 16px;border-radius:99px}
 
-.faq{display:grid;gap:12px;max-width:860px}
-details{padding:22px 26px}
+.faq{display:grid;gap:14px;max-width:880px}
+details{padding:24px 28px}
 summary{cursor:pointer;font-weight:800;font-size:19px;list-style:none;display:flex;justify-content:space-between;gap:20px}
 summary::-webkit-details-marker{display:none}
-summary:after{content:"+";color:var(--gold);font-size:26px;line-height:1;transition:transform .2s}
+summary:after{content:"+";color:var(--blue);font-size:28px;line-height:1;transition:transform .2s}
 details[open] summary:after{transform:rotate(45deg)}
-details p{margin-top:12px;color:var(--muted)}
+details p{margin-top:12px;color:var(--muted);font-weight:600}
+details a{color:var(--blue);font-weight:800}
 
-.final{text-align:center}
-.final .glass{padding:70px 30px;background:linear-gradient(180deg,rgba(243,196,104,.12),rgba(128,92,246,.10))}
-.final h2{max-width:780px;margin:0 auto 20px}
-.final p{color:var(--muted);font-size:20px;margin-bottom:34px}
-footer{padding:40px 0 60px;color:var(--muted);font-size:15px}
+.final .box{padding:76px 30px;text-align:center;background:var(--grad);color:#fff;border-radius:44px;box-shadow:0 50px 100px -30px rgba(31,107,255,.6);position:relative;overflow:hidden}
+.final .box:before,.final .box:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.12)}
+.final .box:before{width:420px;height:420px;left:-140px;top:-180px}
+.final .box:after{width:360px;height:360px;right:-120px;bottom:-200px}
+.final h2{max-width:800px;margin:0 auto 20px;position:relative}
+.final h2 em{color:#fff;text-decoration:underline;text-decoration-thickness:6px;text-underline-offset:10px;text-decoration-color:rgba(255,255,255,.45)}
+.final p{font-size:20px;margin:0 auto 34px;max-width:680px;opacity:.92;font-weight:600;position:relative}
+.final .cta{justify-content:center;position:relative}
+.final .btn-ghost{background:rgba(255,255,255,.16);color:#fff}
+
+footer{padding:44px 0 64px;color:var(--muted);font-size:15px;font-weight:600}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer a.l{color:var(--blue);font-weight:800}
 
 .rv{opacity:0;transform:translateY(26px);transition:opacity .8s,transform .8s}
 .rv.in{opacity:1;transform:none}
@@ -155,55 +185,66 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
   .grid3,.modes{grid-template-columns:1fr}
   .links{display:none}
   section{padding:80px 0}
+  .hero-art{width:150px;left:auto;right:-6px;bottom:auto;top:-46px}
 }
 @media (max-width:560px){
   .brand{font-size:18px}
   body{font-size:17px}
   .wrap{padding:0 16px}
   .steps{grid-template-columns:1fr}
-  .phone{width:300px;height:580px}
+  .phone{width:300px;height:590px}
   nav .btn{display:none}
   .cta .btn{width:100%}
-  .hero{padding:40px 0 70px}
-  .pill{font-size:13px}
+  .hero{padding:36px 0 70px}
+  .hero-art{width:112px;right:-4px;top:-40px}
+  .trust div{flex:1 1 40%}
+  .kicker{font-size:12px}
+  .price .sum{font-size:40px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
 <body>
-<div class="aurora"><i></i><i></i><i></i></div>
-<div class="grain"></div>
+<div class="blobs"><i></i><i></i></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="logo" viewBox="0 0 100 100">
-    <defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3c468"/><stop offset="1" stop-color="#d6963e"/></linearGradient></defs>
-    <rect x="6" y="16" width="88" height="78" rx="18" fill="url(#lg)"/>
-    <rect x="6" y="16" width="88" height="22" rx="18" fill="#d6963e"/>
-    <rect x="22" y="4" width="12" height="24" rx="6" fill="#f6f2ea"/>
-    <rect x="66" y="4" width="12" height="24" rx="6" fill="#f6f2ea"/>
-    <path d="M28 62l14 14 30-30" stroke="#0c0d16" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-  </symbol>
+  <symbol id="logo" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="4" fill="#fff"/><rect x="7" y="2.5" width="2.6" height="5" rx="1.3" fill="#fff"/><rect x="14.4" y="2.5" width="2.6" height="5" rx="1.3" fill="#fff"/><path d="M8 13.5l2.6 2.6L16 10.7" stroke="#1f6bff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24" fill="none"><path d="M4 5.5h16v10H10l-4 3.5v-3.5H4z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M8.5 10.5h7" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24" fill="none"><path d="M19 14.5A7.5 7.5 0 019.5 5a7.5 7.5 0 109.5 9.5z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24" fill="none"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24" fill="none"><rect x="4.5" y="4" width="15" height="16.5" rx="3" stroke="#fff" stroke-width="2.2"/><path d="M8.5 9h7M8.5 12.5h7M8.5 16h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24" fill="none"><path d="M20.5 3.5L3.8 10.3l6.3 2.4 2.4 6.3 8-15.5z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M10.1 12.7l4.4-4.4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24" fill="none"><path d="M6.5 16.5V11a5.5 5.5 0 0111 0v5.5l1.5 1.5H5l1.5-1.5z" stroke="#fff" stroke-width="2.2" stroke-linejoin="round"/><path d="M10 20.5h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#fff" stroke-width="2.4"/><path d="M12 7.5V12l3 2" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24" fill="none"><path d="M12 3.5a8.5 8.5 0 100 17c1.2 0 1.8-.9 1.4-2-.5-1.3.4-2.5 1.8-2.5H17a3.5 3.5 0 003.5-3.5c0-5-3.8-9-8.5-9z" stroke="#fff" stroke-width="2.2"/><circle cx="8" cy="11" r="1.4" fill="#fff"/><circle cx="11.5" cy="7.6" r="1.4" fill="#fff"/><circle cx="15.6" cy="9" r="1.4" fill="#fff"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24" fill="none"><path d="M5 9a7 7 0 0112.2-3.2L19 7.5M19 3.5v4h-4M19 15a7 7 0 01-12.2 3.2L5 16.5M5 20.5v-4h4" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24" fill="none"><rect x="4" y="5.5" width="16" height="15" rx="3.5" stroke="#fff" stroke-width="2.2"/><path d="M8 3.5v4M16 3.5v4M4 10.5h16" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-team" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="9" r="3.2" stroke="#fff" stroke-width="2.2"/><path d="M3.5 19c.6-3 2.8-4.6 5.5-4.6s4.9 1.6 5.5 4.6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="16.5" cy="8" r="2.6" stroke="#fff" stroke-width="2"/><path d="M16 13.2c2.4 0 4 1.4 4.5 3.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24" fill="none"><rect x="5" y="10.5" width="14" height="10" rx="3" stroke="#fff" stroke-width="2.2"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5" stroke="#fff" stroke-width="2.2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none"><rect x="6.5" y="3" width="11" height="18" rx="3" stroke="#fff" stroke-width="2.2"/><path d="M10.5 17.5h3" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24" fill="none"><path d="M9 3.5v4M15 3.5v4M7 7.5h10v3a5 5 0 01-10 0v-3zM12 15.5v5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
 </svg>
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#"><svg><use href="#logo"/></svg>Без директу</a>
+    <a class="brand" href="#"><span class="logo"><svg><use href="#logo"/></svg></span>Без директу</a>
     <div class="links">
       <a href="#how">Як працює</a><a href="#owner">Для майстра</a><a href="#demo">Демо</a><a href="#price">Ціна</a><a href="#faq">Питання</a>
     </div>
-    <a class="btn btn-gold" href="https://t.me/andhlj" target="_blank" rel="noopener">Хочу бота</a>
+    <a class="btn btn-blue" href="https://t.me/andhlj" target="_blank" rel="noopener">Хочу бота</a>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
     <div>
-      <span class="pill">Без директу · для масажистів, манікюру й барберів</span>
-      <h1 style="margin-top:22px">Бот записує клієнтів, <span class="gold">поки ви працюєте</span></h1>
-      <p class="lead">Жодного «а є віконце?» у директі. Клієнт сам обирає послугу, день і час у Telegram, а вам приходить готовий запис. Нагадування бот надішле сам.</p>
+      <span class="kicker">Telegram-бот для майстрів</span>
+      <h1>Клієнти записуються <em>самі</em></h1>
+      <p class="lead">Жодного «а є віконце?» у директі. Клієнт сам обирає послугу, дизайн і вільний час у Telegram, а вам приходить готовий запис. Нагадування бот надішле сам.</p>
       <div class="cta">
-        <a class="btn btn-gold" href="#demo">Спробувати як клієнт →</a>
-        <a class="btn btn-ghost" href="https://t.me/andhlj" target="_blank" rel="noopener">7 днів безкоштовно</a>
+        <a class="btn btn-blue" href="#demo">Спробувати як клієнт →</a>
+        <a class="btn btn-white" href="https://t.me/andhlj" target="_blank" rel="noopener">7 днів безкоштовно</a>
       </div>
       <div class="trust">
         <div><b>24/7</b>запис навіть уночі</div>
@@ -211,7 +252,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
         <div><b>1 хв</b>змінити ціни й графік</div>
       </div>
     </div>
-    <div>
+    <div class="stage">
+      <img class="hero-art" src="hero.webp" alt="" width="250" height="250">
       <div class="phone">
         <div class="screen">
           <div class="chat-top"><div class="av"><svg><use href="#logo"/></svg></div><div><b id="chatTitle">Масаж у Олени</b><small>бот · онлайн</small></div></div>
@@ -219,8 +261,8 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
         </div>
       </div>
       <div class="tabs" id="tabs">
-        <button class="tab on" data-n="massage">💆 Масаж</button>
-        <button class="tab" data-n="nails">💅 Манікюр</button>
+        <button class="tab on" data-n="nails">💅 Манікюр</button>
+        <button class="tab" data-n="massage">💆 Масаж</button>
         <button class="tab" data-n="barber">✂️ Барбер</button>
       </div>
     </div>
@@ -229,21 +271,21 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 
 <div class="niches">
   <div class="track" id="track">
-    <span>💆 Масаж</span><span>💅 Манікюр</span><span>✂️ Барбершоп</span><span>🦶 Педикюр</span><span>🌿 Загальний масаж</span><span>🧔 Стрижка й борода</span>
+    <span>💅 Манікюр</span><span>💆 Масаж</span><span>✨ Брови й вії</span><span>✂️ Барбершоп</span><span>🦶 Педикюр</span><span>🧴 Косметологія</span><span>💇 Перукарня</span><span>🖋 Тату</span>
   </div>
 </div>
 
 <section id="why">
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">чому це важливо</span>
-      <h2>Клієнти йдуть туди, <span class="gold">де відповіли першими</span></h2>
+      <span class="kicker">Знайомо?</span>
+      <h2>Клієнти йдуть туди, <em>де відповіли першими</em></h2>
       <p>Поки ви з клієнтом, телефон мовчить. А нова людина в цей момент пише ще двом майстрам і записується до того, хто відповів швидше.</p>
     </div>
     <div class="grid3">
-      <div class="card glass rv"><div class="e">💬</div><h3>Листування забирає години</h3><p>«А скільки коштує?», «а на суботу є?», «а о 15:00?» — щодня одне й те саме.</p></div>
-      <div class="card glass rv"><div class="e">🌙</div><h3>Пишуть, коли ви спите</h3><p>Багато заявок приходить увечері. Зранку людина вже записана деінде.</p></div>
-      <div class="card glass rv"><div class="e">🙈</div><h3>Забувають і не приходять</h3><p>Віконце пропадає, а нагадувати кожному вручну немає часу.</p></div>
+      <div class="pain card rv"><div class="bubble">А скільки коштує френч?<small>23:52</small></div><h3>Листування забирає години</h3><p>«А на суботу є?», «а о 15:00?» — щодня одне й те саме.</p></div>
+      <div class="pain card rv"><div class="bubble">Є віконце на завтра? 🙏<small>01:14</small></div><h3>Пишуть, коли ви спите</h3><p>Багато заявок приходить увечері. Зранку людина вже записана деінде.</p></div>
+      <div class="pain card rv"><div class="bubble">Ой, я забула 🙈<small>14:05</small></div><h3>Забувають і не приходять</h3><p>Віконце пропадає, а нагадувати кожному вручну немає часу.</p></div>
     </div>
   </div>
 </section>
@@ -251,15 +293,15 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section id="how">
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">4 кроки</span>
-      <h2>Як це <span class="gold">працює</span></h2>
+      <span class="kicker">Як це працює</span>
+      <h2>4 кроки — і <em>запис готовий</em></h2>
       <p>Нічого встановлювати не треба: Telegram уже є майже в кожного клієнта.</p>
     </div>
     <div class="steps">
-      <div class="step glass rv"><div class="n gold">01</div><h3>Посилання в Instagram</h3><p>Клієнт тисне «Записатися» в шапці профілю чи в сторіз.</p></div>
-      <div class="step glass rv"><div class="n gold">02</div><h3>Послуга, день, час</h3><p>Бот показує прайс і лише вільні віконця.</p></div>
-      <div class="step glass rv"><div class="n gold">03</div><h3>Запис у вас</h3><p>Імʼя, телефон і процедура одразу приходять вам або потрібному майстру в Telegram.</p></div>
-      <div class="step glass rv"><div class="n gold">04</div><h3>Нагадування</h3><p>Клієнту за добу і за 2 години. Менше неявок.</p></div>
+      <div class="step card rv"><div class="n">01</div><div class="ico"><svg><use href="#i-link"/></svg></div><h3>Посилання в Instagram</h3><p>Клієнт тисне «Записатися» в шапці профілю чи в сторіз.</p></div>
+      <div class="step card rv"><div class="n">02</div><div class="ico"><svg><use href="#i-list"/></svg></div><h3>Послуга, дизайн, час</h3><p>Бот показує прайс, дизайни з фото й лише вільні віконця.</p></div>
+      <div class="step card rv"><div class="n">03</div><div class="ico"><svg><use href="#i-send"/></svg></div><h3>Запис у вас</h3><p>Імʼя, телефон і процедура одразу приходять вам або потрібному майстру.</p></div>
+      <div class="step card rv"><div class="n">04</div><div class="ico"><svg><use href="#i-bell"/></svg></div><h3>Нагадування</h3><p>Клієнту за добу і за 2 години. Менше неявок.</p></div>
     </div>
   </div>
 </section>
@@ -267,16 +309,16 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section>
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">що ви отримуєте</span>
-      <h2>Адміністратор, який <span class="gold">не спить і не забуває</span></h2>
+      <span class="kicker">Що вміє бот</span>
+      <h2>Адмін, який <em>не втомлюється</em></h2>
     </div>
     <div class="grid3">
-      <div class="card glass rv"><div class="e">⏰</div><h3>Запис 24/7</h3><p>Уночі, у вихідні, поки ви з клієнтом.</p></div>
-      <div class="card glass rv"><div class="e">🔔</div><h3>Нагадування</h3><p>За добу і за 2 години до візиту. Клієнт може підтвердити, що прийде.</p></div>
-      <div class="card glass rv"><div class="e">🔁</div><h3>Перенос і скасування</h3><p>Клієнт робить сам, а ви одразу бачите зміни.</p></div>
-      <div class="card glass rv"><div class="e">🗓</div><h3>Розклад зранку</h3><p>Щодня в Telegram: хто, на коли й на що записаний.</p></div>
-      <div class="card glass rv"><div class="e">⏱</div><h3>Тривалість процедур</h3><p>Масаж на 90 хвилин займає дві години. Ніхто не запишеться посеред сеансу.</p></div>
-      <div class="card glass rv"><div class="e">🔒</div><h3>Ваші клієнти — ваші</h3><p>У кожного майстра свій бот і своя база записів.</p></div>
+      <div class="feat card rv"><div class="ico"><svg><use href="#i-clock"/></svg></div><h3>Запис 24/7</h3><p>Уночі, у вихідні, поки ви з клієнтом.</p></div>
+      <div class="feat card rv"><div class="ico"><svg><use href="#i-bell"/></svg></div><h3>Нагадування</h3><p>За добу і за 2 години до візиту, з кнопками «Буду» / «Не зможу».</p></div>
+      <div class="feat card rv"><div class="ico"><svg><use href="#i-palette"/></svg></div><h3>Дизайни з фото</h3><p>Клієнт гортає ваші роботи й обирає дизайн, доплата рахується сама.</p></div>
+      <div class="feat card rv"><div class="ico"><svg><use href="#i-repeat"/></svg></div><h3>Перенос і скасування</h3><p>Клієнт робить сам, а вам одразу приходить сповіщення.</p></div>
+      <div class="feat card rv"><div class="ico"><svg><use href="#i-cal"/></svg></div><h3>Розклад зранку</h3><p>Щодня о 9:00 в Telegram: хто, на коли й на що записаний.</p></div>
+      <div class="feat card rv"><div class="ico"><svg><use href="#i-lock"/></svg></div><h3>Ваші клієнти — ваші</h3><p>У кожного майстра свій бот і своя база записів.</p></div>
     </div>
   </div>
 </section>
@@ -284,27 +326,26 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section id="owner" class="owner">
   <div class="wrap">
     <div class="rv">
-      <span class="pill">для майстра</span>
-      <h2 style="margin-top:22px">Усе налаштовуєте <span class="gold">самі, в Telegram</span></h2>
-      <p class="muted" style="margin-top:18px;font-size:20px">Без програм, сайтів і файлів. Натиснули «⚙️ Налаштування» й змінили, що потрібно.</p>
+      <span class="kicker">Для майстра</span>
+      <h2 style="margin-top:22px">Усе налаштовуєте <em>самі, в Telegram</em></h2>
+      <p class="muted" style="margin-top:18px;font-size:20px;font-weight:600">Без програм, сайтів і файлів. Натиснули «⚙️ Налаштування» й змінили, що потрібно.</p>
       <ul class="list">
         <li><span class="chk"></span>Послуги, ціни, тривалість і опис</li>
-        <li><span class="chk"></span>Години роботи й вихідні дні</li>
-        <li><span class="chk"></span>Закрити день чи годину: відпустка, лікарняний</li>
-        <li><span class="chk"></span>Команда: майстри з фото й описом, у кожного свій розклад</li>
-        <li><span class="chk"></span>Майстер підключається за посиланням і сам оновлює своє фото</li>
-        <li><span class="chk"></span>Назва, адреса, телефон, Instagram, фото салону з телефона</li>
+        <li><span class="chk"></span>Дизайни з фото ваших робіт і доплатою</li>
+        <li><span class="chk"></span>Години роботи, вихідні, відпустка чи лікарняний</li>
+        <li><span class="chk"></span>Команда: майстри з фото, у кожного свій розклад</li>
+        <li><span class="chk"></span>Назва, адреса, телефон, Instagram, фото салону</li>
         <li><span class="chk"></span>Готове посилання для шапки профілю</li>
       </ul>
     </div>
-    <div class="glass settings rv">
+    <div class="card settings rv">
       <div class="title">⚙️ Налаштування</div>
-      <div class="muted" style="font-size:15px">Тип: 💆 Масаж</div>
+      <div class="muted" style="font-size:15px;font-weight:700">Тип: 💅 Манікюр</div>
       <div class="row">💰 Послуги й ціни <span>3 послуги</span></div>
+      <div class="row">🎨 Дизайни <span>6 з фото</span></div>
       <div class="row">🕐 Години <span>10:00 – 19:00</span></div>
       <div class="row">📅 Вихідні <span>неділя</span></div>
       <div class="row">👥 Команда <span>2 майстри</span></div>
-      <div class="row">🏪 Назва й контакти <span>Масаж у Олени</span></div>
       <div class="row">🔗 Посилання для Instagram <span>t.me/…</span></div>
     </div>
   </div>
@@ -313,12 +354,12 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section>
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">два режими</span>
-      <h2>Окремо або <span class="gold">разом з Altegio</span></h2>
+      <span class="kicker">Два режими</span>
+      <h2>Окремо або <em>разом з Altegio</em></h2>
     </div>
     <div class="modes">
-      <div class="glass rv"><div style="font-size:40px">📱</div><h3>Окремо</h3><p class="muted">Для майстра чи невеликої студії. Бот сам веде розклад: ваші послуги, ціни, графік і майстрів. Нічого більше не потрібно.</p></div>
-      <div class="glass rv"><div style="font-size:40px">🔗</div><h3>З Altegio</h3><p class="muted">Для салону з кількома майстрами. Бот бере майстрів, послуги й вільний час з Altegio, а записи створює прямо у вашій CRM.</p></div>
+      <div class="mode card rv"><div class="ico"><svg><use href="#i-phone"/></svg></div><h3>Окремо</h3><p>Для майстра чи невеликої студії. Бот сам веде розклад: ваші послуги, ціни, графік і майстрів. Нічого більше не потрібно.</p></div>
+      <div class="mode card rv"><div class="ico"><svg><use href="#i-plug"/></svg></div><h3>З Altegio</h3><p>Для салону з кількома майстрами. Бот бере майстрів, послуги й вільний час з Altegio, а записи створює прямо у вашій CRM.</p></div>
     </div>
   </div>
 </section>
@@ -326,14 +367,14 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section id="demo">
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">30 секунд, без реєстрації</span>
-      <h2>Запишіться <span class="gold">як клієнт</span></h2>
+      <span class="kicker">30 секунд, без реєстрації</span>
+      <h2>Запишіться <em>як клієнт</em></h2>
       <p>Оберіть демо своєї ніші й пройдіть запис так, як це зробить ваш клієнт. Записи тестові.</p>
     </div>
     <div class="grid3">
-      <a class="demo glass rv" href="https://t.me/zapys_masazh_bot" target="_blank" rel="noopener"><div class="e">💆</div><h3>Масаж</h3><span class="u">@zapys_masazh_bot</span><span class="muted">Масаж спини, загальний, масаж ніг</span><span class="go">Відкрити в Telegram →</span></a>
-      <a class="demo glass rv" href="https://t.me/zapys_nails_bot" target="_blank" rel="noopener"><div class="e">💅</div><h3>Манікюр</h3><span class="u">@zapys_nails_bot</span><span class="muted">Манікюр з покриттям, педикюр</span><span class="go">Відкрити в Telegram →</span></a>
-      <a class="demo glass rv" href="https://t.me/try_barber_ua_bot" target="_blank" rel="noopener"><div class="e">✂️</div><h3>Барбершоп</h3><span class="u">@try_barber_ua_bot</span><span class="muted">Два салони, майстри з фото, разом з Altegio</span><span class="go">Відкрити в Telegram →</span></a>
+      <a class="demo card rv" href="https://t.me/zapys_nails_bot" target="_blank" rel="noopener"><div class="ico" style="font-size:30px">💅</div><h3>Манікюр</h3><span class="u">@zapys_nails_bot</span><span class="muted">Манікюр з покриттям, вибір дизайну з фото, педикюр</span><span class="go">Відкрити в Telegram →</span></a>
+      <a class="demo card rv" href="https://t.me/zapys_masazh_bot" target="_blank" rel="noopener"><div class="ico" style="font-size:30px">💆</div><h3>Масаж</h3><span class="u">@zapys_masazh_bot</span><span class="muted">Масаж спини, загальний, масаж ніг</span><span class="go">Відкрити в Telegram →</span></a>
+      <a class="demo card rv" href="https://t.me/try_barber_ua_bot" target="_blank" rel="noopener"><div class="ico" style="font-size:30px">✂️</div><h3>Барбершоп</h3><span class="u">@try_barber_ua_bot</span><span class="muted">Два салони, майстри з фото, разом з Altegio</span><span class="go">Відкрити в Telegram →</span></a>
     </div>
   </div>
 </section>
@@ -341,28 +382,29 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section id="price">
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">вартість</span>
-      <h2>Прозоро і <span class="gold">без сюрпризів</span></h2>
-      <p>Спочатку 7 днів безкоштовно. Платите, лише якщо бот сподобався.</p>
+      <span class="kicker">Ціна</span>
+      <h2>Дешевше, ніж <em>одна неявка</em></h2>
+      <p>Спочатку 7 днів безкоштовно. Платите, лише якщо бот сподобався. Підключення безкоштовне.</p>
     </div>
-    <div class="grid3">
-      <div class="price glass main rv">
-        <span class="tag">почніть звідси</span>
+    <div class="grid3 prices">
+      <div class="price card main rv">
+        <span class="badge">почніть звідси</span>
+        <span class="tag">пробний тиждень</span>
         <div class="sum">0 грн</div><div class="once">перші 7 днів</div>
         <ul><li>Повноцінний бот під вас</li><li>Ваші послуги, ціни й графік</li><li>Без зобовʼязань</li></ul>
-        <a class="btn btn-gold" href="https://t.me/andhlj" target="_blank" rel="noopener">Спробувати безкоштовно</a>
+        <a class="btn" href="https://t.me/andhlj" target="_blank" rel="noopener">Спробувати безкоштовно</a>
       </div>
-      <div class="price glass rv">
+      <div class="price card rv">
         <span class="tag">окремо</span>
-        <div class="sum">400 грн <small>/ місяць</small></div><div class="once">пів року 2 200 · рік 4 000 грн<br>підключення безкоштовно</div>
+        <div class="sum">400 грн <small>/ міс</small></div><div class="once">пів року 2 200 · рік 4 000 грн</div>
         <ul><li>Бот сам веде ваш розклад</li><li>Налаштування прямо в Telegram</li><li>Сервер 24/7 і щоденні копії записів</li></ul>
-        <a class="btn btn-ghost" href="https://t.me/andhlj" target="_blank" rel="noopener">Обговорити</a>
+        <a class="btn btn-white" href="https://t.me/andhlj" target="_blank" rel="noopener">Обговорити</a>
       </div>
-      <div class="price glass rv">
+      <div class="price card rv">
         <span class="tag">з Altegio</span>
-        <div class="sum">300 грн <small>/ місяць</small></div><div class="once">пів року 1 650 · рік 3 000 грн<br>підключення безкоштовно</div>
+        <div class="sum">300 грн <small>/ міс</small></div><div class="once">пів року 1 650 · рік 3 000 грн</div>
         <ul><li>Запис у Telegram одразу в Altegio</li><li>Кілька майстрів і філій</li><li>Нагадування без оплати за SMS</li></ul>
-        <a class="btn btn-ghost" href="https://t.me/andhlj" target="_blank" rel="noopener">Обговорити</a>
+        <a class="btn btn-white" href="https://t.me/andhlj" target="_blank" rel="noopener">Обговорити</a>
       </div>
     </div>
   </div>
@@ -371,29 +413,30 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 <section id="faq">
   <div class="wrap">
     <div class="head rv">
-      <span class="pill">питання</span>
-      <h2>Що питають <span class="gold">найчастіше</span></h2>
+      <span class="kicker">Питання</span>
+      <h2>Що питають <em>найчастіше</em></h2>
     </div>
     <div class="faq">
-      <details class="glass rv"><summary>Чи треба клієнтам щось встановлювати?</summary><p>Ні. Telegram уже є майже в кожного. Клієнт натискає посилання й одразу бачить ваш прайс і вільний час.</p></details>
-      <details class="glass rv"><summary>Я масажистка чи майстер манікюру й працюю сама. Це для мене?</summary><p>Так, саме для вас. Бот сам веде розклад, а послуги, ціни, години й вихідні ви змінюєте в Telegram за хвилину.</p></details>
-      <details class="glass rv"><summary>А якщо процедура довга, наприклад 2 години?</summary><p>Бот враховує тривалість: довга процедура займає потрібну кількість годин, і на цей час ніхто інший не запишеться.</p></details>
-      <details class="glass rv"><summary>У нас уже є Altegio. Підійде?</summary><p>Так. Бот бере майстрів, послуги й вільний час з Altegio і створює записи прямо у вашій CRM.</p></details>
-      <details class="glass rv"><summary>Хто бачить дані моїх клієнтів?</summary><p>Тільки ви. У кожного майстра окремий бот і окрема база записів.</p></details>
-      <details class="glass rv"><summary>Як платити й чи можна відмовитись?</summary><p>Оплата на карту за місяць, пів року чи рік. За 3 дні до кінця бот сам нагадає. Відмовитись можна будь-коли без штрафів, а якщо бот не працював з нашої вини, продовжимо підписку на ці дні. Усі умови: <a href="umovy.html" style="color:var(--gold)">сторінка «Умови»</a>.</p></details>
-      <details class="glass rv"><summary>Хто налаштовує й виправляє, якщо щось не так?</summary><p>Ми: налаштування, запуск і виправлення помилок входять у підписку. Бот працює на нашому сервері 24/7, з щоденними копіями записів.</p></details>
-      <details class="glass rv"><summary>Чи є онлайн-оплата?</summary><p>Поки що ні: клієнт платить вам на місці. Якщо потрібно, її можна додати окремо.</p></details>
+      <details class="card rv"><summary>Чи треба клієнтам щось встановлювати?</summary><p>Ні. Telegram уже є майже в кожного. Клієнт натискає посилання й одразу бачить ваш прайс і вільний час.</p></details>
+      <details class="card rv"><summary>Я працюю сама. Це для мене?</summary><p>Так, саме для вас. Бот сам веде розклад, а послуги, ціни, години й вихідні ви змінюєте в Telegram за хвилину.</p></details>
+      <details class="card rv"><summary>Можна показати клієнтам мої дизайни?</summary><p>Так. Додайте фото своїх робіт і доплату за кожен дизайн: клієнт гортає їх під час запису й обирає, а вам приходить, що саме обрали.</p></details>
+      <details class="card rv"><summary>А якщо процедура довга, наприклад 2 години?</summary><p>Бот враховує тривалість: довга процедура займає потрібну кількість годин, і на цей час ніхто інший не запишеться.</p></details>
+      <details class="card rv"><summary>У нас уже є Altegio. Підійде?</summary><p>Так. Бот бере майстрів, послуги й вільний час з Altegio і створює записи прямо у вашій CRM.</p></details>
+      <details class="card rv"><summary>Хто бачить дані моїх клієнтів?</summary><p>Тільки ви. У кожного майстра окремий бот і окрема база записів.</p></details>
+      <details class="card rv"><summary>Як платити й чи можна відмовитись?</summary><p>Оплата на карту за місяць, пів року чи рік. За 3 дні до кінця бот сам нагадає. Відмовитись можна будь-коли без штрафів, а якщо бот не працював з нашої вини, продовжимо підписку на ці дні. Усі умови: <a href="umovy.html">сторінка «Умови»</a>.</p></details>
+      <details class="card rv"><summary>Хто налаштовує й виправляє, якщо щось не так?</summary><p>Ми: налаштування, запуск і виправлення помилок входять у підписку. Бот працює на нашому сервері 24/7, з щоденними копіями записів.</p></details>
+      <details class="card rv"><summary>Чи є онлайн-оплата?</summary><p>Поки що ні: клієнт платить вам на місці. Якщо потрібно, її можна додати окремо.</p></details>
     </div>
   </div>
 </section>
 
 <section class="final">
   <div class="wrap">
-    <div class="glass rv">
-      <h2>Працюйте <span class="gold">без директу</span></h2>
+    <div class="box rv">
+      <h2>Працюйте <em>без директу</em></h2>
       <p>Бот відповідає й записує клієнтів сам. Налаштую під ваші послуги й графік за день, перші 7 днів безкоштовно.</p>
-      <div class="cta" style="justify-content:center">
-        <a class="btn btn-gold" href="https://t.me/andhlj" target="_blank" rel="noopener">Написати в Telegram</a>
+      <div class="cta">
+        <a class="btn btn-white" href="https://t.me/andhlj" target="_blank" rel="noopener">Написати в Telegram</a>
         <a class="btn btn-ghost" href="#demo">Спершу спробувати демо</a>
       </div>
     </div>
@@ -402,21 +445,22 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:2
 
 <footer>
   <div class="wrap">
-    <a class="brand" href="#" style="font-size:18px"><svg><use href="#logo"/></svg>Без директу</a>
-    <span>Без директу — онлайн-запис у Telegram для майстрів · <a href="https://t.me/andhlj" target="_blank" rel="noopener" style="color:var(--gold)">@andhlj</a> · <a href="start.html" style="color:var(--gold)">Перші кроки</a> · <a href="umovy.html" style="color:var(--gold)">Умови</a></span>
+    <a class="brand" href="#" style="font-size:18px"><span class="logo"><svg><use href="#logo"/></svg></span>Без директу</a>
+    <span>Онлайн-запис у Telegram для майстрів · <a class="l" href="https://t.me/andhlj" target="_blank" rel="noopener">@andhlj</a> · <a class="l" href="start.html">Перші кроки</a> · <a class="l" href="umovy.html">Умови</a></span>
   </div>
 </footer>
 
 <script>
 const SCRIPTS = {
+  nails:{title:"Манікюр · Studio Ira", msgs:[
+    ["bot","Привіт! 💅 Що робимо?"],["kb","💅 Манікюр з покриттям · 600 грн"],
+    ["me","Манікюр з покриттям"],["bot","Пʼятниця, 27.11\nВільно: 11:00 · 14:00 · 17:00"],["me","17:00"],
+    ["bot","🎨 Оберіть дизайн\nФренч · +100 грн · разом 700 грн"],["me","✅ Френч"],
+    ["bot","✅ Ви записані!\n💅 Манікюр · Френч · 700 грн\n📅 27.11 о 17:00\nНагадаю за добу 🔔"]]},
   massage:{title:"Масаж у Олени", msgs:[
     ["bot","Привіт! 👋 Оберіть процедуру:"],["kb","💆 Масаж спини · 600 грн"],["kb","🌿 Загальний масаж · 1000 грн"],
     ["me","Загальний масаж"],["bot","Субота, 28.11\nВільно: 10:00 · 13:00 · 15:00"],["me","13:00"],
     ["bot","✅ Ви записані!\n🌿 Загальний масаж · 90 хв\n📅 28.11 о 13:00\nНагадаю за добу 🔔"]]},
-  nails:{title:"Манікюр · Studio Ira", msgs:[
-    ["bot","Привіт! 💅 Що робимо?"],["kb","💅 Манікюр з покриттям · 600 грн"],["kb","🦶 Педикюр · 700 грн"],
-    ["me","Манікюр з покриттям"],["bot","Пʼятниця, 27.11\nВільно: 11:00 · 14:00 · 17:00"],["me","17:00"],
-    ["bot","✅ Ви записані!\n💅 Манікюр · 90 хв\n📅 27.11 о 17:00\nНагадаю за 2 години 🔔"]]},
   barber:{title:"Barber Demo", msgs:[
     ["bot","Оберіть майстра:"],["kb","👤 Олександр · топ-барбер"],["kb","🎲 Будь-який вільний майстер"],
     ["me","Олександр"],["bot","Чоловіча стрижка · 700 грн\nЗавтра: 10:00 · 12:00 · 18:00"],["me","18:00"],
@@ -438,7 +482,7 @@ async function play(n){
 }
 function select(n){document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("on",b.dataset.n===n)); play(n);}
 document.getElementById("tabs").addEventListener("click",e=>{const b=e.target.closest(".tab"); if(b) select(b.dataset.n);});
-select("massage");
+select("nails");
 const tr=document.getElementById("track"); tr.innerHTML+=tr.innerHTML;
 if(location.search.includes("static")) document.querySelectorAll(".rv").forEach(el=>el.classList.add("in"));
 const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in"); io.unobserve(e.target);}}),{threshold:.12});
